@@ -10,7 +10,7 @@ Architecture Overview
      |                     |                     |
 +----+---------+    +------+----------+   +------+-----------+
 |              |    |                 |   |                  |
-|  Dancer UI   |    |  Maintainer UI  |   |  Party Owner UI  |
+|  Dancer UI   |    |  Maintainer UI  |   |  Party Owner UI  |                               <<<<<< Layer: FRONTEND
 |              |    |                 |   |                  |
 +-----+---+----+    +------+----------+   +------------------+
       |   |                |
@@ -18,7 +18,7 @@ Architecture Overview
       |               |    |
    +--+------+    +---+----+-----------+   +----------------+      +-----------------+
    |         |    |                    |   |                |      |                 |
-   |  Track  |    |  Playlist Service  +---+   PlaybackCtl  +------+  Event Service  |
+   |  Track  |    |  Playlist Service  +---+   PlaybackCtl  +------+  Event Service  |      <<<<<<<< Layer: SERVICE
    |         |    |                    |   |                |      |                 |
    +-----+---+    +---+-------------+--+   +--------+-------+      +-----------------+
          |            |             |               |
@@ -26,10 +26,10 @@ Architecture Overview
          |        |   |             |
     +----+--------+---+---+     +---+----------------+
     |                     |     |                    |
-    |  Provider Boundary  |     |  Backend Boundary  |
+    |  Provider Boundary  |     |  Backend Boundary  |                                     <<<<<<<<<<< Layer: BACKEND
     |                     |     |                    |
     +----------+----------+     +---------+----------+
-               |                          |
+               |                          |    
          +-----+------+             +-----+-----+
          ||          ||             ||         ||
          || Provider ||             || Backend ||

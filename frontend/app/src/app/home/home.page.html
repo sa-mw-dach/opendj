@@ -1,20 +1,20 @@
 <ion-header>
-  <ion-toolbar>
+  <!-- <ion-toolbar>
     <ion-title>
       Now Playing
     </ion-title>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
-  <ion-toolbar class="playing-wrapper">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <!-- <ion-title> Current song playing</ion-title> -->
-    <ion-thumbnail slot="start">
-        <img src="{{ data[0].img }}" />
-      </ion-thumbnail>
+
+      <div class="current-song">
+        <h3>Song currently</h3>
+      </div>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
@@ -23,6 +23,7 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-content>
 <ion-list class="list-override" lines="none" *ngFor="let item of data; let index = $index">
   <ion-item>
     <ion-thumbnail slot="start">
@@ -32,17 +33,17 @@
       <h3>{{ item.title }}</h3>
       <p>{{ item.subTitle }}</p>
     </ion-label>
-    <ion-button (click)="move(index, index + 1)" expand="outline" slot="end">
-      <ion-icon slot="icon-only" name="arrow-round-up"></ion-icon>
+    <ion-button style="color: black; border-color: black" (click)="move(index, index + 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="thumbs-up"></ion-icon>
     </ion-button>
-    <ion-button (click)="move(index, index - 1)" expand="outline" slot="end">
-      <ion-icon slot="icon-only" name="arrow-round-down"></ion-icon>
+    <ion-button style="color: black" (click)="move(index, index - 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="thumbs-down"></ion-icon>
     </ion-button>
   </ion-item>
 </ion-list>
-
+</ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button (click)="presentAddSongPrompt()" expand="full" fill="solid">ADD</ion-button>
+    <ion-button (click)="presentAddSongPrompt()" expand="full" fill="clear">ADD</ion-button>
   </ion-toolbar>
 </ion-footer>

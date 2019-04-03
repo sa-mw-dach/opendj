@@ -8,19 +8,19 @@ Architecture Overview
 ||        ||        ||            ||     ||             ||
 +----+-----+        +------+-------+     +-------+-------+
      |                     |                     |
-+------+-------+    +--------+--------+   +--------+---------+
++----+---------+    +------+----------+   +------+-----------+
 |              |    |                 |   |                  |
 |  Dancer UI   |    |  Maintainer UI  |   |  Party Owner UI  |
 |              |    |                 |   |                  |
-+-------+---+--+    +--------+--------+   +------------------+
++-----+---+----+    +------+----------+   +------------------+
       |   |                |
       |   +-----------+    |
       |               |    |
-   +--+------+    +---+----+-----------+   +--------------+   +-----------------+
-   |         |    |                    |   |              |   |                 |
-   |  Track  |    |  Playlist Service  +---+   Thelxiope  |   |  Event Service  |
-   |         |    |                    |   |              |   |                 |
-   +-----+---+    +---+-------------+--+   +--------+-----+   +-----------------+
+   +--+------+    +---+----+-----------+   +----------------+      +-----------------+
+   |         |    |                    |   |                |      |                 |
+   |  Track  |    |  Playlist Service  +---+   PlaybackCtl  +------+  Event Service  |
+   |         |    |                    |   |                |      |                 |
+   +-----+---+    +---+-------------+--+   +--------+-------+      +-----------------+
          |            |             |               |
          |        +---------------------------------+
          |        |   |             |
@@ -37,6 +37,8 @@ Architecture Overview
          +------------+             +-----------+
 
 
+
+
 ```
 
 
@@ -50,7 +52,7 @@ Architecture Overview
   * Add/Remove Track to Playlist
   * Vote Track Up/Down
   * Create/Delete Playlist (for Event)
-* Thelxiope (Greek: Siren, "the beautiful voice")
+* Playback Control
   * Maintains player state in playlist, reconciles reality with desired state
 * Event service
   * CRUD Event

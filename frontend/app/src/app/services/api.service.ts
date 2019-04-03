@@ -8,7 +8,7 @@ import { of } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  apiURL = '';
+  apiURL = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
 
   constructor(private http: HttpClient) {}
 
@@ -20,5 +20,7 @@ export class ApiService {
     }
   }
 
-  getPlaylist() {}
+  getPlaylist() {
+    return this.http.get(`${this.apiURL}/api/v1/playlists`);
+  }
 }

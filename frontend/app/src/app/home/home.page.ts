@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { PlaylistItem } from '../models/playlist-item.model';
 import { AlertController } from '@ionic/angular';
-import { ApiService } from '../services/api.service';
+// import { ApiService } from '../services/api.service';
+
+import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
 
 @Component({
   selector: 'app-home',
@@ -14,8 +16,10 @@ export class HomePage implements OnInit {
 
   constructor(
     public alertController: AlertController,
-    public api: ApiService
-  ) {}
+    public api: PlaylistsService
+  ) {
+
+  }
 
   ngOnInit() {
     this.data = [
@@ -56,6 +60,14 @@ export class HomePage implements OnInit {
           'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw=='
       }
     ];
+
+
+    this.api.playlistsGet()
+    .subscribe(
+      (data) => {console.log(data); },
+      (err) => {console.error(err); },
+      () => {}
+    );
   }
 
   move(old_index, new_index) {
@@ -93,13 +105,16 @@ export class HomePage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel');
+            alert.dismiss();
+            // this.presentErrorAlert();
           }
         },
         {
           text: 'Add To Playlist',
           handler: (data) => {
             console.log('Confirm Ok', data);
-            // this.api.addSong()
+            alert.dismiss();
+            this.presentSuccessAlert();
           }
         }
       ]

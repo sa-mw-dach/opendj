@@ -10,7 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiService } from './services/api.service';
+// import { ApiService } from './services/api.service';
+import { PlaylistsService } from '../../sdk/playlist/api/playlists.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,7 @@ import { ApiService } from './services/api.service';
   providers: [
     StatusBar,
     SplashScreen,
-    ApiService,
+    PlaylistsService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

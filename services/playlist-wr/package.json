@@ -10,11 +10,12 @@
   "author": "Ivan Vasiljevic",
   "license": "MIT",
   "devDependencies": {
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "5.1.1",
     "gulp": "~3.9.1",
     "gulp-eslint": "4.0.0",
     "gulp-nodemon": "^2.2.1",
-    "eslint-plugin-mocha": "^4.11.0",
-    "eslint-plugin-node": "5.1.1"
+    "mock-mongoose": "^7.4.0-r2"
   },
   "dependencies": {
     "body-parser": "1.17.2",

@@ -2,19 +2,19 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Yet Another Node.js Blogg Application API",
-    "description": "Yet Another Node.js Blogg Application API",
+    "title": "Playlist Service",
+    "description": "OpenDJ Playlist Service incl. Voting",
     "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
+      "name": "GPLv3",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
     }
   },
   "host": "localhost:3000",
   "basePath": "/api/v1",
   "tags": [
     {
-      "name": "Users",
-      "description": "API for users in the system"
+      "name": "Playlist",
+      "description": "API for playlists in the system"
     }
   ],
   "schemes": [
@@ -27,19 +27,19 @@
     "application/json"
   ],
   "paths": {
-    "/users": {
+    "/playlists": {
       "post": {
         "tags": [
-          "Users"
+          "Playlists"
         ],
-        "description": "Create new user in system",
+        "description": "Create new playlist in system",
         "parameters": [
           {
-            "name": "user",
+            "name": "playlist",
             "in": "body",
-            "description": "User that we want to create",
+            "description": "Playlist that we want to create",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         ],
@@ -48,86 +48,86 @@
         ],
         "responses": {
           "200": {
-            "description": "New user is created",
+            "description": "New playlist is created",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         }
       },
       "get": {
         "tags": [
-          "Users"
+          "Playlists"
         ],
-        "summary": "Get all users in system",
+        "summary": "Get all playlists in system",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Users"
+              "$ref": "#/definitions/Playlists"
             }
           }
         }
       }
     },
-    "/users/{userId}": {
+    "/playlists/{playlistId}": {
       "parameters": [
         {
-          "name": "userId",
+          "name": "playlistId",
           "in": "path",
           "required": true,
-          "description": "ID of user that we want to find",
+          "description": "ID of playlist that we want to find",
           "type": "string"
         }
       ],
       "get": {
         "tags": [
-          "Users"
+          "Playlists"
         ],
-        "summary": "Get user with given ID",
+        "summary": "Get playlist with given ID",
         "responses": {
           "200": {
-            "description": "User is found",
+            "description": "Playlist is found",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         }
       },
       "delete": {
-        "summary": "Delete user with given ID",
+        "summary": "Delete Playlist with given ID",
         "tags": [
-          "Users"
+          "Playlists"
         ],
         "responses": {
           "200": {
-            "description": "User is deleted",
+            "description": "Playlist is deleted",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         }
       },
       "put": {
-        "summary": "Update user with give ID",
+        "summary": "Update Playlist with give ID",
         "tags": [
-          "Users"
+          "Playlists"
         ],
         "parameters": [
           {
-            "name": "user",
+            "name": "Playlist",
             "in": "body",
-            "description": "User with new values of properties",
+            "description": "Playlist with new values of properties",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "User is updated",
+            "description": "Playlist is updated",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Playlist"
             }
           }
         }
@@ -135,9 +135,8 @@
     }
   },
   "definitions": {
-    "User": {
+    "Playlist": {
       "required": [
-        "email",
         "_id"
       ],
       "properties": {
@@ -145,21 +144,14 @@
           "type": "string",
           "uniqueItems": true
         },
-        "email": {
-          "type": "string",
-          "uniqueItems": true
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "firstName": {
+        "name": {
           "type": "string"
         }
       }
     },
-    "Users": {
+    "Playlists": {
       "type": "array",
-      "$ref": "#/definitions/User"
+      "$ref": "#/definitions/Playlist"
     }
   }
 }

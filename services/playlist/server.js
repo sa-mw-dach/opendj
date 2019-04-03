@@ -5,6 +5,7 @@
 var express = require('express'),
   router = express.Router(),
   bodyParser = require('body-parser'),
+  cors = require('cors'),
   swaggerUi = require('swagger-ui-express'),
   swaggerDocument = require('./swagger.json');
 
@@ -33,6 +34,9 @@ mongoose.model('Playlist', PlaylistSchema);
 var Playlist = require('mongoose').model('Playlist');
 
 var app = express();
+
+// handle cors
+app.use(cors());
 
 //rest API requirements
 app.use(bodyParser.urlencoded({

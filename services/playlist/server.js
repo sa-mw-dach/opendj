@@ -26,8 +26,13 @@ mockgoose.prepareStorage().then(function() {
 });
 
 var PlaylistSchema = new Schema({
+  _id: {type: String}
   name: {type: String},
-  tracks: [{ name: String}]
+  tracks: [{
+	  resourceURI: String,
+	  artistName: String,
+	  imageObject: {externalURI : String}
+	  }]
 });
 
 mongoose.model('Playlist', PlaylistSchema);
@@ -57,6 +62,7 @@ var createPlaylist = function (req, res, next) {
   });
 };
 
+//put
 var updatePlaylist = function (req, res, next) {
   Playlist.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, playlist) {
     if (err) {
@@ -67,7 +73,7 @@ var updatePlaylist = function (req, res, next) {
   });
 };
 
-
+//delete
 var deletePlaylist = function (req, res, next) {
   req.playlist.remove(function (err) {
     if (err) {
@@ -78,6 +84,7 @@ var deletePlaylist = function (req, res, next) {
   });
 };
 
+//get
 var getAllPlaylists = function (req, res, next) {
   Playlist.find(function (err, playlists) {
     if (err) {
@@ -88,6 +95,7 @@ var getAllPlaylists = function (req, res, next) {
   });
 };
 
+//get
 var getOnePlaylist = function (req, res) {
   res.json(req.playlist);
 };

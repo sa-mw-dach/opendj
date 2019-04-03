@@ -25,7 +25,8 @@ mockgoose.prepareStorage().then(function() {
 });
 
 var PlaylistSchema = new Schema({
-  name: {type: String}
+  name: {type: String},
+  tracks: [{ name: String}]
 });
 
 mongoose.model('Playlist', PlaylistSchema);

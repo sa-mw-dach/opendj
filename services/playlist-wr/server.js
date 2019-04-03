@@ -11,20 +11,18 @@ var express = require('express'),
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://mongodb-playlist:27017/swagger-demo');
-
-var UserSchema = new Schema({
-  email: {
-    type: String, required: true,
-    trim: true, unique: true,
-    match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
-  },
-  firstName: {type: String},
-  lastName: {type: String}
+var Mockgoose = require('mock-mongoose').Mockgoose;
+var mockgoose = new Mockgoose(mongoose);
+mockgoose.prepareStorage().then(function() {
+    mongoose.connect('mongodb://mongodb-playlist:27017/playlist');
 });
 
-mongoose.model('User', UserSchema);
-var User = require('mongoose').model('User');
+var PlaylistSchema = new Schema({
+  name: {type: String}
+});
+
+mongoose.model('Playlist', PlaylistSchema);
+var Playlist = require('mongoose').model('Playlist');
 
 var app = express();
 
@@ -35,73 +33,73 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 //middleware for create
-var createUser = function (req, res, next) {
-  var user = new User(req.body);
+var createPlaylist = function (req, res, next) {
+  var playlist = new Playlist(req.body);
 
-  user.save(function (err) {
+  playlist.save(function (err) {
     if (err) {
       next(err);
     } else {
-      res.json(user);
+      res.json(playlist);
     }
   });
 };
 
-var updateUser = function (req, res, next) {
-  User.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, user) {
+var updatePlaylist = function (req, res, next) {
+  Playlist.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, playlist) {
     if (err) {
       next(err);
     } else {
-      res.json(user);
+      res.json(playlist);
     }
   });
 };
 
-var deleteUser = function (req, res, next) {
-  req.user.remove(function (err) {
+var deletePlaylist = function (req, res, next) {
+  req.playlist.remove(function (err) {
     if (err) {
       next(err);
     } else {
-      res.json(req.user);
+      res.json(req.playlist);
     }
   });
 };
 
-var getAllUsers = function (req, res, next) {
-  User.find(function (err, users) {
+var getAllPlaylists = function (req, res, next) {
+  Playlist.find(function (err, playlists) {
     if (err) {
       next(err);
     } else {
-      res.json(users);
+      res.json(playlists);
     }
   });
 };
 
-var getOneUser = function (req, res) {
-  res.json(req.user);
+var getOnePlaylist = function (req, res) {
+  res.json(req.playlist);
 };
 
-var getByIdUser = function (req, res, next, id) {
-  User.findOne({_id: id}, function (err, user) {
+var getByIdPlaylist = function (req, res, next, id) {
+  Playlist.findOne({_id: id}, function (err, playlist) {
     if (err) {
       next(err);
     } else {
-      req.user = user;
+      req.playlist = playlist;
       next();
     }
   });
 };
 
-router.route('/users')
-  .post(createUser)
-  .get(getAllUsers);
+router.route('/playlists')
+  .post(createPlaylist)
+  .get(getAllPlaylists);
 
-router.route('/users/:userId')
-  .get(getOneUser)
-  .put(updateUser)
-  .delete(deleteUser);
+router.route('/playlists/:playlistId')
+  .get(getOnePlaylist)
+  .put(updatePlaylist)
+  .delete(deletePlaylist);
 
-router.param('userId', getByIdUser);
+router.param('playlistId', getByIdPlaylist);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', router);

@@ -143,7 +143,7 @@
         }
       }
     },
-    "/playlists/{playlistId}/tracks/{trackId}" : {
+    "/playlists/{playlistId}/tracks/{resourceURI}" : {
       "delete" : {
         "tags" : [ "Playlists" ],
         "summary" : "Delete Song in playlist ID",
@@ -154,7 +154,7 @@
           "required" : true,
           "type" : "string"
         }, {
-          "name" : "trackId",
+          "name" : "resourceURI",
           "in" : "path",
           "description" : "ID of a track that we want to find",
           "required" : true,

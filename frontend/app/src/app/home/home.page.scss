@@ -1,14 +1,15 @@
 // CSS overrides
 
-// .header-ios ion-toolbar {
-//   height: 20vh;
-// }
+.playing-wrapper {
+  height: 20vh;
+}
 
 .list-override {
   position: relative;
-  top: -22vh;
+  top: -10vh;
 }
+
 .new-header-bg{
-  --background: #edefef;
+  --background: grey;
 }
 

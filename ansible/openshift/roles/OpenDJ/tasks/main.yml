@@ -1,0 +1,53 @@
+#######################################################################################################
+# 
+# oc new-project dfroehli-opendj-dev --display-name "OpenDJ-DEV" --description="SA Hackathon OpenDJ project - OpenSource To The DanceFloor - Development Stage"
+# oc new-project dfroehli-opendj-prd --display-name "OpenDJ-PROD" --description="SA Hackathon OpenDJ project - OpenSource To The DanceFloor - Production Stage"
+# 
+# oc adm groups new opendj-developer
+# oc adm groups add-users opendj-developer wrichter@redhat.com dfroehli@redhat.com oschneid@redhat.com
+# oc adm groups add-users opendj-developer mleibfri@redhat.com cbennett@redhat.com mmetting@redhat.com
+# 
+# oc policy add-role-to-group admin opendj-developer --namespace=dfroehli-opendj-dev
+# oc policy add-role-to-group admin opendj-developer --namespace=dfroehli-opendj-prd
+# 
+#######################################################################################################
+
+- name: Create a project
+  k8s:
+    state: present
+    definition:
+      api_version: v1
+      kind: Project
+      metadata:
+        name: dfroehli-opendj-dev
+        description: "SA Hackathon OpenDJ project - OpenSource To The DanceFloor - Development Stage"
+        display-name: "OpenDJ-DEV"
+
+- name: Create a project
+  k8s:
+    state: present
+    definition:
+      api_version: v1
+      kind: Project
+      metadata:
+        name: dfroehli-opendj-prd
+        description: "SA Hackathon OpenDJ project - OpenSource To The DanceFloor - Production Stage"
+        display-name: "OpenDJ-PROD"
+
+- name: Create a Group
+  k8s:
+    state: present
+    definition:
+      api_version: v1
+      kind: Group
+      metadata:
+        name: opendj-developer
+      users:
+      - wrichter@redhat.com
+      - dfroehli@redhat.com
+      - oschneid@redhat.com
+      - mpfuetzn@redhat.com
+      - mleibfri@redhat.com
+      - cbennett@redhat.com
+      - mmetting@redhat.com
+

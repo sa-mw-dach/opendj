@@ -1,0 +1,70 @@
+Name:         admin
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  ClusterRole
+  Name:  admin
+Subjects:
+  Kind  Name                 Namespace
+  ----  ----                 ---------
+  User  dfroehli@redhat.com  
+
+
+Name:         admin-0
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  ClusterRole
+  Name:  admin
+Subjects:
+  Kind   Name              Namespace
+  ----   ----              ---------
+  Group  opendj-developer  
+
+
+Name:         project-admin
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  ClusterRole
+  Name:  project-admin
+Subjects:
+  Kind   Name              Namespace
+  ----   ----              ---------
+  Group  opendj-developer  
+
+
+Name:         system:deployers
+Labels:       <none>
+Annotations:  openshift.io/description=Allows deploymentconfigs in this namespace to rollout pods in this namespace.  It is auto-managed by a controller; remove subjects to disable.
+Role:
+  Kind:  ClusterRole
+  Name:  system:deployer
+Subjects:
+  Kind            Name      Namespace
+  ----            ----      ---------
+  ServiceAccount  deployer  dfroehli-opendj-prd
+
+
+Name:         system:image-builders
+Labels:       <none>
+Annotations:  openshift.io/description=Allows builds in this namespace to push images to this namespace.  It is auto-managed by a controller; remove subjects to disable.
+Role:
+  Kind:  ClusterRole
+  Name:  system:image-builder
+Subjects:
+  Kind            Name     Namespace
+  ----            ----     ---------
+  ServiceAccount  builder  dfroehli-opendj-prd
+
+
+Name:         system:image-pullers
+Labels:       <none>
+Annotations:  openshift.io/description=Allows all pods in this namespace to pull images from this namespace.  It is auto-managed by a controller; remove subjects to disable.
+Role:
+  Kind:  ClusterRole
+  Name:  system:image-puller
+Subjects:
+  Kind   Name                                        Namespace
+  ----   ----                                        ---------
+  Group  system:serviceaccounts:dfroehli-opendj-prd  

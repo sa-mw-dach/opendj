@@ -1,15 +1,20 @@
 // CSS overrides
 
-.playing-wrapper {
-  height: 20vh;
-}
-
 .list-override {
   position: relative;
   top: -10vh;
 }
 
-.new-header-bg{
-  --background: grey;
+.current-song {
+  background: black;
+  color: white;
+  text-align: center;
+  height: 10vh;
+  margin-bottom: 5%;
+}
+
+.btn-vote {
+  color: black;
+  border-color: black !important;
 }
 

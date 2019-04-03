@@ -26,7 +26,7 @@ mockgoose.prepareStorage().then(function() {
 });
 
 var PlaylistSchema = new Schema({
-  _id: {type: String}
+  _id: {type: String},
   name: {type: String},
   tracks: [{
 	  resourceURI: String,

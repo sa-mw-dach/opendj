@@ -26,7 +26,7 @@ mockgoose.prepareStorage().then(function() {
 });
 
 var PlaylistSchema = new Schema({
-  _id: {type: String}
+  _id: {type: String},
   name: {type: String},
   tracks: [{
 	  resourceURI: String,
@@ -111,6 +111,17 @@ var getByIdPlaylist = function (req, res, next, id) {
   });
 };
 
+var getTrackByPlaylist = function (req, res, next) {
+  var id = req.body._id;
+  Playlist.findOne({ _id: id }, function (err, playlist) {
+    if (err) {
+      next(err);
+    } else {
+      res.json(playlist.tracks[0]);
+    }
+  })
+};
+
 var addTrackToPlaylist = function (req, res, next) {
   var id = req.body._id;
   var newTrack = req.body.track;
@@ -132,6 +143,9 @@ router.route('/playlists/:playlistId')
   .get(getOnePlaylist)
   .put(updatePlaylist)
   .delete(deletePlaylist);
+
+router.route('/playlists/:playlistId/firstTrack')
+  .get(getTrackByPlaylist)
 
 router.route('/addtrack')
   .post(addTrackToPlaylist)

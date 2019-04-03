@@ -166,27 +166,27 @@
           }
         }
       }
-    }
-  },
-  "/addtrack" : {
-    "post": {
-      "tags" : [ "Add track" ],
-      "description" : "Add track uri",
-      "produces" : [ "application/json" ],
-      "parameters" : [ {
-        "in" : "body",
-        "name" : "playlist",
-        "description" : "submit spotify uri to add track to playlist",
-        "required" : false,
-        "schema" : {
-          "$ref" : "#/definitions/Playlist"
-        }
-      } ],
-      "responses" : {
-        "200" : {
-          "description" : "New playlist is created",
+    },
+    "/addtrack" : {
+      "post": {
+        "tags" : [ "Add track" ],
+        "description" : "Add track uri",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "playlist",
+          "description" : "submit spotify uri to add track to playlist",
+          "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/Playlist"
+            "$ref" : "#/definitions/Track"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "New playlist is created",
+            "schema" : {
+              "$ref" : "#/definitions/Playlist"
+            }
           }
         }
       }

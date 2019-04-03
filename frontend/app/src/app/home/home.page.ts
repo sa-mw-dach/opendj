@@ -18,7 +18,7 @@ export class HomePage implements OnInit {
     public alertController: AlertController,
     public api: PlaylistsService
   ) {
-
+    this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 
   ngOnInit() {

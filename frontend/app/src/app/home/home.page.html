@@ -4,68 +4,45 @@
       Now Playing
     </ion-title>
   </ion-toolbar>
+
+  <ion-toolbar class="playing-wrapper">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- <ion-title> Current song playing</ion-title> -->
+    <ion-thumbnail slot="start">
+        <img src="{{ data[0].img }}" />
+      </ion-thumbnail>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<!-- <ion-content>
-  <div class="now-playing">
-    <ion-icon name="arrow-round-back"></ion-icon>
-    <div slot="right">
-      Current song playing
-    </div>
-    <ion-icon slot="left" name="arrow-round-forward"></ion-icon>
-  </div>
-</ion-content> -->
-
-<!-- <ion-list>
+<ion-list class="list-override" lines="none" *ngFor="let item of data; let index = $index">
   <ion-item>
-    <ion-label>Pokémon Yellow</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Mega Man X</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>The Legend of Zelda</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Pac-Man</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Super Mario World</ion-label>
-  </ion-item>
-</ion-list> -->
-
-<ion-list class="list-override" lines="none">
-  <ion-item>
-    <ion-label slot="start">
-      <h3>Current Song</h3>
-      <p>Current Artist</p>
+    <ion-thumbnail slot="start">
+      <img src="{{ item.img }}" />
+    </ion-thumbnail>
+    <ion-label>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.subTitle }}</p>
     </ion-label>
-    <ion-icon name="arrow-round-up" slot="end"></ion-icon>
-    <ion-icon name="arrow-round-down" slot="end"></ion-icon>
-  </ion-item>
-  <ion-item>
-    <ion-label slot="start">
-      <h3>Current Song</h3>
-      <p>Current Artist</p>
-    </ion-label>
-    <ion-icon name="arrow-round-up" slot="end"></ion-icon>
-    <ion-icon name="arrow-round-down" slot="end"></ion-icon>
-  </ion-item>
-
-  <ion-item>
-    <ion-label slot="start">
-      <h3>Current Song</h3>
-      <p>Current Artist</p>
-    </ion-label>
-    <ion-icon name="arrow-round-up" slot="end"></ion-icon>
-    <ion-icon name="arrow-round-down" slot="end"></ion-icon>
+    <ion-button (click)="move(index, index + 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="arrow-round-up"></ion-icon>
+    </ion-button>
+    <ion-button (click)="move(index, index - 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="arrow-round-down"></ion-icon>
+    </ion-button>
   </ion-item>
 </ion-list>
 
 <ion-footer>
   <ion-toolbar>
-    <!-- <div slot="start"></div> -->
-    <ion-button size="large">ADD</ion-button>
-    <!-- <div slot="end"></div> -->
+    <ion-button (click)="presentAddSongPrompt()" expand="full" fill="solid">ADD</ion-button>
   </ion-toolbar>
 </ion-footer>

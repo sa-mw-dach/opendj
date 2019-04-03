@@ -1,0 +1,156 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Playlist Service",
+    "description": "OpenDJ Playlist Service incl. Voting",
+    "license": {
+      "name": "GPLv3",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
+    }
+  },
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Playlist",
+      "description": "API for playlists in the system"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/playlists": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "description": "Create new playlist in system",
+        "parameters": [
+          {
+            "name": "playlist",
+            "in": "body",
+            "description": "Playlist that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New playlist is created",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "summary": "Get all playlists in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Playlists"
+            }
+          }
+        }
+      }
+    },
+    "/playlists/{playlistId}": {
+      "parameters": [
+        {
+          "name": "playlistId",
+          "in": "path",
+          "required": true,
+          "description": "ID of playlist that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "summary": "Get playlist with given ID",
+        "responses": {
+          "200": {
+            "description": "Playlist is found",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Playlist with given ID",
+        "tags": [
+          "Playlists"
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist is deleted",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Playlist with give ID",
+        "tags": [
+          "Playlists"
+        ],
+        "parameters": [
+          {
+            "name": "Playlist",
+            "in": "body",
+            "description": "Playlist with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist is updated",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Playlist": {
+      "required": [
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Playlists": {
+      "type": "array",
+      "$ref": "#/definitions/Playlist"
+    }
+  }
+}

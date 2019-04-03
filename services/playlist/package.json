@@ -1,74 +1,35 @@
 {
-  "name": "service-playlist",
-  "version": "1.0.0",
-  "author": "Red Hat, Inc.",
-  "license": "Apache-2.0",
-  "scripts": {
-    "test": "tape test/*.js | tap-spec",
-    "test:integration": "tape test/integration/*.js | tap-spec",
-    "test:integration:undeploy": "nodeshift --strictSSL=false undeploy",
-    "lint": "xo",
-    "prepare": "echo 'To confirm CVE compliance, run \"npm run security-check\"' ",
-    "security-check": "nsp check",
-    "coverage": "nyc npm test",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "ci": "npm run lint && npm run coveralls",
-    "dependencyCheck": "szero . --ci",
-    "release": "standard-version -a",
-    "openshift": "nodeshift --strictSSL=false --dockerImage=registry.access.redhat.com/rhoar-nodejs/nodejs-10",
-    "postinstall": "license-reporter report -s && license-reporter save -s --xml licenses.xml",
-    "start": "node ."
-  },
-  "main": "./bin/www",
-  "standard-version": {
-    "scripts": {
-      "postbump": "npm run postinstall && node release.js",
-      "precommit": "git add .openshiftio/application.yaml licenses/"
-    }
-  },
-  "xo": {
-    "space": 2,
-    "rules": {
-      "space-before-function-paren": [
-        "error",
-        "always"
-      ]
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/nodeshift-starters/nodejs-rest-http-redhat.git"
-  },
-  "files": [
-    "package.json",
-    "app.js",
-    "public",
-    "bin",
-    "LICENSE",
-    "licenses"
+  "name": "swagger-to-existing-nodejs-project",
+  "version": "0.0.1",
+  "description": "Demo application that shows how to add Swagger UI Spec to existing Node.js/Express.js project ",
+  "keywords": [
+    "node.js",
+    "express.js",
+    "swagger"
   ],
-  "bugs": {
-    "url": "https://github.com/nodeshift-starters/nodejs-rest-http-redhat/issues"
-  },
-  "homepage": "https://github.com/nodeshift-starters/nodejs-rest-http-redhat",
+  "author": "Ivan Vasiljevic",
+  "license": "MIT",
   "devDependencies": {
-    "coveralls": "^3.0.0",
-    "js-yaml": "^3.10.0",
-    "nodeshift": "~1.12.0",
-    "nsp": "~3.2.1",
-    "nyc": "~12.0.2",
-    "rhoaster": "~0.2.0",
-    "standard-version": "^4.3.0",
-    "supertest": "^3.0.0",
-    "szero": "^1.0.0",
-    "tap-spec": "~5.0.0",
-    "tape": "~4.9.0",
-    "xo": "~0.22.0"
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "5.1.1",
+    "gulp": "~3.9.1",
+    "gulp-eslint": "4.0.0",
+    "gulp-nodemon": "^2.2.1",
+    "mock-mongoose": "^7.4.0-r2"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "debug": "^4.0.1",
-    "express": "4.16.0",
-    "license-reporter": "^1.2.0"
+    "body-parser": "1.17.2",
+    "express": "4.15.3",
+    "mongoose": "4.11.5",
+    "swagger-ui-express": "2.0.6",
+    "method-override": "2.3.9",
+    "mock-mongoose": "^7.4.0-r2"
+  },
+  "engines": {
+    "node": ">=6.11.0"
+  },
+  "scripts": {
+    "lint": "jshint **.js",
+    "test": "mocha test/"
   }
 }

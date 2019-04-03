@@ -9,7 +9,6 @@
       "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
     }
   },
-  "host": "localhost:3000",
   "basePath": "/api/v1",
   "tags": [
     {
@@ -137,7 +136,8 @@
   "definitions": {
     "Playlist": {
       "required": [
-        "_id"
+        "_id",
+        "name"
       ],
       "properties": {
         "_id": {
@@ -146,12 +146,30 @@
         },
         "name": {
           "type": "string"
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Track"
+          }
         }
       }
     },
     "Playlists": {
       "type": "array",
-      "$ref": "#/definitions/Playlist"
+      "items": {
+        "$ref": "#/definitions/Playlist"
+      }
+    },
+    "Track": {
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
     }
   }
 }

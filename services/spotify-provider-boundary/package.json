@@ -17,7 +17,7 @@
     "release": "standard-version -a",
     "openshift": "nodeshift --strictSSL=false --dockerImage=registry.access.redhat.com/rhoar-nodejs/nodejs-10",
     "postinstall": "license-reporter report -s && license-reporter save -s --xml licenses.xml",
-    "start": "node ."
+    "start": " node ."
   },
   "main": "./bin/www",
   "standard-version": {
@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cors": "^2.8.5",
     "debug": "^4.0.1",
     "express": "4.16.0",
     "license-reporter": "^1.2.0",

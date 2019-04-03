@@ -20,7 +20,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-list class="list-override" lines="none" *ngFor="let item of data">
+<ion-list class="list-override" lines="none" *ngFor="let item of data; let index = $index">
   <ion-item>
     <ion-thumbnail slot="start">
       <img src="{{ item.img }}" />
@@ -29,10 +29,10 @@
       <h3>{{ item.title }}</h3>
       <p>{{ item.subTitle }}</p>
     </ion-label>
-    <ion-button expand="outline" slot="end">
+    <ion-button (click)="move(index, index + 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="arrow-round-up"></ion-icon>
     </ion-button>
-    <ion-button expand="outline" slot="end">
+    <ion-button (click)="move(index, index - 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="arrow-round-down"></ion-icon>
     </ion-button>
   </ion-item>
@@ -40,7 +40,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="full" fill="solid">ADD</ion-button>
+    <ion-button (click)="presentAddSongPrompt()" expand="full" fill="solid">ADD</ion-button>
   </ion-toolbar>
 </ion-footer>
 <!-- </ion-content> -->

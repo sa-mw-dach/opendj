@@ -3,4 +3,4 @@ export interface PlaylistItem {
   subTitle: string;
   img: string;
   id?: string;
-};
+}

@@ -18,7 +18,7 @@
     "message": "The following service(s) have been created in your project: ${NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/sclorg/nodejs-ex/blob/master/README.md.",
     "labels": {
         "template": "opendj-nodejs",
-        "app": "opendj-nodejs"
+        "app": "${NAME}"
     },
     "objects": [
       {
@@ -221,17 +221,24 @@
         "required": true
       },
       {
+        "name": "SOURCE_REPOSITORY_URL",
+        "displayName": "Git Repository URL",
+        "description": "The URL of the repository with your application source code.",
+        "required": true,
+        "value": "https://github.com/sa-mw-dach/OpenDJ.git"
+      },
+      {
+        "name": "CONTEXT_DIR",
+        "displayName": "Context Directory",
+        "description": "Set this to the relative path to your project if it is not in the root of your repository.",
+        "required": true
+      },
+      {
         "name": "PROBE_PATH",
         "displayName": "Path for readiness and liveness probe",
         "description": "Path for readiness and liveness probe",
         "required": true,
         "value": "/"
-      },
-      {
-        "name": "NAME",
-        "displayName": "Name",
-        "description": "The name assigned to all of the frontend objects defined in this template.",
-        "required": true
       },
       {
         "name": "NAMESPACE",
@@ -255,21 +262,9 @@
         "value": "512Mi"
       },
       {
-        "name": "SOURCE_REPOSITORY_URL",
-        "displayName": "Git Repository URL",
-        "description": "The URL of the repository with your application source code.",
-        "required": true,
-        "value": "https://github.com/sa-mw-dach/OpenDJ.git"
-      },
-      {
         "name": "SOURCE_REPOSITORY_REF",
         "displayName": "Git Reference",
         "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
-      },
-      {
-        "name": "CONTEXT_DIR",
-        "displayName": "Context Directory",
-        "description": "Set this to the relative path to your project if it is not in the root of your repository."
       },
       {
         "name": "APPLICATION_DOMAIN",

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { PlaylistItem } from '../models/playlist-item.model';
 import { AlertController } from '@ionic/angular';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,10 @@ import { AlertController } from '@ionic/angular';
 export class HomePage implements OnInit {
   data: Array<PlaylistItem>;
 
-  constructor(public alertController: AlertController) {}
+  constructor(
+    public alertController: AlertController,
+    public api: ApiService
+  ) {}
 
   ngOnInit() {
     this.data = [
@@ -93,11 +97,34 @@ export class HomePage implements OnInit {
         },
         {
           text: 'Add To Playlist',
-          handler: () => {
-            console.log('Confirm Ok');
+          handler: (data) => {
+            console.log('Confirm Ok', data);
+            // this.api.addSong()
           }
         }
       ]
+    });
+
+    await alert.present();
+  }
+
+  async presentSuccessAlert() {
+    const alert = await this.alertController.create({
+      header: 'Success',
+      subHeader: 'Successfully added ',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  async presentErrorAlert() {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      subHeader: 'Unable to post Song selection',
+      message: 'Please try again.',
+      buttons: ['OK']
     });
 
     await alert.present();

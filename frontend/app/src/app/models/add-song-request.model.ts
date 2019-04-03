@@ -1,3 +1,3 @@
 export interface AddSongRequestObject {
-  uri: string;
+  songUri: string;
 }

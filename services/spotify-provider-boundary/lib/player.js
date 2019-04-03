@@ -23,7 +23,7 @@ function playerRoute() {
     }
 
     playerRouter.post('/', function (request, response) {
-        
+
         var token = process.env.token;
         var device = process.env.device;
 
@@ -36,10 +36,7 @@ function playerRoute() {
             handleError("No track defined in body", response);
         } else {
             var data = JSON.stringify({
-                context_uri: track,
-                offset: {
-                    position: 5
-                },
+                uris: [track],
                 position_ms: 0
             });
 

@@ -67,6 +67,7 @@ var updatePlaylist = function (req, res, next) {
   });
 };
 
+
 var deletePlaylist = function (req, res, next) {
   req.playlist.remove(function (err) {
     if (err) {
@@ -102,6 +103,19 @@ var getByIdPlaylist = function (req, res, next, id) {
   });
 };
 
+var addTrackToPlaylist = function (req, res, next) {
+  var id = req.body._id;
+  var newTrack = req.body.track;
+  Playlist.findOneAndUpdate({ _id: id }, { $push: { tracks: newTrack }}, function (err, playlist) {
+    if (err) {
+      next(err);
+    } else {
+      res.json(playlist);
+    }
+  })
+};
+
+
 router.route('/playlists')
   .post(createPlaylist)
   .get(getAllPlaylists);
@@ -110,6 +124,9 @@ router.route('/playlists/:playlistId')
   .get(getOnePlaylist)
   .put(updatePlaylist)
   .delete(deletePlaylist);
+
+router.route('/addtrack')
+  .post(addTrackToPlaylist)
 
 router.param('playlistId', getByIdPlaylist);
 

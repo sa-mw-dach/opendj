@@ -8,6 +8,13 @@ var express = require('express'),
   swaggerUi = require('swagger-ui-express'),
   swaggerDocument = require('./swagger.json');
 
+
+  var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+      ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
+      mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+      mongoURLLabel = "";
+
+
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
@@ -104,5 +111,7 @@ router.param('playlistId', getByIdPlaylist);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', router);
 
-app.listen(3000);
+app.listen(port,ip);
+console.log('Server running on http://%s:%s', ip, port);
+
 module.exports = app;

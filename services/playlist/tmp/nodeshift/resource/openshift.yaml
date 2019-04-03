@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: service-playlist
+      namespace: dfroehli-opendj-dev
+      labels:
+        project: service-playlist
+        version: 1.0.0
+        provider: nodeshift
+        app: service-playlist
+      annotations:
+        nodeshift/git-branch: master
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 2
+      selector:
+        app: service-playlist
+        project: service-playlist
+        provider: nodeshift
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - service-playlist
+            from:
+              kind: ImageStreamTag
+              name: 'service-playlist:latest'
+      template:
+        metadata:
+          labels:
+            project: service-playlist
+            version: 1.0.0
+            provider: nodeshift
+            app: service-playlist
+          annotations:
+            nodeshift/git-branch: master
+        spec:
+          containers:
+            - image: service-playlist
+              name: service-playlist
+              securityContext:
+                privileged: false
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                httpGet:
+                  path: /api/greeting
+                  port: 8080
+                  scheme: HTTP
+              livenessProbe:
+                httpGet:
+                  path: /api/greeting
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 60
+                periodSeconds: 30
+              env: []
+  - apiVersion: v1
+    kind: Route
+    spec:
+      to:
+        kind: Service
+        name: service-playlist
+      port:
+        targetPort: 8080
+    metadata:
+      name: service-playlist
+      namespace: dfroehli-opendj-dev
+      labels:
+        project: service-playlist
+        version: 1.0.0
+        provider: nodeshift
+  - apiVersion: v1
+    kind: Service
+    spec:
+      selector:
+        project: service-playlist
+        provider: nodeshift
+      ports:
+        - protocol: TCP
+          port: 8080
+          targetPort: 8080
+          name: http
+      type: ClusterIP
+    metadata:
+      name: service-playlist
+      namespace: dfroehli-opendj-dev
+      labels:
+        project: service-playlist
+        version: 1.0.0
+        provider: nodeshift
+      annotations:
+        nodeshift/git-branch: master

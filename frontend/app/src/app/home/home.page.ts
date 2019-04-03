@@ -5,6 +5,8 @@ import { AlertController } from '@ionic/angular';
 // import { ApiService } from '../services/api.service';
 
 import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
+import { AddTrackService } from '../../../sdk/playlist/api/playlists.service';
+import { AddTrackService } from 'sdk/playlist/api/addTrack.service';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +18,8 @@ export class HomePage implements OnInit {
 
   constructor(
     public alertController: AlertController,
-    public api: PlaylistsService
+    public playListApi: PlaylistsService,
+    public addTrackApi: AddTrackService
   ) {
     this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
@@ -62,7 +65,7 @@ export class HomePage implements OnInit {
     ];
 
 
-    this.api.playlistsGet()
+    this.playListApi.playlistsGet()
     .subscribe(
       (data) => {console.log(data); },
       (err) => {console.error(err); },
@@ -114,6 +117,8 @@ export class HomePage implements OnInit {
           handler: (data) => {
             console.log('Confirm Ok', data);
             alert.dismiss();
+
+            this.addTrackApi.addtrackPost(data)
             this.presentSuccessAlert();
           }
         }
@@ -144,4 +149,5 @@ export class HomePage implements OnInit {
 
     await alert.present();
   }
+
 }

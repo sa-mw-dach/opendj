@@ -178,7 +178,7 @@
           "description" : "submit spotify uri to add track to playlist",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/Playlist"
+            "$ref" : "#/definitions/Track"
           }
         } ],
         "responses" : {

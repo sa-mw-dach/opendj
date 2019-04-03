@@ -1,173 +1,215 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Playlist Service",
-    "description": "OpenDJ Playlist Service incl. Voting",
-    "license": {
-      "name": "GPLv3",
-      "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "OpenDJ Playlist Service incl. Voting",
+    "version" : "1.0.0",
+    "title" : "Playlist Service",
+    "license" : {
+      "name" : "GPLv3",
+      "url" : "https://www.gnu.org/licenses/gpl-3.0.de.html"
     }
   },
-  "basePath": "/api/v1",
-  "tags": [
-    {
-      "name": "Playlist",
-      "description": "API for playlists in the system"
-    }
-  ],
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "paths": {
-    "/playlists": {
-      "post": {
-        "tags": [
-          "Playlists"
-        ],
-        "description": "Create new playlist in system",
-        "parameters": [
-          {
-            "name": "playlist",
-            "in": "body",
-            "description": "Playlist that we want to create",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "New playlist is created",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
+  "basePath" : "/api/v1",
+  "tags" : [ {
+    "name" : "Playlist",
+    "description" : "API for playlists in the system"
+  } ],
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/playlists" : {
+      "get" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Get all playlists in system",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Playlists"
             }
           }
         }
       },
-      "get": {
-        "tags": [
-          "Playlists"
-        ],
-        "summary": "Get all playlists in system",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Playlists"
+      "post" : {
+        "tags" : [ "Playlists" ],
+        "description" : "Create new playlist in system",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "playlist",
+          "description" : "Playlist that we want to create",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Playlist"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "New playlist is created",
+            "schema" : {
+              "$ref" : "#/definitions/Playlist"
             }
           }
         }
       }
     },
-    "/playlists/{playlistId}": {
-      "parameters": [
-        {
-          "name": "playlistId",
-          "in": "path",
-          "required": true,
-          "description": "ID of playlist that we want to find",
-          "type": "string"
+    "/playlists/{playlistId}/firstTrack" : {
+      "get" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Get firstTrack with given playlist ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to use to get its first track",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Track is found",
+            "schema" : {
+              "$ref" : "#/definitions/Track"
+            }
+          },
+          "404" : {
+            "description" : "Playlist empty"
+          }
         }
-      ],
-      "get": {
-        "tags": [
-          "Playlists"
-        ],
-        "summary": "Get playlist with given ID",
-        "responses": {
-          "200": {
-            "description": "Playlist is found",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
+      }
+    },
+    "/playlists/{playlistId}" : {
+      "get" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Get playlist with given ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to find",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Playlist is found",
+            "schema" : {
+              "$ref" : "#/definitions/Playlist"
             }
           }
         }
       },
-      "delete": {
-        "summary": "Delete Playlist with given ID",
-        "tags": [
-          "Playlists"
-        ],
-        "responses": {
-          "200": {
-            "description": "Playlist is deleted",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
+      "put" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Update Playlist with give ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to find",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "Playlist",
+          "description" : "Playlist with new values of properties",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Playlist"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Playlist is updated",
+            "schema" : {
+              "$ref" : "#/definitions/Playlist"
             }
           }
         }
       },
-      "put": {
-        "summary": "Update Playlist with give ID",
-        "tags": [
-          "Playlists"
-        ],
-        "parameters": [
-          {
-            "name": "Playlist",
-            "in": "body",
-            "description": "Playlist with new values of properties",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
-            }
+      "delete" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Delete Playlist with given ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to find",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Playlist is deleted"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Playlist is updated",
-            "schema": {
-              "$ref": "#/definitions/Playlist"
-            }
+        }
+      }
+    },
+    "/playlists/{playlistId}/tracks/{trackId}" : {
+      "delete" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Delete Song in playlist ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to find",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "trackId",
+          "in" : "path",
+          "description" : "ID of a track that we want to find",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Song is deleted"
           }
         }
       }
     }
   },
-  "definitions": {
-    "Playlist": {
-      "required": [
-        "_id",
-        "name"
-      ],
-      "properties": {
-        "_id": {
-          "type": "string",
-          "uniqueItems": true
+  "definitions" : {
+    "Playlist" : {
+      "required" : [ "_id", "name" ],
+      "properties" : {
+        "_id" : {
+          "type" : "string"
         },
-        "name": {
-          "type": "string"
+        "name" : {
+          "type" : "string"
         },
-        "tracks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Track"
+        "tracks" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Track"
           }
         }
       }
     },
-    "Playlists": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Playlist"
+    "Playlists" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/Playlist"
       }
     },
-    "Track": {
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
+    "Track" : {
+      "required" : [ "resourceURI" ],
+      "properties" : {
+        "resourceURI" : {
+          "type" : "string"
+        },
+        "artistName" : {
+          "type" : "string"
+        },
+        "imageObject" : {
+          "$ref" : "#/definitions/imageObject"
+        }
+      }
+    },
+    "imageObject" : {
+      "properties" : {
+        "externalURI" : {
+          "type" : "string"
         }
       }
     }

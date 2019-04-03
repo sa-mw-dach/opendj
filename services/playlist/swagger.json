@@ -168,10 +168,10 @@
       }
     }
   },
-  "/playlists/{playlistId}/tracks/{trackId}" : {
-    "delete" : {
-      "tags" : [ "Playlists" ],
-      "summary" : "Delete Song in playlist ID",
+  "/addtrack" : {
+    "post" : {
+      "tags" : [ "Add Track" ],
+      "summary" : "Add track uri to playlist",
       "parameters" : [ {
         "name" : "playlistId",
         "in" : "path",
@@ -191,7 +191,6 @@
         }
       }
     }
-  }
   },
   "definitions" : {
     "Playlist" : {

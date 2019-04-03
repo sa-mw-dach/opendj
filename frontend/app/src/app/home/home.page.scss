@@ -6,7 +6,7 @@
 }
 
 .current-song {
-  background: black;
+  background: transparent;
   color: white;
   text-align: center;
   height: 10vh;
@@ -18,7 +18,7 @@
   // border-color: black !important;
 }
 
-ion-header {
-  background: linear-gradient(162deg, rgba(56, 70, 108, .8) 20%, rgba(56, 70, 108, .8) 100%);
+.header-bg {
+  background: linear-gradient(162deg, rgba(56, 70, 108, .8) 20%, rgba(56, 70, 108, .8) 100%) !important;
 }
 

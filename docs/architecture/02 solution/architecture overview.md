@@ -16,11 +16,11 @@ Architecture Overview
       |   |                |
       |   +-----------+    |
       |               |    |
-   +--+------+    +---+----+-----------+   +--------------+
-   |         |    |                    |   |              |
-   |  Track  |    |  Playlist Service  +---+   Thelxiope  |
-   |         |    |                    |   |              |
-   +-----+---+    +---+-------------+--+   +--------+-----+
+   +--+------+    +---+----+-----------+   +--------------+   +-----------------+
+   |         |    |                    |   |              |   |                 |
+   |  Track  |    |  Playlist Service  +---+   Thelxiope  |   |  Event Service  |
+   |         |    |                    |   |              |   |                 |
+   +-----+---+    +---+-------------+--+   +--------+-----+   +-----------------+
          |            |             |               |
          |        +---------------------------------+
          |        |   |             |
@@ -35,6 +35,8 @@ Architecture Overview
          || Provider ||             || Backend ||
          ||          ||             ||         ||
          +------------+             +-----------+
+
+
 ```
 
 
@@ -45,11 +47,14 @@ Architecture Overview
   * Retrieve Track Metadata
   * Search Track by Metadata
 * Playlist service
-  * Add/Remove Track
+  * Add/Remove Track to Playlist
   * Vote Track Up/Down
-* Thelxiope
+  * Create/Delete Playlist (for Event)
+* Thelxiope (Greek: Siren, "the beautiful voice")
   * Maintains player state in playlist, reconciles reality with desired state
+* Event service
+  * CRUD Event
 * Provider
   * Interface to provider implementation, e.g. Spotify
 * Backend Boundary
-  * Interface to player device, e.g. on RasPi
+  * Interface to player device, e.g. on RasPi (if required)

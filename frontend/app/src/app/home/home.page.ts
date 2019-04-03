@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { PlaylistItem } from '../models/playlist-item.model';
 import { AlertController } from '@ionic/angular';
-import { ApiService } from '../services/api.service';
+// import { ApiService } from '../services/api.service';
 
-// import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
+import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
 
   constructor(
     public alertController: AlertController,
-    public api: ApiService
+    public api: PlaylistsService
   ) {
 
   }
@@ -62,7 +62,7 @@ export class HomePage implements OnInit {
     ];
 
 
-    this.api.getPlaylist()
+    this.api.playlistsGet()
     .subscribe(
       (data) => {console.log(data); },
       (err) => {console.error(err); },

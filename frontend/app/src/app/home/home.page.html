@@ -11,7 +11,10 @@
         <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title> Current song playing</ion-title>
+    <!-- <ion-title> Current song playing</ion-title> -->
+    <ion-thumbnail slot="start">
+        <img src="{{ data[0].img }}" />
+      </ion-thumbnail>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
@@ -43,4 +46,3 @@
     <ion-button (click)="presentAddSongPrompt()" expand="full" fill="solid">ADD</ion-button>
   </ion-toolbar>
 </ion-footer>
-<!-- </ion-content> -->

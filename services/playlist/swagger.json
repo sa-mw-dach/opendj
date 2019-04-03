@@ -9,7 +9,6 @@
       "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
     }
   },
-  "host": "localhost:3000",
   "basePath": "/api/v1",
   "tags": [
     {

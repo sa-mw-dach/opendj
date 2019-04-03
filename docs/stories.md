@@ -1,7 +1,7 @@
 User Stories
 ============
 
-# Tracks can be up and downvoted
+# Tracks can be up and downvoted u
 # As a dancer, I would like to see the current song
 # As a dancer, I would like to see the next songs
 # As a dancer, I would like to hear more or less like the current track (Using Music Service APIs *magic suggestions*)

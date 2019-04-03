@@ -2,9 +2,10 @@ import requests
 import json
 import time
 import sys
+import os
 
-playlist_service_url = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/'
-boundary_service_url = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/'
+playlist_service_url = os.environ['PLAYLIST_URL'] or 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/'
+boundary_service_url = os.environ['BOUNDARY_SERVICE_URL'] or 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/'
 
 try:
     # retrieve playlists

@@ -105,7 +105,11 @@ var getOnePlaylist = function (req, res) {
 };
 
 var getTrackByPlaylist = function (req, res) {
-  res.json(req.playlist.tracks[0]);
+	if (req.playlist.tracks[0]){
+		res.json(req.playlist.tracks[0])
+	} else {
+		res.status(404).send("empty list");
+	}
 };
 
 var getByIdPlaylist = function (req, res, next, id) {

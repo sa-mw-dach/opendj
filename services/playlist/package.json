@@ -23,7 +23,8 @@
     "express": "^4.16.4",
     "method-override": "2.3.9",
     "mongoose": "4.11.5",
-    "swagger-ui-express": "2.0.6"
+    "swagger-ui-express": "2.0.6",
+    "mock-mongoose": "^7.4.0"
   },
   "engines": {
     "node": ">=6.11.0"

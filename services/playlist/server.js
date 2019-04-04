@@ -30,7 +30,10 @@ var PlaylistSchema = new Schema({
   name: {type: String},
   tracks: [{
 	  resourceURI: {type: String},
+	  trackName: {type: String},
+      albumName: {type: String},
 	  artistName: {type: String},
+	  image: {type: String},
 	  trackName: {type: String},
 	  imageObject: {externalURI : {type: String}}
 	  }]

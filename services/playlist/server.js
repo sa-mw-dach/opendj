@@ -31,6 +31,7 @@ var PlaylistSchema = new Schema({
   tracks: [{
 	  resourceURI: {type: String},
 	  artistName: {type: String},
+	  trackName: {type: String},
 	  imageObject: {externalURI : {type: String}}
 	  }]
 });
@@ -127,6 +128,18 @@ var addTrackToPlaylist = function (req, res, next) {
   })
 };
 
+function createPartyMock() {
+   var mockedPlaylist = new Playlist({_id : "0", name : "Dan's Playlist", tracks : []});
+   //mockedPlaylist._id = "0";
+   mockedPlaylist.save(function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("saved mocked playlist");
+    }
+    });
+   //mockgoose.
+}
 
 router.route('/playlists')
   .post(createPlaylist)
@@ -151,6 +164,10 @@ router.param('playlistId', getByIdPlaylist);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', router);
+
+//init with seeding data
+createPartyMock();
+
 
 app.listen(port,ip);
 console.log('Server running on http://%s:%s', ip, port);

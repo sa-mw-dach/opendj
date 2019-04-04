@@ -50,35 +50,35 @@ export class HomePage implements OnInit {
       .subscribe(
         (data) => {
           // debugger
-          this.playlist = data;
+          this.playlist = data[0];
         },
         (err) => {console.error(err); },
         () => {}
       );
-    }, 20000);
+    }, 3000);
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 
   ngOnInit() {
 
     // this.SpotifyApi.currentTrackGet();
-    // this.PlayListsApi.playlistsGet().subscribe(
-    //   data => {
-    //     this.playlist = data;
-    //     this.playlist.tracks.push(
-    //       {
-    //         trackName: 'The Whole Universe Wants to Be Touched',
-    //         albumName: 'All Melody',
-    //         artistName: 'Nils Frahm',
-    //         image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-    //       }
-    //     );
-    //   },
-    //   err => {
-    //     console.error(err);
-    //   },
-    //   () => {}
-    // );
+    this.PlayListsApi.playlistsGet().subscribe(
+      data => {
+        this.playlist = data[0];
+        // this.playlist.tracks.push(
+        //   {
+        //     trackName: 'The Whole Universe Wants to Be Touched',
+        //     albumName: 'All Melody',
+        //     artistName: 'Nils Frahm',
+        //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+        //   }
+        // );
+      },
+      err => {
+        console.error(err);
+      },
+      () => {}
+    );
   }
 
   move(old_index, new_index) {
@@ -132,9 +132,10 @@ export class HomePage implements OnInit {
             const trackId = data.songUri.replace('spotify:track:', '');
             this.http.get(`${baseUrl}/trackInfo/${trackId}`).subscribe(
               data => {
-                if (data !== null) {
+                // if (data !== null) {
+                  // console.log(data)
                   const request: any  = {
-                    _id: this.playlist._id,
+                    _id: '0',
                     track: data
                   };
                   this.AddTrackApi.addtrackPost(request).subscribe((data) => {
@@ -147,7 +148,7 @@ export class HomePage implements OnInit {
                     alert.dismiss();
                     this.presentSuccessAlert();
                   });
-                }
+                // }
               },
               err => {
                 console.error(err);

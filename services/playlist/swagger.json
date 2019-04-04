@@ -207,7 +207,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "New playlist is created",
+            "description" : "added a track",
             "schema" : {
               "$ref" : "#/definitions/Playlist"
             }
@@ -266,8 +266,8 @@
     "AddTrack": {
       "required" : [ "_id", "track" ],
       "properties" : {
-        "Track" : {
-          "$ref" : "#/definitions/imageObject"
+        "track" : {
+          "$ref" : "#/definitions/Track"
         },
         "_id" : {
           "type" : "string"

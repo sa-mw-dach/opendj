@@ -42,7 +42,8 @@ export class HomePage implements OnInit {
         trackName: 'The Whole Universe Wants to Be Touched',
         albumName: 'All Melody',
         artistName: 'Nils Frahm',
-        image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+        image: 'assets/imgs/logo_transparent.png'
+        // image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
       }
     ];
     // setInterval(() => {

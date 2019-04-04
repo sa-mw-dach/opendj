@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { HomePage } from './home.page';
 
 import { PlaylistItemComponent } from '../components/playlist-item/playlist-item.component';
+import { ActiveTrackComponent } from '../components/active-track/active-track.component';
+import { FooterComponent } from '../components/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -22,7 +24,9 @@ import { PlaylistItemComponent } from '../components/playlist-item/playlist-item
   ],
   declarations: [
     HomePage,
-    PlaylistItemComponent
+    PlaylistItemComponent,
+    ActiveTrackComponent,
+    FooterComponent
   ]
 })
 export class HomePageModule {}

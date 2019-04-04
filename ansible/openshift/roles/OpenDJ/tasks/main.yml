@@ -51,3 +51,29 @@
       - cbennett@redhat.com
       - mmetting@redhat.com
 
+- name: Create a new ClusterRole
+  k8s:
+    state: present
+    definition:
+      api_version: v1
+      kind: ClusterRole
+      metadata:
+        name: admin
+        namespace: dfroehli-opendj-dev
+        Subjects:
+          kind: Group
+          name: opendj-developer
+
+- name: Create a new ClusterRole
+  k8s:
+    state: present
+    definition:
+      api_version: v1
+      kind: ClusterRole
+      metadata:
+        name: admin
+        namespace: dfroehli-opendj-prd
+        Subjects:
+          kind: Group
+          name: opendj-developer
+

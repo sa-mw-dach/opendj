@@ -23,7 +23,6 @@ function trackInfoRoute() {
     }
 
     trackInfo.get('/:id', function (request, response) {
-
         var token = process.env.token;
         var device = process.env.device;
 

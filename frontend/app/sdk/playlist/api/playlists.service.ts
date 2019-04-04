@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class PlaylistsService {
 
-    protected basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
+    protected basePath = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -384,4 +384,3 @@ export class PlaylistsService {
         );
     }
 }
-

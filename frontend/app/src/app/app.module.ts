@@ -14,6 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { PlaylistsService } from '../../sdk/playlist/api/playlists.service';
 import { AddTrackService } from '../../sdk/playlist/api/addTrack.service';
 
+import { DefaultService } from '../../sdk/spotify-provider/api/default.service';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -28,6 +30,7 @@ import { AddTrackService } from '../../sdk/playlist/api/addTrack.service';
     SplashScreen,
     PlaylistsService,
     AddTrackService,
+    DefaultService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

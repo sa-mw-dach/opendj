@@ -1,0 +1,15 @@
+<ion-item *ngFor="let item of playlist.tracks; let index = $index">
+    <ion-thumbnail slot="start">
+      <img src="{{ item.image }}" />
+    </ion-thumbnail>
+    <ion-label>
+      <h3>{{ item.trackName }}</h3>
+      <p>{{ item.artistName }}</p>
+    </ion-label>
+    <ion-button style="color: white" (click)="move(index, index + 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="thumbs-up"></ion-icon>
+    </ion-button>
+    <ion-button style="color: white" (click)="move(index, index - 1)" expand="outline" slot="end">
+      <ion-icon slot="icon-only" name="thumbs-down"></ion-icon>
+    </ion-button>
+  </ion-item>

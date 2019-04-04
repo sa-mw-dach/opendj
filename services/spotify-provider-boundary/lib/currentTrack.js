@@ -59,7 +59,7 @@ function playerRoute() {
                   "is_playing": body.is_playing,
                   "progress_ms":  body.progress_ms,
                   "duration_ms":  body.item.duration_ms,
-                  "ressourceURI": body.item.uri
+                  "resourceURI": body.item.uri
                 };
                 
                 console.log('response: ' + myResponse);

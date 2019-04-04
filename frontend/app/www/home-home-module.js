@@ -114,40 +114,43 @@ var HomePage = /** @class */ (function () {
             name: '',
             tracks: []
         };
-        this.playlist.tracks = [
-            {
-                resourceURI: '',
-                trackName: 'The Whole Universe Wants to Be Touched',
-                albumName: 'All Melody',
-                artistName: 'Nils Frahm',
-                image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-            }
-        ];
+        // this.playlist.tracks = [
+        //   {
+        //     resourceURI: '',
+        //     trackName: 'The Whole Universe Wants to Be Touched',
+        //     albumName: 'All Melody',
+        //     artistName: 'Nils Frahm',
+        //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+        //   }
+        // ];
         setInterval(function () {
             _this.PlayListsApi.playlistsGet()
                 .subscribe(function (data) {
                 // debugger
                 _this.playlist = data;
             }, function (err) { console.error(err); }, function () { });
-        }, 5000);
+        }, 20000);
         // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
     }
     HomePage.prototype.ngOnInit = function () {
-        var _this = this;
-        this.SpotifyApi.currentTrackGet();
-        this.PlayListsApi.playlistsGet().subscribe(function (data) {
-            _this.playlist = data;
-            _this.playlist.tracks = [
-                {
-                    trackName: 'The Whole Universe Wants to Be Touched',
-                    albumName: 'All Melody',
-                    artistName: 'Nils Frahm',
-                    image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-                }
-            ];
-        }, function (err) {
-            console.error(err);
-        }, function () { });
+        // this.SpotifyApi.currentTrackGet();
+        // this.PlayListsApi.playlistsGet().subscribe(
+        //   data => {
+        //     this.playlist = data;
+        //     this.playlist.tracks.push(
+        //       {
+        //         trackName: 'The Whole Universe Wants to Be Touched',
+        //         albumName: 'All Melody',
+        //         artistName: 'Nils Frahm',
+        //         image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+        //       }
+        //     );
+        //   },
+        //   err => {
+        //     console.error(err);
+        //   },
+        //   () => {}
+        // );
     };
     HomePage.prototype.move = function (old_index, new_index) {
         while (old_index < 0) {
@@ -196,26 +199,26 @@ var HomePage = /** @class */ (function () {
                                     text: 'Add To Playlist',
                                     handler: function (data) {
                                         console.log('Confirm Ok', data, _this.playlist);
-                                        var request = {
-                                            _id: _this.playlist._id,
-                                            track: null
-                                        };
                                         // spotify:track:1tT3WfvorMsmKuQbkKMRpv
                                         var baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
                                         var trackId = data.songUri.replace('spotify:track:', '');
                                         _this.http.get(baseUrl + "/trackInfo/" + trackId).subscribe(function (data) {
-                                            console.log('add track', data);
-                                            request.track = data;
-                                            _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
-                                                console.log('add track', data);
-                                            }, function (err) {
-                                                console.error(err);
-                                                alert.dismiss();
-                                                _this.presentErrorAlert();
-                                            }, function () {
-                                                alert.dismiss();
-                                                _this.presentSuccessAlert();
-                                            });
+                                            if (data !== null) {
+                                                var request = {
+                                                    _id: _this.playlist._id,
+                                                    track: data
+                                                };
+                                                _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
+                                                    console.log('add track', data);
+                                                }, function (err) {
+                                                    console.error(err);
+                                                    alert.dismiss();
+                                                    _this.presentErrorAlert();
+                                                }, function () {
+                                                    alert.dismiss();
+                                                    _this.presentSuccessAlert();
+                                                });
+                                            }
                                         }, function (err) {
                                             console.error(err);
                                             alert.dismiss();

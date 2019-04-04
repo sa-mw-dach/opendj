@@ -34,17 +34,17 @@ export class HomePage implements OnInit {
       _id: '0',
       name: '',
       tracks: []
-    }
+    };
 
-    this.playlist.tracks = [
-      {
-        resourceURI: '',
-        trackName: 'The Whole Universe Wants to Be Touched',
-        albumName: 'All Melody',
-        artistName: 'Nils Frahm',
-        image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-      }
-    ];
+    // this.playlist.tracks = [
+    //   {
+    //     resourceURI: '',
+    //     trackName: 'The Whole Universe Wants to Be Touched',
+    //     albumName: 'All Melody',
+    //     artistName: 'Nils Frahm',
+    //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+    //   }
+    // ];
     setInterval(() => {
       this.PlayListsApi.playlistsGet()
       .subscribe(
@@ -55,30 +55,30 @@ export class HomePage implements OnInit {
         (err) => {console.error(err); },
         () => {}
       );
-    }, 5000);
+    }, 20000);
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 
   ngOnInit() {
 
-    this.SpotifyApi.currentTrackGet();
-    this.PlayListsApi.playlistsGet().subscribe(
-      data => {
-        this.playlist = data;
-        this.playlist.tracks = [
-          {
-            trackName: 'The Whole Universe Wants to Be Touched',
-            albumName: 'All Melody',
-            artistName: 'Nils Frahm',
-            image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-          }
-        ];
-      },
-      err => {
-        console.error(err);
-      },
-      () => {}
-    );
+    // this.SpotifyApi.currentTrackGet();
+    // this.PlayListsApi.playlistsGet().subscribe(
+    //   data => {
+    //     this.playlist = data;
+    //     this.playlist.tracks.push(
+    //       {
+    //         trackName: 'The Whole Universe Wants to Be Touched',
+    //         albumName: 'All Melody',
+    //         artistName: 'Nils Frahm',
+    //         image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+    //       }
+    //     );
+    //   },
+    //   err => {
+    //     console.error(err);
+    //   },
+    //   () => {}
+    // );
   }
 
   move(old_index, new_index) {
@@ -125,28 +125,29 @@ export class HomePage implements OnInit {
           handler: data => {
             console.log('Confirm Ok', data, this.playlist);
 
-            let request: any  = {
-              _id: this.playlist._id,
-              track: null
-            };
+
 
             // spotify:track:1tT3WfvorMsmKuQbkKMRpv
             const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
             const trackId = data.songUri.replace('spotify:track:', '');
             this.http.get(`${baseUrl}/trackInfo/${trackId}`).subscribe(
               data => {
-                console.log('add track', data);
-                request.track = data;
-                this.AddTrackApi.addtrackPost(request).subscribe((data) => {
-                  console.log('add track', data);
-                }, (err) => {
-                  console.error(err)
-                  alert.dismiss();
-                  this.presentErrorAlert();
-                }, () => {
-                  alert.dismiss();
-                  this.presentSuccessAlert();
-                });
+                if (data !== null) {
+                  const request: any  = {
+                    _id: this.playlist._id,
+                    track: data
+                  };
+                  this.AddTrackApi.addtrackPost(request).subscribe((data) => {
+                    console.log('add track', data);
+                  }, (err) => {
+                    console.error(err)
+                    alert.dismiss();
+                    this.presentErrorAlert();
+                  }, () => {
+                    alert.dismiss();
+                    this.presentSuccessAlert();
+                  });
+                }
               },
               err => {
                 console.error(err);

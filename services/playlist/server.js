@@ -112,6 +112,29 @@ var getTrackByPlaylist = function (req, res) {
 	}
 };
 
+/*
+* I dont know if it is a good idea to respond with the deleted item
+*/
+var popTrackByPlaylist = function (req, res) {
+	//playlist being fetch already by getByIdPlaylist
+    var id = req.playlist._id;
+    console.log("fetching teh following Playlist ID to pop");
+    console.log(id);
+    //findoneAndUpdate
+    Playlist.findOneAndUpdate({ _id: id }, { $pop: { tracks: -1 }}, {new: false}, function (err, playlist) {
+    if (err) {
+	  console.log(err);
+      next(err);
+    } else {
+	    if (playlist.tracks[0]) { 
+           res.json(playlist.tracks[0]);
+      } else {
+	      res.status(404).send("Playlist empty");
+	  }
+    }
+  })
+};
+
 var getByIdPlaylist = function (req, res, next, id) {
   Playlist.findOne({_id: id}, function (err, playlist) {
     if (err) {
@@ -172,6 +195,8 @@ router.route('/playlists/:playlistId')
 
 router.route('/playlists/:playlistId/firstTrack')
   .get(getTrackByPlaylist);
+router.route('/playlists/:playlistId/pop')
+  .get(popTrackByPlaylist);
 
 router.route('/getFirstTrack/:playlistId')
   .get(getTrackByPlaylist);

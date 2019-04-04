@@ -68,7 +68,31 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Track is found",
+            "description" : "Track has been found",
+            "schema" : {
+              "$ref" : "#/definitions/Track"
+            }
+          },
+          "404" : {
+            "description" : "Playlist empty"
+          }
+        }
+      }
+    },
+    "/playlists/{playlistId}/pop" : {
+      "get" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "pop firstTrack with given playlist ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to use to get its first track",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The following track has been removed from the list",
             "schema" : {
               "$ref" : "#/definitions/Track"
             }
@@ -92,7 +116,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Track is found",
+            "description" : "Track has been found",
             "schema" : {
               "$ref" : "#/definitions/Track"
             }
@@ -192,7 +216,7 @@
       }
     },
     "/addtrack" : {
-      "post": {
+      "post" : {
         "tags" : [ "Add track" ],
         "description" : "Add track uri",
         "produces" : [ "application/json" ],
@@ -263,7 +287,7 @@
         }
       }
     },
-    "AddTrack": {
+    "AddTrack" : {
       "required" : [ "_id", "track" ],
       "properties" : {
         "track" : {

@@ -35,7 +35,7 @@ try:
             response.raise_for_status()
             currentTrack = json.loads(response.content)
 
-            if (not currentTrack['is_playing']) or (currentTrack['progress_ms'] >= currentTrack['progress_ms']):
+            if (not currentTrack['is_playing']) or (currentTrack['progress_ms'] >= currentTrack['duration_ms']):
                 break
             
             # sleep some time

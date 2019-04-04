@@ -4,9 +4,11 @@ import { PlaylistItem } from '../models/playlist-item.model';
 import { AlertController } from '@ionic/angular';
 // import { ApiService } from '../services/api.service';
 
+// import * as API from '../../../sdk/playlist/api/api';
 import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
-import { AddTrackService } from '../../../sdk/playlist/api/playlists.service';
-import { AddTrackService } from 'sdk/playlist/api/addTrack.service';
+import { AddTrackService } from '../../../sdk/playlist/api/addTrack.service';
+
+// import { Track } from '../../../sdk/playlist/model/track';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +17,14 @@ import { AddTrackService } from 'sdk/playlist/api/addTrack.service';
 })
 export class HomePage implements OnInit {
   data: Array<PlaylistItem>;
+  playlist: any;
 
   constructor(
     public alertController: AlertController,
-    public playListApi: PlaylistsService,
-    public addTrackApi: AddTrackService
+    public AddTrackApi: AddTrackService,
+    public PlayListsApi: PlaylistsService
   ) {
-    this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+    // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 
   ngOnInit() {
@@ -65,9 +68,11 @@ export class HomePage implements OnInit {
     ];
 
 
-    this.playListApi.playlistsGet()
+    this.PlayListsApi.playlistsGet()
     .subscribe(
-      (data) => {console.log(data); },
+      (data) => {
+        this.playlist = data;
+      },
       (err) => {console.error(err); },
       () => {}
     );
@@ -116,10 +121,23 @@ export class HomePage implements OnInit {
           text: 'Add To Playlist',
           handler: (data) => {
             console.log('Confirm Ok', data);
-            alert.dismiss();
 
-            this.addTrackApi.addtrackPost(data)
-            this.presentSuccessAlert();
+            const request: any  = {
+              _id: this.playlist._id,
+              track: {
+                resourceURI: data.songUri
+              }
+            };
+
+            this.AddTrackApi.addtrackPost(request).subscribe((data) => {
+              console.log('add track', data);
+            }, (err) => {
+              alert.dismiss();
+              this.presentErrorAlert();
+            }, () => {
+              alert.dismiss();
+              this.presentSuccessAlert();
+            });
           }
         }
       ]

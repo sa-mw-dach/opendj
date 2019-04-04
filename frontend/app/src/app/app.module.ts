@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 // import { ApiService } from './services/api.service';
 import { PlaylistsService } from '../../sdk/playlist/api/playlists.service';
+import { AddTrackService } from '../../sdk/playlist/api/addTrack.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { PlaylistsService } from '../../sdk/playlist/api/playlists.service';
     StatusBar,
     SplashScreen,
     PlaylistsService,
+    AddTrackService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

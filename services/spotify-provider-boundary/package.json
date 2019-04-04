@@ -52,8 +52,8 @@
   },
   "homepage": "https://github.com/nodeshift-starters/nodejs-rest-http-redhat",
   "devDependencies": {
-    "coveralls": "^3.0.0",
-    "js-yaml": "^3.10.0",
+    "coveralls": "^3.0.3",
+    "js-yaml": "^3.13.0",
     "nodeshift": "~1.12.0",
     "nsp": "~3.2.1",
     "nyc": "~12.0.2",
@@ -63,7 +63,7 @@
     "szero": "^1.0.0",
     "tap-spec": "~5.0.0",
     "tape": "~4.9.0",
-    "xo": "~0.22.0"
+    "xo": "^0.24.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -71,6 +71,7 @@
     "debug": "^4.0.1",
     "express": "4.16.0",
     "license-reporter": "^1.2.0",
-    "spotify-web-api-node": "^4.0.0"
+    "spotify-web-api-node": "^4.0.0",
+    "swagger-ui-express": "^4.0.2"
   }
 }

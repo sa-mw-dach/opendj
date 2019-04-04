@@ -10,6 +10,11 @@
 # oc policy add-role-to-group admin opendj-developer --namespace=dfroehli-opendj-dev
 # oc policy add-role-to-group admin opendj-developer --namespace=dfroehli-opendj-prd
 # 
+# Later we need all other steps to setup the whole environment. As this was a 1-day Hackathon, these 
+# steps still are missing, but the code below provides an idea, on how to achieve the setup.
+#
+# So, missing are the individual pods, etc. and the workflow to do CI/CD to move the dev-setup into prod...
+# 
 #######################################################################################################
 
 - name: Create a project

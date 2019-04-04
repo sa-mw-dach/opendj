@@ -27,10 +27,12 @@ function playerRoute() {
         var token = process.env.token;
         var device = process.env.device;
 
-        console.log(token);
-        console.log(device);
-
         var track = request.body.track;
+
+        console.log("/play");
+        console.log("token " + token);
+        console.log("device " + device);
+        console.log("track " + track);
 
         if (typeof track === 'undefined') {
             handleError("No track defined in body", response);
@@ -53,8 +55,8 @@ function playerRoute() {
             };
 
             var req = https.request(options, function (res) {
-                console.log('Status: ' + res.statusCode);
-                console.log('Headers: ' + JSON.stringify(res.headers));
+                //console.log('Status: ' + res.statusCode);
+                //console.log('Headers: ' + JSON.stringify(res.headers));
 
                 res.setEncoding('utf8');
 

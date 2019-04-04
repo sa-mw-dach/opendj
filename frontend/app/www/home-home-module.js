@@ -127,30 +127,27 @@ var HomePage = /** @class */ (function () {
             _this.PlayListsApi.playlistsGet()
                 .subscribe(function (data) {
                 // debugger
-                _this.playlist = data;
+                _this.playlist = data[0];
             }, function (err) { console.error(err); }, function () { });
-        }, 20000);
+        }, 3000);
         // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
     }
     HomePage.prototype.ngOnInit = function () {
+        var _this = this;
         // this.SpotifyApi.currentTrackGet();
-        // this.PlayListsApi.playlistsGet().subscribe(
-        //   data => {
-        //     this.playlist = data;
-        //     this.playlist.tracks.push(
-        //       {
-        //         trackName: 'The Whole Universe Wants to Be Touched',
-        //         albumName: 'All Melody',
-        //         artistName: 'Nils Frahm',
-        //         image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-        //       }
-        //     );
-        //   },
-        //   err => {
-        //     console.error(err);
-        //   },
-        //   () => {}
-        // );
+        this.PlayListsApi.playlistsGet().subscribe(function (data) {
+            _this.playlist = data[0];
+            // this.playlist.tracks.push(
+            //   {
+            //     trackName: 'The Whole Universe Wants to Be Touched',
+            //     albumName: 'All Melody',
+            //     artistName: 'Nils Frahm',
+            //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+            //   }
+            // );
+        }, function (err) {
+            console.error(err);
+        }, function () { });
     };
     HomePage.prototype.move = function (old_index, new_index) {
         while (old_index < 0) {
@@ -203,22 +200,23 @@ var HomePage = /** @class */ (function () {
                                         var baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
                                         var trackId = data.songUri.replace('spotify:track:', '');
                                         _this.http.get(baseUrl + "/trackInfo/" + trackId).subscribe(function (data) {
-                                            if (data !== null) {
-                                                var request = {
-                                                    _id: _this.playlist._id,
-                                                    track: data
-                                                };
-                                                _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
-                                                    console.log('add track', data);
-                                                }, function (err) {
-                                                    console.error(err);
-                                                    alert.dismiss();
-                                                    _this.presentErrorAlert();
-                                                }, function () {
-                                                    alert.dismiss();
-                                                    _this.presentSuccessAlert();
-                                                });
-                                            }
+                                            // if (data !== null) {
+                                            // console.log(data)
+                                            var request = {
+                                                _id: '0',
+                                                track: data
+                                            };
+                                            _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
+                                                console.log('add track', data);
+                                            }, function (err) {
+                                                console.error(err);
+                                                alert.dismiss();
+                                                _this.presentErrorAlert();
+                                            }, function () {
+                                                alert.dismiss();
+                                                _this.presentSuccessAlert();
+                                            });
+                                            // }
                                         }, function (err) {
                                             console.error(err);
                                             alert.dismiss();

@@ -246,7 +246,16 @@
         "resourceURI" : {
           "type" : "string"
         },
+        "trackName" : {
+          "type" : "string"
+        },
+        "albumName" : {
+          "type" : "string"
+        },
         "artistName" : {
+          "type" : "string"
+        },
+        "image" : {
           "type" : "string"
         },
         "imageObject" : {

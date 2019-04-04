@@ -24,10 +24,8 @@ function trackInfoRoute() {
         var token = process.env.token;
         var device = process.env.device;
 
-        console.log(token);
-        console.log(device);
-
-        var track = req.params.id;
+        console.log(request.params);
+        var track = request.params.id;
 
         if (typeof track === 'undefined') {
             handleError("No track defined in body", response);
@@ -55,17 +53,20 @@ function trackInfoRoute() {
 
                 var bodyStr = '';
                 res.on('data', function (chunk) {
-                  bodyStr += chunk;
+                    bodyStr += chunk;
                 });
 
                 res.on('end', function () {
                     console.log('BODY: ' + bodyStr);
                     var body = JSON.parse(bodyStr);
+
                     var myResponse = {
-                      "trackName": body.name,
-                      "albumName": body.album.name,
-                      "image":  body.album.images[0].url
+                        "trackName": body.name,
+                        "albumName": body.album.name,
+                        "artistName" : body.artists[0].name,
+                        "image": body.album.images[0].url
                     };
+
                     console.log('myResponse: ' + myResponse);
                     response.end(JSON.stringify(myResponse));
                 });
@@ -75,6 +76,8 @@ function trackInfoRoute() {
             req.on('error', function (e) {
                 handleError(e, response);
             });
+
+            req.end();
         }
     });
 

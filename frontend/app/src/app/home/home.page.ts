@@ -8,6 +8,9 @@ import { AlertController } from '@ionic/angular';
 import { PlaylistsService } from '../../../sdk/playlist/api/playlists.service';
 import { AddTrackService } from '../../../sdk/playlist/api/addTrack.service';
 
+import { DefaultService } from '../../../sdk/spotify-provider/api/default.service';
+import { HttpClient } from '@angular/common/http';
+
 // import { Track } from '../../../sdk/playlist/model/track';
 
 @Component({
@@ -22,18 +25,21 @@ export class HomePage implements OnInit {
   constructor(
     public alertController: AlertController,
     public AddTrackApi: AddTrackService,
-    public PlayListsApi: PlaylistsService
+    public PlayListsApi: PlaylistsService,
+    public SpotifyApi: DefaultService,
+    public http: HttpClient
   ) {
-    setInterval(() => {
-      this.PlayListsApi.playlistsGet()
-      .subscribe(
-        (data) => {
-          this.playlist = data;
-        },
-        (err) => {console.error(err); },
-        () => {}
-      );
-    }, 3000);
+    // setInterval(() => {
+    //   this.PlayListsApi.playlistsGet()
+    //   .subscribe(
+    //     (data) => {
+    //       // debugger
+    //       this.playlist = data[0];
+    //     },
+    //     (err) => {console.error(err); },
+    //     () => {}
+    //   );
+    // }, 3000);
 
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
@@ -78,11 +84,12 @@ export class HomePage implements OnInit {
       }
     ];
 
-
+this.SpotifyApi.currentTrackGet()
     this.PlayListsApi.playlistsGet()
     .subscribe(
       (data) => {
-        this.playlist = data;
+
+        this.playlist = data[0];
       },
       (err) => {console.error(err); },
       () => {}
@@ -131,24 +138,58 @@ export class HomePage implements OnInit {
         {
           text: 'Add To Playlist',
           handler: (data) => {
-            console.log('Confirm Ok', data);
+            console.log('Confirm Ok', data, this.playlist);
 
-            const request: any  = {
-              _id: this.playlist._id,
-              track: {
-                resourceURI: data.songUri
-              }
-            };
+            // const request: any  = {
+            //   _id: this.playlist._id,
+            //   track: {
+            //     resourceURI: data.songUri
+            //   }
+            // };
 
-            this.AddTrackApi.addtrackPost(request).subscribe((data) => {
-              console.log('add track', data);
-            }, (err) => {
-              alert.dismiss();
-              this.presentErrorAlert();
-            }, () => {
-              alert.dismiss();
-              this.presentSuccessAlert();
-            });
+            // spotify:track:1tT3WfvorMsmKuQbkKMRpv
+            const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+            const trackId = data.songUri.replace('spotify:track:','');
+            this.http.get(`${baseUrl}/trackInfo/${trackId}`).subscribe((data) => {
+                  console.log('add track', data);
+                }, (err) => {
+                  console.error(err)
+                  alert.dismiss();
+                  this.presentErrorAlert();
+                }, () => {
+
+                  // this.AddTrackApi.addtrackPost(request).subscribe((data) => {
+                  //     console.log('add track', data);
+                  //   }, (err) => {
+                  //     console.error(err)
+                  //     alert.dismiss();
+                  //     this.presentErrorAlert();
+                  //   }, () => {
+                  //     alert.dismiss();
+                  //     this.presentSuccessAlert();
+                  //   });
+                });
+            // this.SpotifyApi.currentTrackGet(trackId).subscribe((data) => {
+            //     console.log('add track', data);
+            //   }, (err) => {
+            //     console.error(err)
+            //     alert.dismiss();
+            //     this.presentErrorAlert();
+            //   }, () => {
+            //     alert.dismiss();
+            //     this.presentSuccessAlert();
+            //   })
+            // this.SpotifyApi.playPost()
+            // this.AddTrackApi.addtrackPost(request).subscribe((data) => {
+            //   console.log('add track', data);
+            // }, (err) => {
+            //   console.error(err)
+            //   alert.dismiss();
+            //   this.presentErrorAlert();
+            // }, () => {
+            //   alert.dismiss();
+            //   this.presentSuccessAlert();
+            // });
           }
         }
       ]

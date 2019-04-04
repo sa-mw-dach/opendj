@@ -8,6 +8,8 @@ function trackInfoRoute() {
     trackInfo.use(cors());
     trackInfo.use(bodyParser());
 
+    console.log("trackInfo");
+
     function handleError(err, response) {
 
         console.log('Error: ' + err);
@@ -21,12 +23,15 @@ function trackInfoRoute() {
     }
 
     trackInfo.get('/:id', function (request, response) {
-
         var token = process.env.token;
         var device = process.env.device;
 
-        console.log(request.params);
         var track = request.params.id;
+
+        console.log("/trackInfo");
+        console.log("token " + token);
+        console.log("device " + device);
+        console.log("track " + track);
 
         if (typeof track === 'undefined') {
             handleError("No track defined in body", response);
@@ -47,8 +52,8 @@ function trackInfoRoute() {
             };
 
             var req = https.request(options, function (res) {
-                console.log('Status: ' + res.statusCode);
-                console.log('Headers: ' + JSON.stringify(res.headers));
+                //console.log('Status: ' + res.statusCode);
+                //console.log('Headers: ' + JSON.stringify(res.headers));
 
                 res.setEncoding('utf8');
 
@@ -58,7 +63,7 @@ function trackInfoRoute() {
                 });
 
                 res.on('end', function () {
-                    console.log('BODY: ' + bodyStr);
+                    //console.log('BODY: ' + bodyStr);
                     var body = JSON.parse(bodyStr);
 
                     var myResponse = {
@@ -68,7 +73,7 @@ function trackInfoRoute() {
                         "image": body.album.images[0].url
                     };
 
-                    console.log('myResponse: ' + myResponse);
+                    console.log('response: ' + myResponse);
                     response.end(JSON.stringify(myResponse));
                 });
 

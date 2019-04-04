@@ -124,10 +124,7 @@ var getByIdPlaylist = function (req, res, next, id) {
 };
 
 var addTrackToPlaylist = function (req, res, next) {
-<<<<<<< HEAD
-=======
   console.log("Request Body")
->>>>>>> 5cc5a05f0eb38ad63d5bd33ef80a7dc64b84cb34
   console.log(req.body);
   var id = req.body._id;
   console.log("fetching teh following Playlist ID");

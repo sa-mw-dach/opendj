@@ -59,7 +59,7 @@ var HomePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header >\n\n  <ion-toolbar class=\"header-bg\">\n    <ion-buttons slot=\"start\">\n      <ion-button style=\"color: white\" >\n        <ion-icon slot=\"icon-only\" name=\"arrow-round-back\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n\n      <div class=\"current-song\">\n        <h3>Song currently</h3>\n      </div>\n    <ion-buttons slot=\"end\">\n      <ion-button style=\"color: white\" >\n        <ion-icon slot=\"icon-only\" name=\"arrow-round-forward\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n<ion-list class=\"list-override\" lines=\"none\">\n  <ion-item *ngFor=\"let item of data.tracks; let index = $index\">\n    <ion-thumbnail slot=\"start\">\n      <img src=\"{{ item.image }}\" />\n    </ion-thumbnail>\n    <ion-label>\n      <h3>{{ item.trackName }}</h3>\n      <p>{{ item.artistName }}</p>\n    </ion-label>\n    <ion-button style=\"color: white\" (click)=\"move(index, index + 1)\" expand=\"outline\" slot=\"end\">\n      <ion-icon slot=\"icon-only\" name=\"thumbs-up\"></ion-icon>\n    </ion-button>\n    <ion-button style=\"color: white\" (click)=\"move(index, index - 1)\" expand=\"outline\" slot=\"end\">\n      <ion-icon slot=\"icon-only\" name=\"thumbs-down\"></ion-icon>\n    </ion-button>\n  </ion-item>\n</ion-list>\n</ion-content>\n<ion-footer>\n  <ion-toolbar>\n    <ion-button style=\"color: white\" (click)=\"presentAddSongPrompt()\" expand=\"full\" fill=\"clear\">ADD</ion-button>\n  </ion-toolbar>\n</ion-footer>\n"
+module.exports = "<ion-header >\n\n  <ion-toolbar class=\"header-bg\">\n    <ion-buttons slot=\"start\">\n      <ion-button style=\"color: white\" >\n        <ion-icon slot=\"icon-only\" name=\"arrow-round-back\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n\n      <div class=\"current-song\">\n        <h3>Song currently</h3>\n      </div>\n    <ion-buttons slot=\"end\">\n      <ion-button style=\"color: white\" >\n        <ion-icon slot=\"icon-only\" name=\"arrow-round-forward\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n<ion-list class=\"list-override\" lines=\"none\">\n  <ion-item *ngFor=\"let item of playlist.tracks; let index = $index\">\n    <ion-thumbnail slot=\"start\">\n      <img src=\"{{ item.image }}\" />\n    </ion-thumbnail>\n    <ion-label>\n      <h3>{{ item.trackName }}</h3>\n      <p>{{ item.artistName }}</p>\n    </ion-label>\n    <ion-button style=\"color: white\" (click)=\"move(index, index + 1)\" expand=\"outline\" slot=\"end\">\n      <ion-icon slot=\"icon-only\" name=\"thumbs-up\"></ion-icon>\n    </ion-button>\n    <ion-button style=\"color: white\" (click)=\"move(index, index - 1)\" expand=\"outline\" slot=\"end\">\n      <ion-icon slot=\"icon-only\" name=\"thumbs-down\"></ion-icon>\n    </ion-button>\n  </ion-item>\n</ion-list>\n</ion-content>\n<ion-footer>\n  <ion-toolbar>\n    <ion-button style=\"color: white\" (click)=\"presentAddSongPrompt()\" expand=\"full\" fill=\"clear\">ADD</ion-button>\n  </ion-toolbar>\n</ion-footer>\n"
 
 /***/ }),
 
@@ -103,48 +103,48 @@ __webpack_require__.r(__webpack_exports__);
 // import { Track } from '../../../sdk/playlist/model/track';
 var HomePage = /** @class */ (function () {
     function HomePage(alertController, AddTrackApi, PlayListsApi, SpotifyApi, http) {
+        var _this = this;
         this.alertController = alertController;
         this.AddTrackApi = AddTrackApi;
         this.PlayListsApi = PlayListsApi;
         this.SpotifyApi = SpotifyApi;
         this.http = http;
-        this.data = {
+        this.playlist = {
+            _id: '0',
+            name: '',
             tracks: []
         };
-        this.data.tracks = [
+        this.playlist.tracks = [
             {
+                resourceURI: '',
                 trackName: 'The Whole Universe Wants to Be Touched',
                 albumName: 'All Melody',
                 artistName: 'Nils Frahm',
                 image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
             }
         ];
-        // setInterval(() => {
-        //   this.PlayListsApi.playlistsGet()
-        //   .subscribe(
-        //     (data) => {
-        //       // debugger
-        //       this.playlist = data[0];
-        //     },
-        //     (err) => {console.error(err); },
-        //     () => {}
-        //   );
-        // }, 3000);
+        setInterval(function () {
+            _this.PlayListsApi.playlistsGet()
+                .subscribe(function (data) {
+                // debugger
+                _this.playlist = data;
+            }, function (err) { console.error(err); }, function () { });
+        }, 5000);
         // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
     }
     HomePage.prototype.ngOnInit = function () {
-        // this.data.tracks = [
-        //   {
-        //     trackName: 'The Whole Universe Wants to Be Touched',
-        //     albumName: 'All Melody',
-        //     artistName: 'Nils Frahm',
-        //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
-        //   }
-        // ];
         var _this = this;
         this.SpotifyApi.currentTrackGet();
         this.PlayListsApi.playlistsGet().subscribe(function (data) {
-            _this.playlist = data[0];
+            _this.playlist = data;
+            _this.playlist.tracks = [
+                {
+                    trackName: 'The Whole Universe Wants to Be Touched',
+                    albumName: 'All Melody',
+                    artistName: 'Nils Frahm',
+                    image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+                }
+            ];
         }, function (err) {
             console.error(err);
         }, function () { });
@@ -196,33 +196,33 @@ var HomePage = /** @class */ (function () {
                                     text: 'Add To Playlist',
                                     handler: function (data) {
                                         console.log('Confirm Ok', data, _this.playlist);
-                                        // const request: any  = {
-                                        //   _id: this.playlist._id,
-                                        //   track: {
-                                        //     resourceURI: data.songUri
-                                        //   }
-                                        // };
+                                        var request = {
+                                            _id: _this.playlist._id,
+                                            track: null
+                                        };
                                         // spotify:track:1tT3WfvorMsmKuQbkKMRpv
                                         var baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
                                         var trackId = data.songUri.replace('spotify:track:', '');
                                         _this.http.get(baseUrl + "/trackInfo/" + trackId).subscribe(function (data) {
                                             console.log('add track', data);
+                                            request.track = data;
+                                            _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
+                                                console.log('add track', data);
+                                            }, function (err) {
+                                                console.error(err);
+                                                alert.dismiss();
+                                                _this.presentErrorAlert();
+                                            }, function () {
+                                                alert.dismiss();
+                                                _this.presentSuccessAlert();
+                                            });
                                         }, function (err) {
                                             console.error(err);
                                             alert.dismiss();
                                             _this.presentErrorAlert();
-                                        }, function () {
-                                            // this.AddTrackApi.addtrackPost(request).subscribe((data) => {
-                                            //     console.log('add track', data);
-                                            //   }, (err) => {
-                                            //     console.error(err)
-                                            //     alert.dismiss();
-                                            //     this.presentErrorAlert();
-                                            //   }, () => {
-                                            //     alert.dismiss();
-                                            //     this.presentSuccessAlert();
-                                            //   });
-                                        });
+                                        }, function () { });
+                                        // if(request.track !== null) {
+                                        // }
                                         // this.SpotifyApi.currentTrackGet(trackId).subscribe((data) => {
                                         //     console.log('add track', data);
                                         //   }, (err) => {

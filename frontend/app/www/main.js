@@ -864,7 +864,7 @@ __webpack_require__.r(__webpack_exports__);
 var AddTrackService = /** @class */ (function () {
     function AddTrackService(httpClient, basePath, configuration) {
         this.httpClient = httpClient;
-        this.basePath = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
+        this.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
         this.defaultHeaders = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]();
         this.configuration = new _configuration__WEBPACK_IMPORTED_MODULE_4__["Configuration"]();
         if (basePath) {
@@ -963,7 +963,7 @@ __webpack_require__.r(__webpack_exports__);
 var PlaylistsService = /** @class */ (function () {
     function PlaylistsService(httpClient, basePath, configuration) {
         this.httpClient = httpClient;
-        this.basePath = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
+        this.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1';
         this.defaultHeaders = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]();
         this.configuration = new _configuration__WEBPACK_IMPORTED_MODULE_4__["Configuration"]();
         if (basePath) {

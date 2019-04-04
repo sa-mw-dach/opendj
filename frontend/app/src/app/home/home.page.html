@@ -20,7 +20,7 @@
 
 <ion-content>
 <ion-list class="list-override" lines="none">
-  <ion-item *ngFor="let item of data.tracks; let index = $index">
+  <ion-item *ngFor="let item of playlist.tracks; let index = $index">
     <ion-thumbnail slot="start">
       <img src="{{ item.image }}" />
     </ion-thumbnail>

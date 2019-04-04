@@ -10,5 +10,5 @@ export interface TrackItem {
 export interface Playlist {
   name: string;
   _id: string;
-  tracks: Array<TrackItem>;
+  tracks: TrackItem[];
 }

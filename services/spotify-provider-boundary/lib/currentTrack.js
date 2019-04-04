@@ -27,9 +27,9 @@ function playerRoute() {
         var token = process.env.token;
         var device = process.env.device;
 
-        console.log(token);
-        console.log(device);
-
+        console.log("/currentTrack");
+        console.log("token " + token);
+        console.log("device " + device);
 
         var options = {
             hostname: 'api.spotify.com',
@@ -42,8 +42,8 @@ function playerRoute() {
         };
 
         var req = https.request(options, function (res) {
-            console.log('Status: ' + res.statusCode);
-            console.log('Headers: ' + JSON.stringify(res.headers));
+            //console.log('Status: ' + res.statusCode);
+            //console.log('Headers: ' + JSON.stringify(res.headers));
 
             res.setEncoding('utf8');
 
@@ -53,15 +53,16 @@ function playerRoute() {
             });
 
             res.on('end', function () {
-                console.log('BODY: ' + bodyStr);
+                //console.log('BODY: ' + bodyStr);
                 var body = JSON.parse(bodyStr);
                 var myResponse = {
                   "is_playing": body.is_playing,
                   "progress_ms":  body.progress_ms,
                   "duration_ms":  body.item.duration_ms,
-                  "ressourceURI": body.item.uri
+                  "resourceURI": body.item.uri
                 };
-                console.log('myResponse: ' + myResponse);
+                
+                console.log('response: ' + myResponse);
                 response.end(JSON.stringify(myResponse));
             });
 

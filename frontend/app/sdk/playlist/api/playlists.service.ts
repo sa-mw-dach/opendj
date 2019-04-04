@@ -59,6 +59,46 @@ export class PlaylistsService {
 
 
     /**
+     * Get firstTrack with given playlist ID
+     *
+     * @param playlistId ID of playlist that we want to use to get its first track
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFirstTrackPlaylistIdGet(playlistId: string, observe?: 'body', reportProgress?: boolean): Observable<Track>;
+    public getFirstTrackPlaylistIdGet(playlistId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Track>>;
+    public getFirstTrackPlaylistIdGet(playlistId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Track>>;
+    public getFirstTrackPlaylistIdGet(playlistId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (playlistId === null || playlistId === undefined) {
+            throw new Error('Required parameter playlistId was null or undefined when calling getFirstTrackPlaylistIdGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/getFirstTrack/${encodeURIComponent(String(playlistId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get all playlists in system
      *
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -260,7 +300,7 @@ export class PlaylistsService {
     }
 
     /**
-     * Delete Song in playlist ID
+     * Delete track in playlist ID
      *
      * @param playlistId ID of playlist that we want to find
      * @param resourceURI ID of a track that we want to find

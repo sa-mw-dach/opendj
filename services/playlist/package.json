@@ -15,14 +15,13 @@
     "gulp": "~3.9.1",
     "gulp-eslint": "4.0.0",
     "gulp-nodemon": "^2.2.1",
-    "mock-mongoose": "^7.4.0-r2"
+    "mock-mongoose": "^7.4.0"
   },
   "dependencies": {
-    "body-parser": "1.17.2",
+    "body-parser": "^1.18.3",
     "cors": "2.8.5",
-    "express": "4.15.3",
+    "express": "^4.16.4",
     "method-override": "2.3.9",
-    "mock-mongoose": "^7.4.0-r2",
     "mongoose": "4.11.5",
     "swagger-ui-express": "2.0.6"
   },

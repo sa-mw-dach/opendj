@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
-import { Track } from '../../models/add-song-request.model';
+import {Track } from '../../../../sdk/playlist/model/track';
 
 @Component({
   selector: 'app-playlist-item',
@@ -9,8 +8,7 @@ import { Track } from '../../models/add-song-request.model';
 })
 export class PlaylistItemComponent implements OnInit {
 
-  @Input() Item: PlaylistItem
-  constructor() { }
+  @Input() track: Track;
 
   ngOnInit() {}
 

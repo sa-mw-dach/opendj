@@ -20,7 +20,8 @@
 
 <ion-content>
 <ion-list class="list-override" lines="none">
-  <ion-item *ngFor="let item of playlist.tracks; let index = $index">
+  <app-playlist-item *ngFor="let track of playlist.tracks; let index = $index" [track]="track"></app-playlist-item>
+  <!-- <ion-item *ngFor="let item of playlist.tracks; let index = $index">
     <ion-thumbnail slot="start">
       <img src="{{ item.image }}" />
     </ion-thumbnail>
@@ -34,7 +35,7 @@
     <ion-button style="color: white" (click)="move(index, index - 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="thumbs-down"></ion-icon>
     </ion-button>
-  </ion-item>
+  </ion-item> -->
 </ion-list>
 </ion-content>
 <ion-footer>

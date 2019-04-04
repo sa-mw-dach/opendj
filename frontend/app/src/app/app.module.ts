@@ -17,7 +17,9 @@ import { AddTrackService } from '../../sdk/playlist/api/addTrack.service';
 import { DefaultService } from '../../sdk/spotify-provider/api/default.service';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   entryComponents: [],
   imports: [
     BrowserModule,

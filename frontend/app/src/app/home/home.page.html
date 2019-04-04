@@ -18,7 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding-top>
+<ion-content>
 <ion-list class="list-override" lines="none">
   <ion-item *ngFor="let item of data; let index = $index">
     <ion-thumbnail slot="start">
@@ -39,6 +39,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button (click)="presentAddSongPrompt()" expand="full" fill="clear">ADD</ion-button>
+    <ion-button style="color: white" (click)="presentAddSongPrompt()" expand="full" fill="clear">ADD</ion-button>
   </ion-toolbar>
 </ion-footer>

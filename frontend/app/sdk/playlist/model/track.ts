@@ -13,6 +13,9 @@
 
 export interface Track { 
     resourceURI: string;
+    trackName?: string;
+    albumName?: string;
     artistName?: string;
+    image?: string;
     imageObject?: ImageObject;
 }

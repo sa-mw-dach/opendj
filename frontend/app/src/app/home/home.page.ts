@@ -24,6 +24,17 @@ export class HomePage implements OnInit {
     public AddTrackApi: AddTrackService,
     public PlayListsApi: PlaylistsService
   ) {
+    setInterval(() => {
+      this.PlayListsApi.playlistsGet()
+      .subscribe(
+        (data) => {
+          this.playlist = data;
+        },
+        (err) => {console.error(err); },
+        () => {}
+      );
+    }, 3000);
+
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 

@@ -21,7 +21,6 @@ function trackInfoRoute() {
     }
 
     trackInfo.get('/:id', function (request, response) {
-
         var token = process.env.token;
         var device = process.env.device;
 
@@ -51,14 +50,14 @@ function trackInfoRoute() {
             var req = https.request(options, function (res) {
                 console.log('Status: ' + res.statusCode);
                 console.log('Headers: ' + JSON.stringify(res.headers));
-    
+
                 res.setEncoding('utf8');
-    
+
                 var bodyStr = '';
                 res.on('data', function (chunk) {
                   bodyStr += chunk;
                 });
-    
+
                 res.on('end', function () {
                     console.log('BODY: ' + bodyStr);
                     var body = JSON.parse(bodyStr);
@@ -70,9 +69,9 @@ function trackInfoRoute() {
                     console.log('myResponse: ' + myResponse);
                     response.end(JSON.stringify(myResponse));
                 });
-    
+
             });
-    
+
             req.on('error', function (e) {
                 handleError(e, response);
             });

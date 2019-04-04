@@ -2,7 +2,7 @@
 
 .list-override {
   position: relative;
-  top: -10vh;
+  // top: -10vh;
 }
 
 .current-song {
@@ -19,6 +19,23 @@
 }
 
 .header-bg {
-  background: linear-gradient(162deg, rgba(56, 70, 108, .8) 20%, rgba(56, 70, 108, .8) 100%) !important;
+  background: linear-gradient(162deg, rgba(129, 144, 185, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
+}
+
+ion-toolbar {
+  --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
+}
+
+ion-content {
+  --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important
+}
+
+ion-list{
+  --ion-background-color: rgba(53, 54, 56, 0.8) !important;
+}
+
+ion-item{
+  color: white;
+  --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
 }
 

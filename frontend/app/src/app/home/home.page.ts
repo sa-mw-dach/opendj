@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
       this.PlayListsApi.playlistsGet()
       .subscribe(
         (data) => {
+          // debugger
           this.playlist = data[0];
         },
         (err) => {console.error(err); },
@@ -82,7 +83,8 @@ export class HomePage implements OnInit {
     this.PlayListsApi.playlistsGet()
     .subscribe(
       (data) => {
-        this.playlist = data;
+
+        this.playlist = data[0];
       },
       (err) => {console.error(err); },
       () => {}

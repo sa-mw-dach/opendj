@@ -64,5 +64,15 @@
                 </license>
             </licenses>
         </dependency>
+        <dependency>
+            <packageName>swagger-ui-express</packageName>
+            <version>4.0.2</version>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/MIT</url>
+                </license>
+            </licenses>
+        </dependency>
     </dependencies>
 </licenseSummary>

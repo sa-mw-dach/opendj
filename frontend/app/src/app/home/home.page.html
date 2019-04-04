@@ -2,7 +2,7 @@
 
   <ion-toolbar class="header-bg">
     <ion-buttons slot="start">
-      <ion-button>
+      <ion-button style="color: white" >
         <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -11,16 +11,16 @@
         <h3>Song currently</h3>
       </div>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button style="color: white" >
         <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-<ion-list class="list-override" lines="inset" *ngFor="let item of data; let index = $index">
-  <ion-item>
+<ion-content padding-top>
+<ion-list class="list-override" lines="none">
+  <ion-item *ngFor="let item of data; let index = $index">
     <ion-thumbnail slot="start">
       <img src="{{ item.img }}" />
     </ion-thumbnail>
@@ -28,10 +28,10 @@
       <h3>{{ item.title }}</h3>
       <p>{{ item.subTitle }}</p>
     </ion-label>
-    <ion-button style="color: black; border-color: black" (click)="move(index, index + 1)" expand="outline" slot="end">
+    <ion-button style="color: white" (click)="move(index, index + 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="thumbs-up"></ion-icon>
     </ion-button>
-    <ion-button style="color: black" (click)="move(index, index - 1)" expand="outline" slot="end">
+    <ion-button style="color: white" (click)="move(index, index - 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="thumbs-down"></ion-icon>
     </ion-button>
   </ion-item>

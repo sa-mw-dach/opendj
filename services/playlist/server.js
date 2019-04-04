@@ -112,7 +112,11 @@ var getTrackByPlaylist = function (req, res) {
 	}
 };
 
+/*
+* I dont know if it is a good idea to respond with the deleted item
+*/
 var popTrackByPlaylist = function (req, res) {
+	//playlist being fetch already by getByIdPlaylist
     var id = req.playlist._id;
     console.log("fetching teh following Playlist ID to pop");
     console.log(id);

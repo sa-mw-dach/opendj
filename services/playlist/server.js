@@ -29,9 +29,9 @@ var PlaylistSchema = new Schema({
   _id: {type: String},
   name: {type: String},
   tracks: [{
-	  resourceURI: String,
-	  artistName: String,
-	  imageObject: {externalURI : String}
+	  resourceURI: {type: String},
+	  artistName: {type: String},
+	  imageObject: {externalURI : {type: String}}
 	  }]
 });
 
@@ -100,6 +100,10 @@ var getOnePlaylist = function (req, res) {
   res.json(req.playlist);
 };
 
+var getTrackByPlaylist = function (req, res) {
+  res.json(req.playlist.tracks[0]);
+};
+
 var getByIdPlaylist = function (req, res, next, id) {
   Playlist.findOne({_id: id}, function (err, playlist) {
     if (err) {
@@ -109,17 +113,6 @@ var getByIdPlaylist = function (req, res, next, id) {
       next();
     }
   });
-};
-
-var getTrackByPlaylist = function (req, res, next) {
-  var id = req.body._id;
-  Playlist.findOne({ _id: id }, function (err, playlist) {
-    if (err) {
-      next(err);
-    } else {
-      res.json(playlist.tracks[0]);
-    }
-  })
 };
 
 var addTrackToPlaylist = function (req, res, next) {
@@ -145,10 +138,14 @@ router.route('/playlists/:playlistId')
   .delete(deletePlaylist);
 
 router.route('/playlists/:playlistId/firstTrack')
-  .get(getTrackByPlaylist)
+  .get(getTrackByPlaylist);
+
+router.route('/getFirstTrack/:playlistId')
+  .get(getTrackByPlaylist);
+
 
 router.route('/addtrack')
-  .post(addTrackToPlaylist)
+  .post(addTrackToPlaylist);
 
 router.param('playlistId', getByIdPlaylist);
 

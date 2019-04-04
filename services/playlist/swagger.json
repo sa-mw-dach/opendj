@@ -79,6 +79,30 @@
         }
       }
     },
+    "/getFirstTrack/{playlistId}" : {
+      "get" : {
+        "tags" : [ "Playlists" ],
+        "summary" : "Get firstTrack with given playlist ID",
+        "parameters" : [ {
+          "name" : "playlistId",
+          "in" : "path",
+          "description" : "ID of playlist that we want to use to get its first track",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Track is found",
+            "schema" : {
+              "$ref" : "#/definitions/Track"
+            }
+          },
+          "404" : {
+            "description" : "Playlist empty"
+          }
+        }
+      }
+    },
     "/playlists/{playlistId}" : {
       "get" : {
         "tags" : [ "Playlists" ],
@@ -146,7 +170,7 @@
     "/playlists/{playlistId}/tracks/{resourceURI}" : {
       "delete" : {
         "tags" : [ "Playlists" ],
-        "summary" : "Delete Song in playlist ID",
+        "summary" : "Delete track in playlist ID",
         "parameters" : [ {
           "name" : "playlistId",
           "in" : "path",
@@ -162,7 +186,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Song is deleted"
+            "description" : "track is deleted"
           }
         }
       }

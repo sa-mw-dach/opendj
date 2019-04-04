@@ -125,9 +125,14 @@ var getByIdPlaylist = function (req, res, next, id) {
 
 var addTrackToPlaylist = function (req, res, next) {
   var id = req.body._id;
+  console.log("fetching teh following ID");
+  console.log(id);
+  console.log("Track Data")
   var newTrack = req.body.track;
+  console.log(newTrack)
   Playlist.findOneAndUpdate({ _id: id }, { $push: { tracks: newTrack }}, function (err, playlist) {
     if (err) {
+	   console.log(err);
       next(err);
     } else {
       res.json(playlist);

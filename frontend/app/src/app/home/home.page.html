@@ -20,13 +20,13 @@
 
 <ion-content>
 <ion-list class="list-override" lines="none">
-  <ion-item *ngFor="let item of data; let index = $index">
+  <ion-item *ngFor="let item of data.tracks; let index = $index">
     <ion-thumbnail slot="start">
-      <img src="{{ item.img }}" />
+      <img src="{{ item.image }}" />
     </ion-thumbnail>
     <ion-label>
-      <h3>{{ item.title }}</h3>
-      <p>{{ item.subTitle }}</p>
+      <h3>{{ item.trackName }}</h3>
+      <p>{{ item.artistName }}</p>
     </ion-label>
     <ion-button style="color: white" (click)="move(index, index + 1)" expand="outline" slot="end">
       <ion-icon slot="icon-only" name="thumbs-up"></ion-icon>

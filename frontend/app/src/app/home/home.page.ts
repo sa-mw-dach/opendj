@@ -45,7 +45,7 @@ export class HomePage implements OnInit {
     //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
     //   }
     // ];
-    // setInterval(() => {
+    setInterval(() => {
       this.PlayListsApi.playlistsGet()
       .subscribe(
         (data) => {
@@ -55,7 +55,7 @@ export class HomePage implements OnInit {
         (err) => {console.error(err); },
         () => {}
       );
-    // }, 3000);
+    }, 5000);
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
   }
 
@@ -135,10 +135,10 @@ export class HomePage implements OnInit {
               (res: any) => {
                 // if (data !== null) {
                   console.log('get', res);
-                  const request: any  = {
-                    body: {
+                  const request: object  = {
+                    // 'body': {
                       '_id': '0',
-                      track:   {
+                      'track':   {
                         'resourceURI': data.songUri,
                         'trackName': res.trackName,
                         'albumName': res.albumName,
@@ -148,9 +148,10 @@ export class HomePage implements OnInit {
                         //   'externalURI': 'string'
                         // }
                       }
-                    }
+                    // }
                   };
 
+                  // let body = JSON.parse(request);
                   this.http.post(`${playlistUrl}/addtrack`, request).subscribe((resdata) => {
                     console.log('add track', resdata);
                   }, (err) => {

@@ -909,7 +909,9 @@ var AddTrackService = /** @class */ (function () {
         if (httpContentTypeSelected != undefined) {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
-        return this.httpClient.post(this.basePath + "/addtrack", {
+        debugger;
+        console.log(typeof body);
+        return this.httpClient.post(this.basePath + "/addtrack", body, {
             withCredentials: this.configuration.withCredentials,
             headers: headers,
             observe: observe,

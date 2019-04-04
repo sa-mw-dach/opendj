@@ -129,7 +129,7 @@ var HomePage = /** @class */ (function () {
                 // debugger
                 _this.playlist = data[0];
             }, function (err) { console.error(err); }, function () { });
-        }, 3000);
+        }, 5000);
         // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
     }
     HomePage.prototype.ngOnInit = function () {
@@ -198,24 +198,45 @@ var HomePage = /** @class */ (function () {
                                         console.log('Confirm Ok', data, _this.playlist);
                                         // spotify:track:1tT3WfvorMsmKuQbkKMRpv
                                         var baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+                                        var playlistUrl = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/';
                                         var trackId = data.songUri.replace('spotify:track:', '');
-                                        _this.http.get(baseUrl + "/trackInfo/" + trackId).subscribe(function (data) {
+                                        _this.http.get(baseUrl + "/trackInfo/" + trackId).subscribe(function (res) {
                                             // if (data !== null) {
-                                            // console.log(data)
+                                            console.log('get', res);
                                             var request = {
-                                                _id: '0',
-                                                track: data
+                                                // 'body': {
+                                                '_id': '0',
+                                                'track': {
+                                                    'resourceURI': data.songUri,
+                                                    'trackName': res.trackName,
+                                                    'albumName': res.albumName,
+                                                    'artistName': res.artistName,
+                                                    'image': res.image
+                                                    // 'imageObject': {
+                                                    //   'externalURI': 'string'
+                                                    // }
+                                                }
+                                                // }
                                             };
-                                            _this.AddTrackApi.addtrackPost(request).subscribe(function (data) {
-                                                console.log('add track', data);
+                                            // let body = JSON.parse(request);
+                                            _this.http.post(playlistUrl + "/addtrack", request).subscribe(function (resdata) {
+                                                console.log('add track', resdata);
                                             }, function (err) {
                                                 console.error(err);
                                                 alert.dismiss();
-                                                _this.presentErrorAlert();
-                                            }, function () {
-                                                alert.dismiss();
-                                                _this.presentSuccessAlert();
+                                                // this.presentErrorAlert();
                                             });
+                                            // console.log(request);
+                                            // this.AddTrackApi.addtrackPost(request).subscribe((resdata) => {
+                                            //   console.log('add track', resdata);
+                                            // }, (err) => {
+                                            //   console.error(err);
+                                            //   alert.dismiss();
+                                            //   this.presentErrorAlert();
+                                            // }, () => {
+                                            //   alert.dismiss();
+                                            //   this.presentSuccessAlert();
+                                            // });
                                             // }
                                         }, function (err) {
                                             console.error(err);

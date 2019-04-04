@@ -7,6 +7,7 @@ var swaggerUi = require('swagger-ui-express'),
 
 app.use('/play', require('./lib/player.js')());
 app.use('/currentTrack', require('./lib/currentTrack.js')());
+app.use('/trackInfo', require('./lib/trackInfo.js')());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = app;

@@ -18,8 +18,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { AddTrack } from '../model/addTrack';
 import { Playlist } from '../model/playlist';
-import { Track } from '../model/track';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -64,10 +64,10 @@ export class AddTrackService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addtrackPost(body?: Track, observe?: 'body', reportProgress?: boolean): Observable<Playlist>;
-    public addtrackPost(body?: Track, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Playlist>>;
-    public addtrackPost(body?: Track, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Playlist>>;
-    public addtrackPost(body?: Track, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addtrackPost(body?: AddTrack, observe?: 'body', reportProgress?: boolean): Observable<Playlist>;
+    public addtrackPost(body?: AddTrack, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Playlist>>;
+    public addtrackPost(body?: AddTrack, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Playlist>>;
+    public addtrackPost(body?: AddTrack, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 

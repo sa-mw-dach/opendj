@@ -170,7 +170,7 @@
     "/playlists/{playlistId}/tracks/{resourceURI}" : {
       "delete" : {
         "tags" : [ "Playlists" ],
-        "summary" : "Delete Song in playlist ID",
+        "summary" : "Delete track in playlist ID",
         "parameters" : [ {
           "name" : "playlistId",
           "in" : "path",
@@ -186,7 +186,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Song is deleted"
+            "description" : "track is deleted"
           }
         }
       }

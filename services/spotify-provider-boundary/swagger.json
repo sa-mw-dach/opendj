@@ -1,0 +1,59 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "0.0.0",
+      "title": "title",
+      "description": "description",
+      "termsOfService": "terms",
+      "license": {
+        "name": "GPL"
+      }
+    },
+    "basePath": "/",
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/play": {
+        "post": {
+          "parameters": [
+            {
+              "in": "body",
+              "name": "track",
+              "description": "Bla",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Track"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Track is found"
+            },
+            "503": {
+              "description": "Shit happened"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Track": {
+        "required": [
+          "track"
+        ],
+        "properties": {
+          "track": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }

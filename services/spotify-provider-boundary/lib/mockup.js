@@ -99,7 +99,7 @@ currentTrack.get('/', function(request, response) {
         mockedState.is_playing = false;
     }
 
-    console.log('mocked static response: ' + mockedState);
+    console.log('mocked static response: ' + JSON.stringify(mockedState));
     response.end(JSON.stringify(mockedState));
 });
 

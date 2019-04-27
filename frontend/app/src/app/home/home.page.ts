@@ -56,7 +56,7 @@ export class HomePage implements OnInit {
         () => {}
       );
     }, 5000);
-    // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+    // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com';
   }
 
   ngOnInit() {
@@ -128,8 +128,8 @@ export class HomePage implements OnInit {
 
 
             // spotify:track:1tT3WfvorMsmKuQbkKMRpv
-            const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
-            const playlistUrl = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/';
+            const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com';
+            const playlistUrl = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/api/v1/';
             const trackId = data.songUri.replace('spotify:track:', '');
             this.http.get(`${baseUrl}/trackInfo/${trackId}`).subscribe(
               (res: any) => {

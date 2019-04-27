@@ -8,7 +8,7 @@ import { of } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  apiURL = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+  apiURL = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com';
 
   constructor(private http: HttpClient) {}
 

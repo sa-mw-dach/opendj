@@ -4,8 +4,8 @@ import time
 import sys
 import os
 
-playlist_service_url = os.getenv('PLAYLIST_URL','http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/')
-boundary_service_url = os.getenv('BOUNDARY_SERVICE_URL','http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/')
+playlist_service_url = os.getenv('PLAYLIST_URL','http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/api/v1/')
+boundary_service_url = os.getenv('BOUNDARY_SERVICE_URL','http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/')
 playlist_service_polling_timeout_msec = int(os.getenv('PLAYLIST_SERVICE_POLLING_TIMEOUT_MSEC','100')) / 1000.0
 backend_service_polling_timeout_msec = int(os.getenv('BACKEND_SERVICE_POLLING_TIMEOUT_MSEC','5000')) / 1000.0
 

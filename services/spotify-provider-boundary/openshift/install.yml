@@ -1,0 +1,180 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Create ImageStreamTag
+      k8s:
+        state: present
+        definition:
+          kind: ImageStream
+          apiVersion: image.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: spotify-provider-boundary
+              template: opendj-nodejs-spotify-provider-boundary
+            name: spotify-provider-boundary
+            namespace: "{{ namespace }}"
+          spec:
+            lookupPolicy:
+              local: false
+          status:
+            dockerImageRepository: >-
+              docker-registry.default.svc:5000/{{ namespace }}/spotify-provider-boundary
+            tags:
+              - items:
+                tag: latest
+    - name: Create BuildConfig
+      k8s:
+        state: present
+        definition:
+          kind: BuildConfig
+          apiVersion: build.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: spotify-provider-boundary
+              template: opendj-nodejs-spotify-provider-boundary
+            name: spotify-provider-boundary
+            namespace: "{{namespace}}"
+          spec:
+            failedBuildsHistoryLimit: 5
+            nodeSelector: null
+            output:
+              to:
+                kind: ImageStreamTag
+                name: spotify-provider-boundary:latest
+            postCommit: {}
+            resources: {}
+            runPolicy: Serial
+            source:
+              contextDir: services/spotify-provider-boundary
+              git:
+                uri: https://github.com/sa-mw-dach/OpenDJ.git
+              type: Git
+            strategy:
+              sourceStrategy:
+                env:
+                - name: NPM_MIRROR
+                from:
+                  kind: ImageStreamTag
+                  name: nodejs:8
+                  namespace: openshift
+              type: Source
+            successfulBuildsHistoryLimit: 5
+            triggers:
+            - imageChange:
+              type: ImageChange
+            - type: ConfigChange
+            - github:
+                secret: 1qTuy4R21UDqOMqivTxpwrUN0brGdIONGdyBeCxX
+              type: GitHub
+            - generic:
+                secret: rEVLkWDcrlBoPuionusPj0CL4A1H1DsFCMYPCdSw
+              type: Generic
+    - name: Create DeploymentConfig
+      k8s:
+        state: present
+        definition:
+          kind: DeploymentConfig
+          apiVersion: apps.openshift.io/v1
+          metadata:
+            annotations:
+              template.alpha.openshift.io/wait-for-ready: 'true'
+            labels:
+              app: spotify-provider-boundary
+              template: opendj-nodejs-spotify-provider-boundary
+            name: spotify-provider-boundary
+            namespace: "{{namespace}}"
+          spec:
+            replicas: 1
+            revisionHistoryLimit: 10
+            selector:
+              name: spotify-provider-boundary
+            strategy:
+              activeDeadlineSeconds: 21600
+              resources: {}
+              rollingParams:
+                intervalSeconds: 1
+                maxSurge: 25%
+                maxUnavailable: 25%
+                timeoutSeconds: 600
+                updatePeriodSeconds: 1
+              type: Rolling
+            template:
+              metadata:
+                creationTimestamp: null
+                labels:
+                  name: spotify-provider-boundary
+                name: spotify-provider-boundary
+              spec:
+                containers:
+                  - env:
+                      - name: token
+                      - name: device
+                    imagePullPolicy: IfNotPresent
+                    name: spotify-provider-boundary
+                    ports:
+                      - containerPort: 8080
+                        protocol: TCP
+                    resources:
+                      limits:
+                        memory: 512Mi
+                    terminationMessagePath: /dev/termination-log
+                    terminationMessagePolicy: File
+                dnsPolicy: ClusterFirst
+                restartPolicy: Always
+                schedulerName: default-scheduler
+                securityContext: {}
+                terminationGracePeriodSeconds: 30
+            test: false
+            triggers:
+              - imageChangeParams:
+                  automatic: true
+                  containerNames:
+                    - spotify-provider-boundary
+                  from:
+                    kind: ImageStreamTag
+                    name: 'spotify-provider-boundary:latest'
+                    namespace: "{{namespace}}"
+                type: ImageChange
+              - type: ConfigChange
+    - name: Create Service
+      k8s:
+        state: present
+        definition:
+          kind: Service
+          apiVersion: v1
+          metadata:
+            annotations:
+            labels:
+              app: spotify-provider-boundary
+            name: spotify-provider-boundary
+            namespace: "{{namespace}}"
+          spec:
+            ports:
+              - name: web
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+            selector:
+              name: spotify-provider-boundary
+            sessionAffinity: None
+            type: ClusterIP
+    - name: Create Route
+      k8s:
+        state: present
+        definition:
+          kind: Route
+          apiVersion: route.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: spotify-provider-boundary
+            name: spotify-provider-boundary
+            namespace: "{{namespace}}"
+          spec:
+            to:
+              kind: Service
+              name: spotify-provider-boundary
+              weight: 100
+            wildcardPolicy: None

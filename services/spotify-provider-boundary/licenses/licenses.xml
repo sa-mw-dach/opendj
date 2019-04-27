@@ -6,7 +6,7 @@
     <dependencies>
         <dependency>
             <packageName>body-parser</packageName>
-            <version>1.18.2</version>
+            <version>1.18.3</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <packageName>debug</packageName>
-            <version>4.0.1</version>
+            <version>4.1.1</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <packageName>license-reporter</packageName>
-            <version>1.2.0</version>
+            <version>1.2.2</version>
             <licenses>
                 <license>
                     <name>Apache License 2.0</name>

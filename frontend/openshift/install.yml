@@ -168,6 +168,8 @@
             name: frontend
             namespace: "{{namespace}}"
           spec:
+            port:
+              targetPort: web
             to:
               kind: Service
               name: frontend

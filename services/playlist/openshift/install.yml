@@ -1,0 +1,168 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Create ImageStreamTag
+      k8s:
+        state: present
+        definition:
+          kind: ImageStream
+          apiVersion: image.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playlist
+            name: playlist
+            namespace: "{{ namespace }}"
+          spec:
+            lookupPolicy:
+              local: false
+    - name: Create BuildConfig
+      k8s:
+        state: present
+        definition:
+          kind: BuildConfig
+          apiVersion: build.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playlist
+            name: playlist
+            namespace: "{{namespace}}"
+          spec:
+            failedBuildsHistoryLimit: 5
+            nodeSelector: null
+            output:
+              to:
+                kind: ImageStreamTag
+                name: playlist:latest
+            postCommit: {}
+            resources: {}
+            runPolicy: Serial
+            source:
+              contextDir: services/playlist
+              git:
+                ref: master
+                uri: https://github.com/sa-mw-dach/OpenDJ.git
+              type: Git
+            strategy:
+              sourceStrategy:
+                env:
+                from:
+                  kind: ImageStreamTag
+                  name: "nodejs:10"
+                  namespace: openshift
+              type: Source
+            successfulBuildsHistoryLimit: 5
+            triggers:
+            - imageChange:
+              type: ImageChange
+            - type: ConfigChange
+            - github:
+                secret: f8020eeb6055607a
+              type: GitHub
+            - generic:
+                secret: 86c8f4979ce31b6c
+              type: Generic
+    - name: Create DeploymentConfig
+      k8s:
+        state: present
+        definition:
+          kind: DeploymentConfig
+          apiVersion: apps.openshift.io/v1
+          metadata:
+            annotations:
+              template.alpha.openshift.io/wait-for-ready: 'true'
+            labels:
+              app: playlist
+            name: playlist
+            namespace: "{{namespace}}"
+          spec:
+            replicas: 1
+            revisionHistoryLimit: 10
+            selector:
+              name: playlist
+            strategy:
+              activeDeadlineSeconds: 21600
+              resources: {}
+              rollingParams:
+                intervalSeconds: 1
+                maxSurge: 25%
+                maxUnavailable: 25%
+                timeoutSeconds: 600
+                updatePeriodSeconds: 1
+              type: Rolling
+            template:
+              metadata:
+                labels:
+                  name: playlist
+                name: playlist
+              spec:
+                containers:
+                  - env:
+                    imagePullPolicy: IfNotPresent
+                    name: playlist
+                    ports:
+                      - containerPort: 8080
+                        protocol: TCP
+                    resources:
+                      limits:
+                        memory: 2048Mi
+                    terminationMessagePath: /dev/termination-log
+                    terminationMessagePolicy: File
+                dnsPolicy: ClusterFirst
+                restartPolicy: Always
+                schedulerName: default-scheduler
+                securityContext: {}
+                terminationGracePeriodSeconds: 30
+            test: false
+            triggers:
+              - imageChangeParams:
+                  automatic: true
+                  containerNames:
+                    - playlist
+                  from:
+                    kind: ImageStreamTag
+                    name: 'playlist:latest'
+                    namespace: "{{namespace}}"
+                type: ImageChange
+              - type: ConfigChange
+    - name: Create Service
+      k8s:
+        state: present
+        definition:
+          kind: Service
+          apiVersion: v1
+          metadata:
+            annotations:
+            labels:
+              app: playlist
+            name: playlist
+            namespace: "{{namespace}}"
+          spec:
+            ports:
+              - name: web
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+            selector:
+              name: playlist
+            sessionAffinity: None
+            type: ClusterIP
+    - name: Create Route
+      k8s:
+        state: present
+        definition:
+          kind: Route
+          apiVersion: route.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playlist
+            name: playlist
+            namespace: "{{namespace}}"
+          spec:
+            to:
+              kind: Service
+              name: playlist
+              weight: 100
+            wildcardPolicy: None

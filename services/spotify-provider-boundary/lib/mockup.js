@@ -78,7 +78,7 @@ play.post('/', function(request, response) {
     } else {
         mockedState.is_playing = true;
         mockedState.progress_ms = 0;
-        mockedState.duration_ms = 42000;
+        mockedState.duration_ms = 10000;
         mockedState.resourceURI = track;
         mockedState.playingStarted = new Date().getTime();
         response.end(JSON.stringify('Ok'));

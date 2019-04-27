@@ -29,7 +29,11 @@ The process starts with the interface design (API first) which includes test dev
 * an automated test harness for any API-level behavior tests
 
 ### Component Specification
-In this step, the component's interfaces (from the previous step) are named togehter with the role in which the component uses the interface (e.g. "client" or "server" or "producer" or "consumer"), and the behavior of the component is described. Outcome of this process is
-
+In this step, the component's interfaces (from the previous step) are named togehter with the role in which the component uses the interface (e.g. "client" or "server" or "producer" or "consumer"), and the behavior of the component is described (verbally). Then, a test harness for the components' behavior is developed. 
 
 ### Component Realization
+In this step, a component is inmplemented. The build and/or CI pipelines ensures the component is validated against the test harnesses on API and component level.
+
+
+## Open Questions
+* Does the choice of implementation language/build system for the test harnesses impact the choice of implmementation language/build system of the component itself?

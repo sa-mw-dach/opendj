@@ -5,6 +5,9 @@ var https = require('https');
 
 var fs = require("fs");
 
+var port = process.env.MOCKUP_TRACKDURATION_MS || 20000;
+
+
 var mockedState = {
     "is_playing": false,
     "progress_ms": 0,

@@ -105,7 +105,7 @@
                       - name: token
                       - name: device
                       - name: MOCKUP_TRACKDURATION_MS
-                        value: 20000
+                        value: "20000"
                     imagePullPolicy: IfNotPresent
                     name: spotify-provider-boundary
                     ports:

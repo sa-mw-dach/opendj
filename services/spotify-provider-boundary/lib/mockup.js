@@ -5,7 +5,7 @@ var https = require('https');
 
 var fs = require("fs");
 
-var port = process.env.MOCKUP_TRACKDURATION_MS || 20000;
+var trackDuration = process.env.MOCKUP_TRACKDURATION_MS || 20000;
 
 
 var mockedState = {
@@ -81,7 +81,7 @@ play.post('/', function(request, response) {
     } else {
         mockedState.is_playing = true;
         mockedState.progress_ms = 0;
-        mockedState.duration_ms = 10000;
+        mockedState.duration_ms = trackDuration;
         mockedState.resourceURI = track;
         mockedState.playingStarted = new Date().getTime();
         response.end(JSON.stringify('Ok'));

@@ -1,0 +1,177 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Create ImageStreamTag
+      k8s:
+        state: present
+        definition:
+          kind: ImageStream
+          apiVersion: image.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: frontend
+            name: frontend
+            namespace: "{{ namespace }}"
+          spec:
+            lookupPolicy:
+              local: false
+    - name: Create BuildConfig
+      k8s:
+        state: present
+        definition:
+          kind: BuildConfig
+          apiVersion: build.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: frontend
+            name: frontend
+            namespace: "{{namespace}}"
+          spec:
+            failedBuildsHistoryLimit: 5
+            nodeSelector: null
+            output:
+              to:
+                kind: ImageStreamTag
+                name: frontend:latest
+            postCommit: {}
+            resources: {}
+            runPolicy: Serial
+            source:
+              contextDir: frontend/app/www
+              git:
+                ref: master
+                uri: https://github.com/sa-mw-dach/OpenDJ.git
+              type: Git
+            strategy:
+              sourceStrategy:
+                env:
+                from:
+                  kind: ImageStreamTag
+                  name: "nginx:1.12"
+                  namespace: openshift
+              type: Source
+            successfulBuildsHistoryLimit: 5
+            triggers:
+            - imageChange:
+              type: ImageChange
+            - type: ConfigChange
+            - github:
+                secret: f8020ffb1432607a
+              type: GitHub
+            - generic:
+                secret: 686dca6c1e25c57f
+              type: Generic
+    - name: Create DeploymentConfig
+      k8s:
+        state: present
+        definition:
+          kind: DeploymentConfig
+          apiVersion: apps.openshift.io/v1
+          metadata:
+            annotations:
+              template.alpha.openshift.io/wait-for-ready: 'true'
+            labels:
+              app: frontend
+            name: frontend
+            namespace: "{{namespace}}"
+          spec:
+            replicas: 1
+            revisionHistoryLimit: 10
+            selector:
+              name: frontend
+            strategy:
+              activeDeadlineSeconds: 21600
+              resources: {}
+              rollingParams:
+                intervalSeconds: 1
+                maxSurge: 25%
+                maxUnavailable: 25%
+                timeoutSeconds: 600
+                updatePeriodSeconds: 1
+              type: Rolling
+            template:
+              metadata:
+                labels:
+                  name: frontend
+                  deploymentconfig: frontend
+                name: frontend
+              spec:
+                containers:
+                  - env:
+                    imagePullPolicy: IfNotPresent
+                    name: frontend
+                    ports:
+                      - containerPort: 8080
+                        protocol: TCP
+                      - containerPort: 8443
+                        protocol: TCP
+                    resources:
+                      limits:
+                        memory: 128Mi
+                    terminationMessagePath: /dev/termination-log
+                    terminationMessagePolicy: File
+                dnsPolicy: ClusterFirst
+                restartPolicy: Always
+                schedulerName: default-scheduler
+                securityContext: {}
+                terminationGracePeriodSeconds: 30
+            test: false
+            triggers:
+              - imageChangeParams:
+                  automatic: true
+                  containerNames:
+                    - frontend
+                  from:
+                    kind: ImageStreamTag
+                    name: 'frontend:latest'
+                    namespace: "{{namespace}}"
+                type: ImageChange
+              - type: ConfigChange
+    - name: Create Service
+      k8s:
+        state: present
+        definition:
+          kind: Service
+          apiVersion: v1
+          metadata:
+            annotations:
+            labels:
+              app: frontend
+            name: frontend
+            namespace: "{{namespace}}"
+          spec:
+            ports:
+              - name: web
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+              - name: 8443-tcp
+                port: 8443
+                protocol: TCP
+                targetPort: 8443
+            selector:
+              deploymentconfig: frontend
+            sessionAffinity: None
+            type: ClusterIP
+    - name: Create Route
+      k8s:
+        state: present
+        definition:
+          kind: Route
+          apiVersion: route.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: frontend
+            name: frontend
+            namespace: "{{namespace}}"
+          spec:
+            port:
+              targetPort: web
+            to:
+              kind: Service
+              name: frontend
+              weight: 100
+            wildcardPolicy: None

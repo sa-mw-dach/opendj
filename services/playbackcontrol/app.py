@@ -4,21 +4,21 @@ import time
 import sys
 import os
 
-playlist_service_url = os.getenv('PLAYLIST_URL','http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/')
-boundary_service_url = os.getenv('BOUNDARY_SERVICE_URL','http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/')
+playlist_service_url = os.getenv('PLAYLIST_URL','http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/api/v1/')
+boundary_service_url = os.getenv('BOUNDARY_SERVICE_URL','http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/')
 playlist_service_polling_timeout_msec = int(os.getenv('PLAYLIST_SERVICE_POLLING_TIMEOUT_MSEC','100')) / 1000.0
 backend_service_polling_timeout_msec = int(os.getenv('BACKEND_SERVICE_POLLING_TIMEOUT_MSEC','5000')) / 1000.0
 
 print(playlist_service_polling_timeout_msec)
 print(backend_service_polling_timeout_msec)
-
+print ('Starting loop waiting for tracks...')
 try:
     while True:
         # retrieve playlists
         response = requests.get(playlist_service_url + '/playlists')
         response.raise_for_status()
 
-        print(response.content)
+#        print(response.content)
         playlists = json.loads(response.content)
 
         #print("The response contains {0} properties".format(len(playlists)))
@@ -27,13 +27,14 @@ try:
             while True:
                 # retrieve first track from first playlist
                 response = requests.get(playlist_service_url + 'playlists/' + playlists[0]['_id'] + '/firstTrack')
-                print(response.content)
+ #               print(response.content)
                 if response.status_code == 404:
                     break;
                 response.raise_for_status()
                 first_track_object = json.loads(response.content)
                 
                 # tell backend to play track
+                print('First track found - hitting play at backend')
                 response = requests.post(boundary_service_url + 'play', data={"track":first_track_object['resourceURI']})
                 response.raise_for_status()
 
@@ -51,8 +52,9 @@ try:
                     time.sleep(backend_service_polling_timeout_msec)
 
                 # remove first track from playlist
-                #response = requests.delete(playlist_service_url + 'playlists/' + playlists[0]['_id'] + '/tracks/' + first_track_object['resourceURI'])
-                #response.raise_for_status()
+                print('Track stopped playing - popping it from playlist')
+                response = requests.get(playlist_service_url + 'playlists/' + playlists[0]['_id'] + '/pop')
+                print(response.content)
         time.sleep(playlist_service_polling_timeout_msec)
 
 except requests.exceptions.RequestException as e:

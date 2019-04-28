@@ -1,0 +1,175 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Create ImageStreamTag
+      k8s:
+        state: present
+        definition:
+          kind: ImageStream
+          apiVersion: image.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playback-controller
+            name: playback-controller
+            namespace: "{{ namespace }}"
+          spec:
+            lookupPolicy:
+              local: false
+    - name: Create BuildConfig
+      k8s:
+        state: present
+        definition:
+          kind: BuildConfig
+          apiVersion: build.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playback-controller
+            name: playback-controller
+            namespace: "{{namespace}}"
+          spec:
+            failedBuildsHistoryLimit: 5
+            nodeSelector: null
+            output:
+              to:
+                kind: ImageStreamTag
+                name: playback-controller:latest
+            postCommit: {}
+            resources: {}
+            runPolicy: Serial
+            source:
+              contextDir: services/playbackcontrol
+              git:
+                uri: https://github.com/sa-mw-dach/OpenDJ.git
+              type: Git
+            strategy:
+              sourceStrategy:
+                from:
+                  kind: ImageStreamTag
+                  name: 'python:3.6'
+                  namespace: openshift
+              type: Source
+            successfulBuildsHistoryLimit: 5
+            triggers:
+              - generic:
+                  secret: 21ba5d5ec3bd4551
+                type: Generic
+              - github:
+                  secret: cc14a95fe1f5bd99
+                type: GitHub
+              - imageChange:
+                type: ImageChange
+
+    - name: Create DeploymentConfig
+      k8s:
+        state: present
+        definition:
+          kind: DeploymentConfig
+          apiVersion: apps.openshift.io/v1
+          metadata:
+            annotations:
+              template.alpha.openshift.io/wait-for-ready: 'true'
+            labels:
+              app: playback-controller
+            name: playback-controller
+            namespace: "{{namespace}}"
+          spec:
+            replicas: 1
+            revisionHistoryLimit: 10
+            selector:
+              deploymentconfig: playback-controller
+            strategy:
+              activeDeadlineSeconds: 21600
+              resources: {}
+              rollingParams:
+                intervalSeconds: 1
+                maxSurge: 25%
+                maxUnavailable: 25%
+                timeoutSeconds: 600
+                updatePeriodSeconds: 1
+              type: Rolling
+            template:
+              metadata:
+                labels:
+                  app: playback-controller
+                  deploymentconfig: playback-controller
+                name: playback-controller
+              spec:
+                containers:
+                  - env:
+                      - name: BOUNDARY_SERVICE_URL
+                        value: 'http://spotify-provider-boundary:8080/'
+                      - name: PLAYLIST_URL
+                        value: 'http://playlist:8080/api/v1/'
+                      - name: PLAYLIST_SERVICE_POLLING_TIMEOUT_MSEC
+                        value: '100'
+                      - name: BACKEND_SERVICE_POLLING_TIMEOUT_MSEC
+                        value: '5000'
+                    imagePullPolicy: IfNotPresent
+                    name: playback-controller
+                    ports:
+                      - containerPort: 8080
+                        protocol: TCP
+                    resources:
+                      limits:
+                        memory: 128Mi
+                    terminationMessagePath: /dev/termination-log
+                    terminationMessagePolicy: File
+                dnsPolicy: ClusterFirst
+                restartPolicy: Always
+                schedulerName: default-scheduler
+                securityContext: {}
+                terminationGracePeriodSeconds: 30
+            test: false
+            triggers:
+              - imageChangeParams:
+                  automatic: true
+                  containerNames:
+                    - playback-controller
+                  from:
+                    kind: ImageStreamTag
+                    name: 'playback-controller:latest'
+                    namespace: "{{namespace}}"
+                type: ImageChange
+              - type: ConfigChange
+    - name: Create Service
+      k8s:
+        state: present
+        definition:
+          kind: Service
+          apiVersion: v1
+          metadata:
+            annotations:
+            labels:
+              app: playback-controller
+            name: playback-controller
+            namespace: "{{namespace}}"
+          spec:
+            ports:
+              - name: web
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+            selector:
+              name: playback-controller
+            sessionAffinity: None
+            type: ClusterIP
+    - name: Create Route
+      k8s:
+        state: present
+        definition:
+          kind: Route
+          apiVersion: route.openshift.io/v1
+          metadata:
+            annotations:
+            labels:
+              app: playback-controller
+            name: playback-controller
+            namespace: "{{namespace}}"
+          spec:
+            to:
+              kind: Service
+              name: playback-controller
+              weight: 100
+            wildcardPolicy: None

@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
       tracks: []
     };
 
+<<<<<<< HEAD
     this.playlist.tracks = [
       {
         resourceURI: '',
@@ -58,6 +59,29 @@ export class HomePage implements OnInit {
     //   );
     // }, 5000);
     // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
+=======
+    // this.playlist.tracks = [
+    //   {
+    //     resourceURI: '',
+    //     trackName: 'The Whole Universe Wants to Be Touched',
+    //     albumName: 'All Melody',
+    //     artistName: 'Nils Frahm',
+    //     image: 'https://i.scdn.co/image/0bd22d8c20675f1c641fe447be5c90dc1e861f18'
+    //   }
+    // ];
+    setInterval(() => {
+      this.PlayListsApi.playlistsGet()
+      .subscribe(
+        (data) => {
+          // debugger
+          this.playlist = data[0];
+        },
+        (err) => {console.error(err); },
+        () => {}
+      );
+    }, 5000);
+    // this.api.configuration.basePath = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com';
+>>>>>>> master
   }
 
   ngOnInit() {
@@ -129,8 +153,8 @@ export class HomePage implements OnInit {
 
 
             // spotify:track:1tT3WfvorMsmKuQbkKMRpv
-            const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com';
-            const playlistUrl = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.hailstorm5.coe.muc.redhat.com/api/v1/';
+            const baseUrl = 'http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com';
+            const playlistUrl = 'http://playlist-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/api/v1/';
             const trackId = data.songUri.replace('spotify:track:', '');
             this.http.get(`${baseUrl}/trackInfo/${trackId}`).subscribe(
               (res: any) => {

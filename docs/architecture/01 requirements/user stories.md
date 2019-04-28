@@ -23,6 +23,8 @@ User Story BACKLOG
     * As a DANCER I want to SEARCH for TRACKS by ALBUM/ARTIST and add from SEARCH RESUÖTS to PLAYLIST
     * As a DANCER I want to EXPRESS LIKE/DISLIKE to a TRACK SOMEBODY did add
     * As a DANCER I want to ADD GENRE/MOOD to the PLAYLIST so thsat the MAINTAINER can CHOOSE
+    * AS a DANCER I want to COPY/CLONE the current active playlist
+    * AS a DANCER I want to CREATE a new playlist
  
 * MAINTAINER
     * As a MAINTAINER, I want to RE-ORDER the PLAYLIST

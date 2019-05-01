@@ -1,6 +1,6 @@
 sdfsdf sdfhkjasdf kljahdsf+adf  
 
-<a name="xxx">yyy</a>
+<a>xxx</a>
 
 asdfajksdfhlkjasdf
          

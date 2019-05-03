@@ -1,0 +1,29 @@
+<ion-content padding>
+
+  <div class="logo">
+    <!-- <ion-thumbnail slot="start"> -->
+    <ion-img [src]="logo"></ion-img>
+    <!-- </ion-thumbnail> -->
+  </div>
+
+  <ion-card>
+
+    <ion-card-title padding-top>Login</ion-card-title>
+    <form [formGroup]="loginForm" padding>
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input clearInput type="text" formControlName="userId"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input clearInput type="password" formControlName="password">
+        </ion-input>
+      </ion-item>
+
+      <ion-button margin (click)="login()" fill="outline" slot="end"
+        size="small" shape="round" expand="block">Login
+      </ion-button>
+    </form>
+  </ion-card>
+</ion-content>

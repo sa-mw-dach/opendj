@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="header">
+    <ion-buttons slot="start">
+      <ion-button style="color: white">
+        <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <div class="current-song">
+      <div class="display">
+        <ion-avatar slot="left">
+          <img src="{{ track.image }}" />
+        </ion-avatar>
+        <ion-label slot="right">
+          <h3>{{ track.trackName }}</h3>
+          <h3>
+            <small>{{ track.albumName }} - {{ track.artistName }}</small>
+          </h3>
+        </ion-label>
+      </div>
+    </div>
+
+    <ion-buttons slot="end">
+      <ion-button style="color: white">
+        <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

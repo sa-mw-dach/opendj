@@ -1,45 +1,18 @@
 // CSS overrides
 
-.list-override {
-  position: relative;
-  // top: -10vh;
-}
-
-.current-song {
-  background: transparent;
-  color: white;
-  text-align: center;
-  height: 10vh;
-  margin-bottom: 5%;
-}
-
-.btn-vote {
-  // color: black;
-  // border-color: black !important;
-}
-
-.header-bg {
-  background: linear-gradient(162deg, rgba(129, 144, 185, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
-}
-
-ion-toolbar {
-  --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
-}
+// .list-override {
+//   position: relative;
+// }
 
 ion-content {
   --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important
 }
 
-ion-list{
+ion-list {
   --ion-background-color: rgba(53, 54, 56, 0.8) !important;
-}
-
-ion-item{
-  color: white;
-  --ion-background-color: linear-gradient(162deg, rgba(79, 83, 94, 0.8) 20%, rgba(56, 70, 108, .8) 100%) !important;
+  background-image: URL('./../../assets/imgs/logo_transparent.png') center center !important;
 }
 
 ion-footer {
   --ion-color: white
 }
-

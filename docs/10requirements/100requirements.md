@@ -1,6 +1,7 @@
+# Requirements
+Here you can find the functional and non-functional requirements.   
 
-Here you can find al functional and non-functional requirements.   
-Content:
+### Content:
 - [Functional Requirements - User Stories](#functional-requirements---user-stories)
   * [User](#user)
     + [Playlist](#playlist)

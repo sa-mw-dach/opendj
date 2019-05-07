@@ -1,0 +1,18 @@
+{
+    "id": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
+    "name": "Bohemian Rhapsody - Remastered 2011",
+    "Album": "A Night At The Opera (2011 Remaster)",
+    "Artist": "Queen",
+    "url": "https://i.scdn.co/image/16f066184e92b296f9a202a326633a934607cb88",
+    "release_date": "1975-11-21",
+    "popularity": 87,
+    "preview_url": "https://p.scdn.co/mp3-preview/d1ff0ba5c5538ca2c50b808aab2278253c98b038?cid=774b29d4f13844c495f206cafdad9c86",
+    "duration_ms": 354320,
+    "danceability": 0.414,
+    "energy": 0.404,
+    "liveness": 0.3,
+    "valence": 0.224,
+    "tempo": 71.105,
+    "likes": 1234,
+    "dislikes": 5678
+}

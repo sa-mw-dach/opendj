@@ -41,7 +41,7 @@ Usage Scenarios  are:
 ## User
 
 ### Playlist
-As User I want to see the Playlist on my mobile device.  
+As User I want to see the Playlist on my mobile device.
 <a name="STRY-10-100">\(STRY-10-100\)</a>
 
 As User I want to see the Playlist on a screen at the location so that I don't need to pull out my mobile device.

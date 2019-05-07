@@ -18,7 +18,7 @@ You can add one of the following tracks by pasting the ID into the "Add" Dialog:
 The music provider is only a mockup, current track finishes playing after 21 seconds. Add several tracks and see how they vanish.
 
 ## Learn more about the idea
-Read the user stories here
+Read the user stories in the requirements doc [here](docs/10requirements/100requirements.md)
 
 ## Contribute
 If you like the idea and want to contribute, welcome! We always need people helping with UX Design, Architecture, Design, Coding, Testing, Coding, Dokumentation etc.  Please read the project charter if your are interested!

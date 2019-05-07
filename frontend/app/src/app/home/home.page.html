@@ -1,44 +1,10 @@
-<ion-header >
-
-  <ion-toolbar class="header-bg">
-    <ion-buttons slot="start">
-      <ion-button style="color: white" >
-        <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-      <div class="current-song">
-        <h3>Song currently</h3>
-      </div>
-    <ion-buttons slot="end">
-      <ion-button style="color: white" >
-        <ion-icon slot="icon-only" name="arrow-round-forward"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<app-active-track [track]="playlist.tracks[0]"></app-active-track>
 <ion-content>
-<ion-list class="list-override" lines="none">
-  <ion-item *ngFor="let item of playlist.tracks; let index = $index">
-    <ion-thumbnail slot="start">
-      <img src="{{ item.image }}" />
-    </ion-thumbnail>
-    <ion-label>
-      <h3>{{ item.trackName }}</h3>
-      <p>{{ item.artistName }}</p>
-    </ion-label>
-    <ion-button style="color: white" (click)="move(index, index + 1)" expand="outline" slot="end">
-      <ion-icon slot="icon-only" name="thumbs-up"></ion-icon>
-    </ion-button>
-    <ion-button style="color: white" (click)="move(index, index - 1)" expand="outline" slot="end">
-      <ion-icon slot="icon-only" name="thumbs-down"></ion-icon>
-    </ion-button>
-  </ion-item>
-</ion-list>
+  <ion-list lines="none">
+    <app-playlist-item
+      *ngFor="let track of playlist.tracks"
+      [track]="track"
+    ></app-playlist-item>
+  </ion-list>
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
-    <ion-button style="color: white" (click)="presentAddSongPrompt()" expand="full" fill="clear">ADD</ion-button>
-  </ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>

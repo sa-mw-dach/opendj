@@ -6,6 +6,10 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 
+import { PlaylistItemComponent } from '../components/playlist-item/playlist-item.component';
+import { ActiveTrackComponent } from '../components/active-track/active-track.component';
+import { FooterComponent } from '../components/footer/footer.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +23,10 @@ import { HomePage } from './home.page';
     ])
   ],
   declarations: [
-    HomePage
+    HomePage,
+    PlaylistItemComponent,
+    ActiveTrackComponent,
+    FooterComponent
   ]
 })
 export class HomePageModule {}

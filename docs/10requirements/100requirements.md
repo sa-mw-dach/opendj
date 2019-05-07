@@ -41,7 +41,7 @@ Usage Scenarios  are:
 ## User
 
 ### Playlist
-As User I want to see the Playlist on my mobile device.
+As User I want to see the Playlist on my mobile device.  
 <a name="STRY-10-100">\(STRY-10-100\)</a>
 
 As User I want to see the Playlist on a screen at the location so that I don't need to pull out my mobile device.
@@ -63,7 +63,7 @@ As User I want to follow the playlist I like most.
 <a name="STRY-10-160">\(STRY-10-160\)</a>
 
 ### Tracks
-As User I want to be able to search for tracks by name or artist, view results and add a TRACK to the Playlist. I do that in OpenDJ, because maybe I don't have an account with a streaming provider.
+As User I want to be able to search for tracks by name or artist, view results and add a TRACK to the Playlist. I do that in OpenDJ, because maybe I don't have an account with a streaming provider.  
 <a name="STRY-10-200">\(STRY-10-200\)</a>
 
 As User I want to add a track from Spotify App by using "Share->Copy Link" and paste it into OpenDJ

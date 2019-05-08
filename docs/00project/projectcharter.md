@@ -1,17 +1,18 @@
+# Project Charter
+
+This defines the charter of the project, what are the goals and how do we interact.
+
+## Essence of this Project
+The essence of this project is to design,build and run a solution called "OpenDJ". The highlevel functional scope is define in the [README.md]. More details can be found in the [requirement documentation](/docs/10requirements/100requirements.md) and the [mvp definition](/docs/10requirements/300mvp.md)
 
 ## Background
 This project was started by dfroehli@redhat.com during a Red Hat Solution Architect Hackathon in April 2019. 
-
-## Private Time vs Business Time  
-Be aware of private vs. business conflict! Use Red Hat values of FREEDOM and RESPONSIBILITY wisely. 
-Rule of Thumb: If you can use it to build skills, demo at customer, Red Hat technology is involved, etc -  then it is BUSINESS and okay during WORKING  hours. If it is about OpemDJ core functionality, nice to have features of OpenDJ etc., it is PRIVATE and should be done in AFTER hours. If you THINK about it, then it actually is EASY to decide.
 
 ## Spare Ressources  
 We have very limited and sparse resources - be sure not to waste time on stuff others are also doing. 
 
 ## Visibility
 Make sure it is visible what you are doing by creating/taking an issue. If your are working on it, it should be in state "In progress" and assigend to you, so everybody else can easily see it.
-
 
 ## Open Source to the rescue 
 Make sure everything you do is visible in the public github repo! Avoid Red Hat internal Resource (GDocs, Mojo etc.) as much as possible. But don't be stupid and add private stuff (credentials, keys, etc.) to public github. 
@@ -36,7 +37,7 @@ The process should be:
 1. Once a decision is being made, it is added as final comment who decided for what and why.
 1. The decision needs to be documented somewhere in the docs folder (e.g. architecure) in a document, summarizing the question, options and decision and referring to the ticket for details.
 
-## Project Manaagement Approach
+## Project Management Approach
 We use an agile, kanban style project approach. Everybody grabs a ticket and works and the topic he can contribute to. Due to the limited resources we have, there are not fixed sprint durations.
 
 ## Meetings
@@ -53,3 +54,6 @@ There are different motivations to participate / contribute / follow this projec
 1. learn about Red Hat Technology und use the project as demo / showcase. Explain typical problems of cloud native app dev to Red Hat customers.
 
 
+## Private Time vs Business Time  
+Be aware of private vs. business conflict! Use Red Hat values of FREEDOM and RESPONSIBILITY wisely. 
+Rule of Thumb: If you can use it to build skills, demo at customer, Red Hat technology is involved, etc -  then it is BUSINESS and okay during WORKING  hours. If it is about OpemDJ core functionality, nice to have features of OpenDJ etc., it is PRIVATE and should be done in AFTER hours. If you THINK about it, then it actually is EASY to decide.

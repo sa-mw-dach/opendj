@@ -6,7 +6,7 @@ The vision of OpenDJ is to solve this problem by applying open source principles
 Participants can add tracks to the playlist of an event. Curators can edit the playlist (sorting/grouping by genre, deleting) - they are like the maintainer of an open source project.
 The music is being played by a streaming provider, e.g. Spotify.
 
-Everybody can add the the playlist, no accounts needed, no access to local devices. OpenDJ is running in the internet and uses streaming provider APIs to execute the playlist on a local device (which might be connected to the PA system of a party location)
+Everybody can add the the playlist, no accounts needed, no access to local devices. OpenDJ is running in the internet and uses streaming provider APIs to execute the playlist on a local device (which might be connected to the PA system of a party location).
 
 ## Try it out
 A prototype is up and running: www.opendj.io
@@ -21,4 +21,6 @@ The music provider is only a mockup, current track finishes playing after 21 sec
 Read the user stories in the requirements doc [here](docs/10requirements/100requirements.md)
 
 ## Contribute
-If you like the idea and want to contribute, welcome! We always need people helping with UX Design, Architecture, Design, Coding, Testing, Coding, Dokumentation etc.  Please read the project charter if your are interested!
+If you like the idea and want to contribute, welcome! We always need people helping with UX Design, Architecture, Design, Coding, Testing, Coding, Dokumentation etc.  Please read the project charter if your are interested! 
+
+To see what is currently happening, please check out the [github project page](https://github.com/sa-mw-dach/OpenDJ/projects?query=is%3Aopen+sort%3Acreated-asc). The active spring/iteration is the project with the lowest number. 

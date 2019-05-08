@@ -252,6 +252,10 @@ User / Curator UI must be simple and easy to use - assume people are dancing/tal
 Minor inconsistencies in a playlist view for participants (e.g. not correct order, outdated number of likes/dislikes etc.) are acceptable.
 <a name="NFR-10-510">\(NFR-10-510\)</a>
 
+Adaptive UI: UI should respond to different devices orientation (portrait/landscape).
+<a name="NFR-10-520">\(NFR-10-520\)</a>
+
+
 ## Security & Privacy
 As this solution is going to be available via the public internet, it must be secure. There should be no security vulnerability warnings from GitHub.
 <a name="NFR-10-600">\(NFR-10-600\)</a>

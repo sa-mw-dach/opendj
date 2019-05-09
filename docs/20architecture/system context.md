@@ -4,12 +4,6 @@ This shows the overall context of the solution:
 
 ![system context diagramm](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/systemcontext.puml)
 
-
-![alternative text](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/plantuml/plantuml-server/master/src/main/webapp/resource/test2diagrams.txt)
-
-
-
-
 ## Actors
 
 * User - a person contributing to the playlist by adding tracks to the end. There is a easy to use web frontend users can use to join an event.

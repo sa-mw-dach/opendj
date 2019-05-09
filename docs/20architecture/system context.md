@@ -2,7 +2,11 @@
 
 This shows the overall context of the solution:
 
-![system context diagramm](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/system%20context.puml)
+![system context diagramm](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/systemcontext.puml)
+
+
+![alternative text](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/plantuml/plantuml-server/master/src/main/webapp/resource/test2diagrams.txt)
+
 
 
 
@@ -17,7 +21,7 @@ This shows the overall context of the solution:
 The application developed by this project, running somewhere in the cloud. Could also be considered a Software as a Service offering. OpenDJ can host multiple events with hundreds or thousands of users concurrently.
 
 * **SpotifyAPI:** 
-Spotify provides a very detailed and powerfull API to search for tracks.
+Spotify provides a very detailed and powerful API to search for tracks.
 OpenDJ uses the Account/Credentials of the EventOwner.  
 The **PlaybackDevice** belongs to the EventOwner and is visible in the Spotify App of the EventOwner. The EventOwner can select in the system on which device the tracks are being played.
 

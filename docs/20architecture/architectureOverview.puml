@@ -1,0 +1,49 @@
+@startuml component
+
+together {
+      actor User as user
+      actor Curator as curator
+      actor EventOwner as eventowner
+}
+
+together {
+      component [frontend-web-user] as frontendwebuser  
+      component [frontend-web-curator] as frontendwebcurator
+      component [frontend-web-event] as frontendwebevent
+}
+
+
+together {
+      together {
+      component [service-playlist-api] as serviceplaylistapi  
+      component [service-playlist-db] as serviceplaylistdb
+
+      }
+      component [service-user] as serviceuserapi
+      component [service-event] as serviceeventapi  
+      component [service-playback-ctrl] as serviceplaybackctrl
+}
+
+together {
+      component [boundary-spotify] as boundaryspotify  
+}
+
+cloud  {
+  component SpotifyAPI  as spotifyapi
+}
+
+
+user -> frontendwebuser
+curator->frontendwebcurator
+eventowner->frontendwebevent
+
+frontendwebuser -> serviceuserapi
+frontendwebuser -> serviceeventapi
+frontendwebuser -> serviceplaylistapi
+serviceplaylistapi -> serviceplaylistdb
+
+serviceplaybackctrl -> serviceplaylistapi
+serviceplaybackctrl -> boundaryspotify
+
+boundaryspotify --> spotifyapi 
+@enduml

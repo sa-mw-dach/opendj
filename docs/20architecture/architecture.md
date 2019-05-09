@@ -9,55 +9,7 @@
 1. Use Red Hat Enterprise Products as much as possible - avoid community upstream projects.
 
 
-# Architecture Overview
-```plantuml
-@startuml component
-
-together {
-      actor User as user
-      actor Curator as curator
-      actor EventOwner as eventowner
-}
-
-together {
-      component [frontend-web-user] as frontendwebuser  
-      component [frontend-web-curator] as frontendwebcurator
-      component [frontend-web-event] as frontendwebevent
-}
+# Architecture Overview Diagram
+![aod](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/architectureOverview.puml)
 
 
-together {
-      together {
-      component [service-playlist-api] as serviceplaylistapi  
-      component [service-playlist-db] as serviceplaylistdb
-
-      }
-      component [service-user] as serviceuserapi
-      component [service-event] as serviceeventapi  
-      component [service-playback-ctrl] as serviceplaybackctrl
-}
-
-together {
-      component [boundary-spotify] as boundaryspotify  
-}
-
-cloud  {
-  component SpotifyAPI  as spotifyapi
-}
-
-
-user -> frontendwebuser
-curator->frontendwebcurator
-eventowner->frontendwebevent
-
-frontendwebuser -> serviceuserapi
-frontendwebuser -> serviceeventapi
-frontendwebuser -> serviceplaylistapi
-serviceplaylistapi -> serviceplaylistdb
-
-serviceplaybackctrl -> serviceplaylistapi
-serviceplaybackctrl -> boundaryspotify
-
-boundaryspotify --> spotifyapi 
-
-```

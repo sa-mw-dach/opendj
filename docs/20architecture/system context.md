@@ -1,49 +1,9 @@
 # System Context
 
-This shows the overall context the solution is ru
+This shows the overall context of the solution:
 
-```plantuml
-@startuml component
-'skinparam monochrome true
-'skinparam handwritten true
+![system context diagramm](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/system%20context.puml)
 
-
-together {
-  actor User
-  actor Curator
-  actor EventOwner
-}
-
-cloud  {
-node OpenDJ as System
-' TODO: Do we want to embedd / show components here already?
-'{
-' component frontend 
-' component playlist 
-' component spotify 
-' }
-}
-
-User -> System
-Curator -> System
-EventOwner -> System
-
-cloud  {
-  component SpotifyAPI 
-  component GoogleAuthAPI 
-}
-
-entity PlaybackDevice
-
-'User ^-- Curator
-'User ^-- EventOwner
-
-
-System ..> SpotifyAPI
-System ..> GoogleAuthAPI
-SpotifyAPI -> PlaybackDevice
-@enduml
-```
 
 
 ## Actors

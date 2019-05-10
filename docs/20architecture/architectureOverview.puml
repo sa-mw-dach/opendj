@@ -1,4 +1,7 @@
 @startuml component
+skinparam linetype ortho 
+' skinparam linetype polyline 
+skinparam roundcorner 15
 
 together {
       actor User as user
@@ -33,17 +36,17 @@ cloud  {
 }
 
 
-user -> frontendwebuser
-curator->frontendwebcurator
-eventowner->frontendwebevent
+user -down-> frontendwebuser
+curator -down-> frontendwebcurator
+eventowner -down-> frontendwebevent
 
-frontendwebuser -> serviceuserapi
-frontendwebuser -> serviceeventapi
-frontendwebuser -> serviceplaylistapi
-serviceplaylistapi -> serviceplaylistdb
+frontendwebuser -down-> serviceuserapi
+frontendwebuser -down-> serviceeventapi
+frontendwebuser -down-> serviceplaylistapi
+serviceplaylistapi -down-> serviceplaylistdb
 
-serviceplaybackctrl -> serviceplaylistapi
-serviceplaybackctrl -> boundaryspotify
+serviceplaybackctrl -right-> serviceplaylistapi
+serviceplaybackctrl --> boundaryspotify
 
 boundaryspotify --> spotifyapi 
 @enduml

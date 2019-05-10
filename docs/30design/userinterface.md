@@ -43,7 +43,8 @@ Fields:
 
 
 * Bottom BLock:
-    *ADD  button leading to "AddTrackDialog"
+    * ADD  button leading to "AddTrackDialog"
+    * Optional: Space for Advertisement, e.g. using Google AdSense
 
 ## Add Track Dialog 
 Modal Popup

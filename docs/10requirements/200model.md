@@ -6,6 +6,7 @@ Which entities need to be persistent, how associations are implemented, and so o
 Comments and details are below the diagram.
 
 Here it is:
+
 ![model](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/10requirements/analysisModel/analysismodel.puml)
 
 

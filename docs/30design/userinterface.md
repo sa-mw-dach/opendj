@@ -98,7 +98,15 @@ Fields:
 - Spotify Playlist To Add Played Tracks to: Name of List (will be created if not existing)
 
 
-# Event Statistics View
+## Event Statistics View
 For Star Curator, Star User and Star Track
 
+## EventView 
+Thoughts:
+- Assuming Full HD Beamer or even 4k Display
+- Top Section: Current Playlist
+- Below: Alternative Playlists in Parallel
+- Background: Nice Visualization or Video of current Track (TO)
+- Commercials / Ads at the bottom
+- Social Media Feed from Twitter at the Bottom
 

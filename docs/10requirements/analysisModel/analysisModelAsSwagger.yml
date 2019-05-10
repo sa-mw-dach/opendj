@@ -1,0 +1,104 @@
+# This was the tryout of using swagger to describe
+# the analyis model. 
+# Lessons learned: as you cant decently express cardinalities,
+# and the tool to convert swagger to plantUML is not working, this
+# was not a good idea. Noted for future reference.
+openapi: "3.0.0"
+info:
+  title: OpenDJ Object Model API
+  version: 0.0.1
+
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              $ref: '#/components/schemas/MusicEvent'
+components:
+  schemas:
+    MusicEvent:
+      type: object
+      descripton: |
+        A MusicEvent with a clever markdown description
+        1. item
+        2. item
+      properties:
+        isPublic:
+          type: boolean
+        location:
+          type: string
+        title:
+          type: string
+        start: 
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        playlists:
+          type: array
+# TODO: Check if 1..N is expressed this way:
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Playlist'
+
+    Playlist:
+      type: object
+      properties:
+        motto:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListItem'
+
+    ListItem:
+      type: object
+      properties:
+        trackid:
+          type: string
+        eta:
+          type: string
+#          format: "\d\d:\d\d"
+
+
+    Track:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        album:
+          type: string
+        artist:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+        bpm:
+          type: integer
+        popularity:
+          type: integer
+        danceability:
+          type: integer
+        energy:
+          type: integer
+        valence:
+          type: integer
+        image_url:
+          type: string
+        preview_url:
+          type: string
+        x:
+          type: string
+        
+
+
+    
+      
+    
+

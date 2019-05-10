@@ -1,0 +1,98 @@
+@startuml
+'skinparam linetype ortho 
+'skinparam linetype polyline 
+skinparam roundcorner 15
+
+' ------------- Classes: -------------
+class MusicEvent {
+    isPublic: boolean
+    location: String 
+    motto: String 
+}
+
+class User {
+    accountID: String
+    DisplayName: String
+    externalID: String
+    anonymous: boolean
+}
+
+class Playlist {
+    motto: String
+}
+
+class ListItem {
+    ETA: String
+}
+
+class ListItemIdea {
+    vagueDescription: String
+}
+
+class Track {
+    ID: string
+    durtion_ms: int 
+    name:  string
+    album: string
+    artist: string
+    genre: string
+    yearPublished: int
+    bpm: int
+    danceability: int
+    energy: int
+    valence: int
+    imageURL: string
+    previewURL: string
+}
+
+class Tenant {
+    brand: String
+    domain: String
+    logo: Image
+}
+
+class MusicProvider {
+}
+
+class MusicBackend {
+}
+
+class SpotifyBackend {
+    access_token: String
+    refresh_token: String
+    device_id: String
+}
+
+class SpotifyProvider {
+}
+
+' ------------- Associations -------------
+' Only simple cardinalities given to keep diag clean:
+MusicEvent "1" --> "*" Playlist : lists
+MusicEvent "1" --> "1" Playlist : current
+MusicEvent "1" --> "1" Playlist : actual
+MusicEvent "*" --> "1" User : eventowner
+MusicEvent "1" --> "*" MusicBackend : backends
+MusicEvent "*" --> "1"  Tenant
+
+Playlist "1" --> "*" ListItem: items
+Playlist "*" --> "*" User: curators
+Playlist "*" --> "1" Playlist: forkedFrom
+
+User "*" -right-> "1" Playlist: follows
+
+ListItem "*" -right-> "*" User: likedBy
+ListItem "*" -right-> "1" User: contributedBy
+ListItem "*" -right-> "*" User: dislikedBy
+ListItem "*" -down-> "0..1" Track: track
+ListItem <|-- ListItemIdea
+
+Track --> MusicProvider: providedBy
+
+MusicProvider <|-down- SpotifyProvider
+MusicProvider "1" -> "*" MusicBackend: backends
+MusicBackend <|-down- SpotifyBackend
+
+' ---- Hidden Relations for visual suggar------
+' BackendClient -[hidden]- Logging
+@enduml

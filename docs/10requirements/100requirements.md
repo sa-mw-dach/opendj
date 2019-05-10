@@ -84,7 +84,7 @@ As User I want to EXPRESS LIKE/DISLIKE to a TRACK I see on the playlist
 As User I want to request skipping of the current track because I hate it.
 <a name="STRY-10-260">\(STRY-10-260\)</a> 
 
-As User I want to add a TrackIdea which describes just a  genre/mood/vague track description to the Playlist, because I cant remember/find the actual track. 
+As User I want to add a TrackIdea which describes just a  genre/mood/vague track description to the Playlist, because I cant remember/find the actual track I have in my mind. 
 <a name="STRY-10-270">\(STRY-10-270\)</a>
 
 ### Security & Privacy

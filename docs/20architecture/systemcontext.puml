@@ -1,6 +1,7 @@
 @startuml component
-'skinparam monochrome true
-'skinparam handwritten true
+' skinparam linetype ortho 
+' skinparam linetype polyline 
+skinparam roundcorner 15
 
 
 together {
@@ -19,9 +20,9 @@ node OpenDJ as System
 ' }
 }
 
-User -> System
-Curator -> System
-EventOwner -> System
+User -down-> System
+Curator -down-> System
+EventOwner -down-> System
 
 cloud  {
   component SpotifyAPI 
@@ -34,7 +35,7 @@ entity PlaybackDevice
 'User ^-- EventOwner
 
 
-System ..> SpotifyAPI
+System ...> SpotifyAPI
 System ..> GoogleAuthAPI
-SpotifyAPI -> PlaybackDevice
+SpotifyAPI --> PlaybackDevice
 @enduml

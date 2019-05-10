@@ -1,9 +1,11 @@
 # Analysis Model
-A rather traditional UML analysis model describing entities their relationship. Please note that this is just to define names and terms. Which entities need to be persistent, how associations are implemented, we will see later.  
+A rather traditional UML analysis model describing entities and their relationships. Please note that this is just to define names and terms, and get a better understanding of the solution domain.  
+
+Which entities need to be persistent, how associations are implemented, and so on, we will see later.  
 
 Comments and details are below the diagram.
 
-
+Here it is:
 ![model](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/10requirements/analysisModel/analysismodel.puml)
 
 

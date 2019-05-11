@@ -1,0 +1,53 @@
+@startuml
+'skinparam linetype ortho 
+'skinparam linetype polyline 
+skinparam roundcorner 15
+
+'skinparam stereotypeCBackgroundColor YellowGreen
+'skinparam stereotypeCBackgroundColor<< event >> orange
+'skinparam stereotypeCBackgroundColor<< service >> lightgreen
+skinparam stereotypeIBackgroundColor<< api >> lightblue
+
+package backend-spotify {
+
+    interface SpotifyProviderAPI <<api>> {
+        <<get>> Track[] search(String query) 
+        <<post>> void play(Event String trackid)
+        <<get>> Track getTrackCurrentlyPlaying(Event)
+
+        <<post>> initiateEventRegistration(Event)
+        <<get>> listAvailableBackendDevices(Event)
+    }
+    class ProviderEvent <<(E,orange)event>> {
+        ==ACTIONS==
+        EVENT_REGISTERED
+        ==PAYLOAD==
+        eventID: String
+ 
+    }
+    class TrackEvent <<(E,orange)event>> {
+        ==ACTIONS==
+        STARTED,STOPPED
+        ==PAYLOAD==
+        eventID: String
+        trackID: String 
+    }
+
+    class SpotifyProvider <<(S,lightgreen)service>> {
+
+    }
+}
+
+
+SpotifyProviderAPI <.. SpotifyProvider
+SpotifyProvider -u-> ProviderEvent
+SpotifyProvider -u-> TrackEvent
+REST ()-- SpotifyProviderAPI
+EVENT1 ()-- ProviderEvent
+EVENT2 ()-- TrackEvent
+
+' ProviderEvent -- TrackEvent
+'ProviderEvent -[hidden]down- TrackEvent
+
+@enduml
+

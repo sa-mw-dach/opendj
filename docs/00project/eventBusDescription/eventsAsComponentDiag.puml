@@ -1,0 +1,20 @@
+@startuml
+'skinparam linetype ortho 
+'skinparam linetype polyline 
+skinparam roundcorner 15
+
+
+[componentA]
+[componentB]
+interface REST 
+interface EVENT
+componentB - EVENT 
+componentB -u- REST  
+
+componentA --( REST : use
+componentA ..> EVENT : consume
+
+@enduml
+
+# TODO: Use Class Diagram with actual interfaces for sync call 
+# and classes for events, using stereotypes

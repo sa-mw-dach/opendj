@@ -8,6 +8,13 @@ skinparam roundcorner 15
 'skinparam stereotypeCBackgroundColor<< service >> lightgreen
 skinparam stereotypeIBackgroundColor<< api >> lightblue
 
+package service-playlist {
+    class PlaylistService <<(S,lightgreen)service>> {
+
+    }
+
+}
+
 package backend-spotify {
 
     interface SpotifyProviderAPI <<api>> {
@@ -42,9 +49,16 @@ package backend-spotify {
 SpotifyProviderAPI <.. SpotifyProvider
 SpotifyProvider -u-> ProviderEvent
 SpotifyProvider -u-> TrackEvent
-REST ()-- SpotifyProviderAPI
-EVENT1 ()-- ProviderEvent
-EVENT2 ()-- TrackEvent
+' Lollipops are strange:
+'REST ()-- SpotifyProviderAPI
+'EVENT1 ()-- ProviderEvent
+'EVENT2 ()-- TrackEvent
+
+
+PlaylistService --> SpotifyProviderAPI : invoke
+PlaylistService ..> ProviderEvent : subcribe
+PlaylistService ..> TrackEvent : subcribe
+
 
 ' ProviderEvent -- TrackEvent
 'ProviderEvent -[hidden]down- TrackEvent

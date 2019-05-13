@@ -1,11 +1,26 @@
 'use strict';
 
 const express = require('express');
+const debug = require('debug')('spotify-provider')
 const app = express();
 var cors = require('cors');
+var router = new express.Router();
+
 
 
 app.use(cors());
+
+
+function handleError(err, response) {
+    console.error('Error: ' + err);
+    var error = {
+        "message": err,
+        "code": 500
+    };
+    response.writeHead(500);
+    response.end(JSON.stringify(error));
+}
+
 
 
 // ------------------------------------------------------------------------
@@ -43,7 +58,10 @@ kafkaClient.connect();
 var topicsToCreate = [{
     topic: TOPIC_INTERNAL,
     partitions: 1,
-    replicationFactor: 1
+    replicationFactor: 1,
+    configEntries: [
+        { name: "retention.ms", value: "120000" },
+    ]
 }, ];
 kafkaClient.createTopics(topicsToCreate, (error, result) => {
     console.log("kafkaClient  createTopics error: %s", error);
@@ -63,7 +81,7 @@ var kafkaConsumer = new kafka.Consumer(kafkaClient, [
     { topic: TOPIC_INTERNAL }, // offset, partition
 ], {
     autoCommit: true,
-    fromOffset: false
+    fromOffset: true
 });
 
 kafkaConsumer.on('message', function(message) {
@@ -73,10 +91,14 @@ kafkaConsumer.on('message', function(message) {
         console.error("ignoring unexpected message %s", JSON.stringify(message));
         return;
     }
-    var payload = JSON.parse(message.value);
-    if (payload != null && payload.eventID != null) {
-        console.info("Adding new state for event %s", payload.eventID);
-        mapOfEventStates[payload.eventID] = payload;
+    try {
+        var payload = JSON.parse(message.value);
+        if (payload != null && payload.eventID != null) {
+            console.info("Adding new state for event %s", payload.eventID);
+            mapOfEventStates[payload.eventID] = payload;
+        }
+    } catch (e) {
+        console.warn(" Exception %s while processing message - ignored", e);
     }
 });
 
@@ -110,6 +132,7 @@ var mapOfEventStates = {
     }
 }
 
+console.log("create SpotifyWebApi...");
 var spotifyApi = new SpotifyWebApi({
     clientId: spotifyClientID,
     clientSecret: spotifyClientSecret,
@@ -126,40 +149,71 @@ var spotifyApi = new SpotifyWebApi({
 // This is Step 2 of the Authorization Code Flow: 
 // Redirected from Spotiy AccountsService after user Consent.
 // We receive a code and need to trade that token into tokens:
-app.use('backend-spotifyprovider/auth_callback', function(req, res) {
-    debug("auth_callback req=%s", JSON.stringify(req));
+console.debug("create Spotify auth callback...");
+router.get('/auth_callback', function(req, res) {
+    //    debug("auth_callback req=%s", JSON.stringify(req));
     var code = req.query.code;
+    var eventId = code;
     debug("code = %s", code);
 
     // TODO: Check on STATE!
 
     // Trade CODE into TOKENS:
-    spotifyApi.authorizationCodeGrant(code).then(
-        function(data) {
-            console.log('The token expires in ' + data.body['expires_in']);
-            console.log('The access token is ' + data.body['access_token']);
-            console.log('The refresh token is ' + data.body['refresh_token']);
 
-            // Set the access token on the API object to use it in later calls
-            spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.setRefreshToken(data.body['refresh_token']);
+    var eventState = {
+        "eventID": eventId,
+        "access_token": "-unknown-",
+        "refresh_token": "-unknown-",
+        "client_state": "-unknown-",
+        "valid_until": "-unknown-",
+        "created": "unknown",
+    };
 
 
-            // TODO: Store token in internal state and broadcast them via kafka
-        },
-        function(err) {
-            console.log('Something went wrong!', err);
-        }
-    );
+    kafkaProducer.send([{
+        topic: TOPIC_INTERNAL,
+        key: eventState.eventID,
+        messages: [JSON.stringify(eventState)]
+    }], function(err, data) {
+        console.log("kafkaProducer.send err=%s", err);
+        console.log("kafkaProducer.send data=%s", JSON.stringify(data));
+    });
+
+
+
+    res.send('1');
+    /*    
+        spotifyApi.authorizationCodeGrant(code).then(
+            function(data) {
+                console.log('The token expires in ' + data.body['expires_in']);
+                console.log('The access token is ' + data.body['access_token']);
+                console.log('The refresh token is ' + data.body['refresh_token']);
+
+                // Set the access token on the API object to use it in later calls
+                spotifyApi.setAccessToken(data.body['access_token']);
+                spotifyApi.setRefreshToken(data.body['refresh_token']);
+
+
+                // TODO: Store token in internal state and broadcast them via kafka
+
+                // TODO: Sent a decent response!
+                res.send('1');
+            },
+            function(err) {
+                handleError(err, res);
+            }
+        );
+    */
 
 });
 
 // Step 3 is using the access_token - omitted here for obvious reasons.
 
 // Step 4 of the flow - refresh tokens!
+console.debug("SpotifyApi refreshAccessToken");
 spotifyApi.refreshAccessToken().then(
     function(data) {
-        console.log('The access token has been refreshed!');
+        console.info('The access token has been refreshed!');
 
         // Save the access token so that it's used in future calls
         spotifyApi.setAccessToken(data.body['access_token']);
@@ -194,5 +248,8 @@ if (typeof spotifyClientID !== 'undefined' && spotifyClientID) {
 //var swaggerUi = require('swagger-ui-express'),
 //swaggerDocument = require('./swagger.json');
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use("/backend-spotifyprovider", router);
+
 
 module.exports = app;

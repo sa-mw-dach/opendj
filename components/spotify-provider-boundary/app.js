@@ -60,7 +60,7 @@ var topicsToCreate = [{
     partitions: 1,
     replicationFactor: 1,
     configEntries: [
-        { name: "retention.ms", value: "120000" },
+        { name: "retention.ms", value: "43200000" }, // 12hours for start, should be 48hours!
     ]
 }, ];
 kafkaClient.createTopics(topicsToCreate, (error, result) => {

@@ -1,7 +1,8 @@
 
 # Scribble
-This contains unsorted thoughts, ideas which have not yet been sorted into a the right document structure
-
+This contains 
+- unsorted thoughts, ideas which have not yet been sorted into a the right document structure
+- random notices
 
 
 ## Architecture Questions:
@@ -24,6 +25,27 @@ Examples:
     - frontend-browser-ui  
     - frontend-app-android (if we need one later)
 1. services-frontend 
+
+### Layering III
+We need to de-couple the frontend from the services, e.g. for converting internal kafka event streams to websockets, isolate changes.
+Options:
+1. [Backend for Frontend](https://docs.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends) - dedicated backend per frontend type (web, app)
+1. [Gateway Aggregration](https://docs.microsoft.com/en-us/azure/architecture/patterns/gateway-aggregation) 
+
+I think we need a "Backend For Frontend" Facade, aka "Mobile Backend as a Service". 
+Responsibilties:
+- Auth checking
+- mapping of internal kafka events to websockets
+
+## WebSockets I
+Use websockets for client/server async events, or bring kafka out to the client?
+
+Con:
+1. Kafaka protocol is binary, more complex to get it through routers, load balancers
+1. Security?
+
+## WebSockets II
+If we use websockets and have a BFF
 
 
 ### Persistence
@@ -81,6 +103,8 @@ Convention: ``` <layer>-<component>-<additional> ```
     - www.opendj.io/api/service-playlist/get 
     - www.opendj.io/api/backend-spotifyprovider/spotifyPleaseCallbackHereAfterUserConsent
 
+
+
 ***???*** 
 Not sure if this is really a good idea - if you have a single component service both static stuff and api, you need two routes in OpenShift to get the traffic to that component. Better would be:
 /**<component>**/*ui*/...
@@ -124,4 +148,19 @@ jenv local openjdk64-1.8.0.212
 # Run:
 zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties 
 kafka-server-start /usr/local/etc/kafka/server.properties
+
+# Delete topic:
+kafka-topics --bootstrap-server localhost:9092 --delete --topic opendj-spotifyprovider-internal
 ```
+
+# GIT
+## Reference issues in other repo:
+sa-mw-dach/OpenDJ#53
+
+# Spotify API
+Registered Callbacks in Spotify Developer Dashboard for OpenDJ App:
+http://www.opendj.io/backend-spotifyprovider/auth_callback
+http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/auth_callback
+http://localhost:8081/backend-spotifyprovider/auth_callback
+
+

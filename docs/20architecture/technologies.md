@@ -1,4 +1,4 @@
-# Aproach
+# Approach
 This project also severs as a showcase / testbed of Red Hat technologies.
 So if possible, we prefer:
 1. OpenShift
@@ -15,6 +15,6 @@ So if possible, we prefer:
 1. Ansible
 1. DataGrid
 
-# Acutal Technologies being uses
+# Actual Technologies being uses
 1. OpenShift V3.11
 1. ROHAR - NodeJS 

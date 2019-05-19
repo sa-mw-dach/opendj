@@ -163,4 +163,18 @@ http://www.opendj.io/backend-spotifyprovider/auth_callback
 http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/auth_callback
 http://localhost:8081/backend-spotifyprovider/auth_callback
 
+# provider api:
+
+# first: get login url:
+http://localhost:8080/backend-spotifyprovider/getSpotifyLoginURL?event=4711
+
+# second: (copy paste that URL to antoher tab and see how spotify consent screen), then call back
+
+# third:
+http://localhost:8080/backend-spotifyprovider/getCurrentTrack?event=4711
+http://localhost:8080/backend-spotifyprovider/getAvailableDevices?event=4711
+
+
+
+
 

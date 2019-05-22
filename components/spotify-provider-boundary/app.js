@@ -5,15 +5,15 @@ const app = express();
 var cors = require('cors');
 var router = new express.Router();
 var log4js = require('log4js')
-var logger = log4js.getLogger();
-logger.level = "trace";
+var log = log4js.getLogger();
+log.level = "trace";
 
 
 app.use(cors());
 
 
 function handleError(err, response) {
-    logger.error('Error: ' + err);
+    log.error('Error: ' + err);
     var error = {
         "message": err,
         "code": 500
@@ -49,7 +49,7 @@ var kafkaClient = new kafka.KafkaClient({
     reconnectOnIdle: true,
 });
 kafkaClient.on('error', function(err) {
-    logger.log("kafkaClient error: %s -  reconnecting....", err);
+    log.log("kafkaClient error: %s -  reconnecting....", err);
     kafkaClient.connect();
 });
 
@@ -65,17 +65,17 @@ var topicsToCreate = [{
     ]
 }, ];
 kafkaClient.createTopics(topicsToCreate, (error, result) => {
-    logger.log("kafkaClient  createTopics error: %s", error);
-    logger.log("kafkaClient  createTopics result: %s", JSON.stringify(result));
+    log.log("kafkaClient  createTopics error: %s", error);
+    log.log("kafkaClient  createTopics result: %s", JSON.stringify(result));
 });
 
 var kafkaProducer = new kafka.Producer(kafkaClient);
 
 kafkaProducer.on('ready', function() {
-    logger.log("kafkaProducer is ready");
+    log.log("kafkaProducer is ready");
 });
 kafkaProducer.on('error', function(err) {
-    logger.error("kafkaProducer error: %s", err);
+    log.error("kafkaProducer error: %s", err);
 });
 
 var kafkaConsumer = new kafka.Consumer(kafkaClient, [
@@ -86,10 +86,10 @@ var kafkaConsumer = new kafka.Consumer(kafkaClient, [
 });
 
 kafkaConsumer.on('message', function(message) {
-    logger.debug("kafkaConsumer message: %s", JSON.stringify(message));
+    log.debug("kafkaConsumer message: %s", JSON.stringify(message));
 
     if (message.topic != TOPIC_INTERNAL) {
-        logger.error("ignoring unexpected message %s", JSON.stringify(message));
+        log.error("ignoring unexpected message %s", JSON.stringify(message));
         return;
     }
     try {
@@ -97,30 +97,30 @@ kafkaConsumer.on('message', function(message) {
         if (payload != null && payload.eventID != null) {
             // TODO: Idempotency - check if our internal state is already newer
             // then we should ignore this message.
-            logger.info("Adding new state for event %s", payload.eventID);
-            mapOfEventStates[payload.eventID] = payload;
+            log.info("Adding new state for event %s", payload.eventID);
+            mapOfEventStates.set(payload.eventID, payload);
         }
     } catch (e) {
-        logger.warn(" Exception %s while processing message - ignored", e);
+        log.warn(" Exception %s while processing message - ignored", e);
     }
 });
 
 kafkaConsumer.on('error', function(error) {
-    logger.error("kafkaConsumer error: %s", error);
+    log.error("kafkaConsumer error: %s", error);
 });
 
 function fireEventStateChange(eventState) {
-    logger.debug("fireEventStateChange for eventID=%s", eventState.eventID);
+    log.debug("fireEventStateChange for eventID=%s", eventState.eventID);
     eventState.timestamp = new Date().toISOString();
     kafkaProducer.send([{
         topic: TOPIC_INTERNAL,
         key: eventState.eventID,
         messages: [JSON.stringify(eventState)]
     }], function(err, data) {
-        logger.log("kafkaProducer.send err=%s", err);
-        logger.log("kafkaProducer.send data=%s", JSON.stringify(data));
+        log.log("kafkaProducer.send err=%s", err);
+        log.log("kafkaProducer.send data=%s", JSON.stringify(data));
     });
-    logger.debug("fireEventStateChange for eventID=%s DONE", eventState.eventID);
+    log.debug("fireEventStateChange for eventID=%s DONE", eventState.eventID);
 }
 
 // --------------------------------------------------------------------------
@@ -148,8 +148,9 @@ var eventStatePrototype = {
     access_token: null,
     refresh_token: null,
     client_state: "-unknown-",
-    token_expires_in: "-unknown-",
-    token_created: "unknown",
+    token_expires: "-unknown-",
+    token_created: "-unknown-",
+    token_refresh_failures: -1,
     isPlaying: false,
     currentTrack: "-unknown-",
     currentDevice: "-unknown-",
@@ -159,34 +160,32 @@ var eventStatePrototype = {
 // The Map of Event States:
 // Key: EventID
 // Value: EventState Object 
-var mapOfEventStates = {
-    "-1": eventStatePrototype
-}
+var mapOfEventStates = new Map();
 
 
 function getSpotifyApiForEvent(eventID) {
     var spotifyApi = mapOfSpotifyApis[eventID];
 
     if (spotifyApi == null) {
-        logger.debug("Create SpotifyApi for eventID=%s...", eventID);
-        logger.debug("clientId=%s, clientSecret=%s, redirectUri=%s", spotifyClientID, spotifyClientSecret, spotifyRedirectUri);
+        log.debug("Create SpotifyApi for eventID=%s...", eventID);
+        log.debug("clientId=%s, clientSecret=%s, redirectUri=%s", spotifyClientID, spotifyClientSecret, spotifyRedirectUri);
         spotifyApi = new SpotifyWebApi({
             clientId: spotifyClientID,
             clientSecret: spotifyClientSecret,
             redirectUri: spotifyRedirectUri
         });
         mapOfSpotifyApis[eventID] = spotifyApi;
-        logger.debug("Create SpotifyApi for eventID=%s...DONE", eventID);
+        log.debug("Create SpotifyApi for eventID=%s...DONE", eventID);
     }
 
     // Make sure Api has latest Tokens:
     var eventState = getEventStateForEvent(eventID);
     if (eventState.access_token != null && spotifyApi.getAccessToken() != eventState.access_token) {
-        logger.debug("Update API access token from state");
+        log.debug("Update API access token from state");
         spotifyApi.setAccessToken(eventState.access_token);
     }
     if (eventState.refresh_token != null && spotifyApi.getRefreshToken() != eventState.refresh_token) {
-        logger.debug("Update API refresh token from state");
+        log.debug("Update API refresh token from state");
         spotifyApi.setRefreshToken(eventState.refresh_token);
     }
 
@@ -196,16 +195,33 @@ function getSpotifyApiForEvent(eventID) {
 }
 
 function getEventStateForEvent(eventID) {
-    var eventState = mapOfEventStates[eventID];
+    var eventState = mapOfEventStates.get(eventID);
     if (eventState == null) {
-        logger.debug("EvenState object created for eventID=%s", eventID);
+        log.debug("EvenState object created for eventID=%s", eventID);
         eventState = Object.assign({}, eventStatePrototype);
         eventState.eventID = eventID;
         eventState.timestamp = new Date().toISOString();
-        mapOfEventStates[eventID] = eventState;
+        mapOfEventStates.set(eventID, eventState);
     }
     return eventState;
 }
+
+function refreshExpiredTokens() {
+    log.trace("refreshExpiredTokens begin");
+
+    mapOfEventStates.forEach(refreshAccessToken);
+
+    log.trace("refreshExpiredTokens end");
+}
+
+function updateEventTokensFromSpotifyBody(eventState, body) {
+    var now = new Date();
+    eventState.access_token = body['access_token'];
+    eventState.refresh_token = body['refresh_token'];
+    eventState.token_created = now.toISOString();
+    eventState.token_expires = new Date(now.getTime() + 1000 * body['expires_in']).toISOString();
+}
+
 
 // We are using "Authorization Code Flow" as we need full access on behalf of the user.
 // Read https://developer.spotify.com/documentation/general/guides/authorization-guide/ to 
@@ -213,13 +229,13 @@ function getEventStateForEvent(eventID) {
 
 // step1: - generate the login URL / redirect...
 router.get('/getSpotifyLoginURL', function(req, res) {
-    logger.debug("getSpotifyLoginURL");
+    log.debug("getSpotifyLoginURL");
 
     // TODO: Error handling if EventID is not presenet
     var eventID = req.query.event;
     var spotifyApi = getSpotifyApiForEvent(eventID);
     var authorizeURL = spotifyApi.createAuthorizeURL(spotifyScopes, eventID);
-    logger.debug("authorizeURL=%s", authorizeURL);
+    log.debug("authorizeURL=%s", authorizeURL);
 
     res.send(authorizeURL);
 });
@@ -228,30 +244,27 @@ router.get('/getSpotifyLoginURL', function(req, res) {
 // Redirected from Spotiy AccountsService after user Consent.
 // We receive a code and need to trade that token into tokens:
 router.get('/auth_callback', function(req, res) {
-    logger.debug("auth_callback req=%s", JSON.stringify(req.query));
+    log.debug("auth_callback req=%s", JSON.stringify(req.query));
     var code = req.query.code;
     var state = req.query.state;
     var eventID = state;
-    logger.debug("code = %s, state=%s", code, state);
+    log.debug("code = %s, state=%s", code, state);
 
     // TODO: Check on STATE!
 
     // Trade CODE into TOKENS:
-    logger.debug("authorizationCodeGrant with code=%s", code);
+    log.debug("authorizationCodeGrant with code=%s", code);
     var spotifyApi = getSpotifyApiForEvent(eventID);
     spotifyApi.authorizationCodeGrant(code).then(
         function(data) {
-            logger.debug("Access granted for eventID=%s!", eventID);
-            logger.debug('The token expires in ' + data.body['expires_in']);
-            logger.debug('The access token is ' + data.body['access_token']);
-            logger.debug('The refresh token is ' + data.body['refresh_token']);
+            log.debug("Access granted for eventID=%s!", eventID);
+            log.debug('The token expires in ' + data.body['expires_in']);
+            log.debug('The access token is ' + data.body['access_token']);
+            log.debug('The refresh token is ' + data.body['refresh_token']);
 
             // Set tokens on the Event Object to use it in later spotify API calls:
             var eventState = getEventStateForEvent(eventID);
-            eventState.access_token = data.body['access_token'];
-            eventState.refresh_token = data.body['refresh_token'];
-            eventState.token_expires_in = data.body['expires_in'];
-            eventState.token_created = new Date().toISOString();
+            updateEventTokensFromSpotifyBody(eventState, data.body);
             fireEventStateChange(eventState);
 
             // TODO: Sent a decent response, actually we need to redirect to a url
@@ -259,7 +272,7 @@ router.get('/auth_callback', function(req, res) {
             res.send('1');
         },
         function(err) {
-            logger.debug('authorizationCodeGrant err=%s', err);
+            log.debug('authorizationCodeGrant err=%s', err);
             handleError(err, res);
         }
     );
@@ -269,36 +282,40 @@ router.get('/auth_callback', function(req, res) {
 
 // Step 4 of the flow - refresh tokens!
 function refreshAccessToken(event) {
-    var api = getSpotifyApiForEvent(event.eventID);
-    api.refreshAccessToken().then(
-        function(data) {
-            logger.debug('The access token has been refreshed for eventID=%s!', event.eventID);
-            var newAccessToken = data.body['access_token'];
-            var newRefreshToken = data.body['refresh_token'];
-            var event = getEventStateForEvent(event.eventID);
+    log.trace("refreshAccessToken begin eventID=%s", event.eventID);
 
-            // Save the access token so that it's used in future calls
-            api.setAccessToken(newAccessToken);
-            api.setRefreshToken(newRefreshToken);
-            event.access_token = newAccessToken;
-            event.refresh_token = newRefreshToken;
-            fireEventStateChange(event);
-        },
-        function(err) {
-            logger.log('Could not refresh access token', err);
-        }
-    );
+    // TODO: Refresh not only expired but also close to expiry, using a random interval
+
+    if (Date.parse(event.token_expires) < Date.now()) {
+        log.info("access token for eventID=%s is expired - initiating refresh... ", event.eventID);
+
+        var api = getSpotifyApiForEvent(event.eventID);
+        api.refreshAccessToken().then(
+            function(data) {
+                log.info("access token for^ eventID=%s is expired - initiating refresh...SUCCESS", event.eventID);
+                updateEventTokensFromSpotifyBody(event, data.body);
+                fireEventStateChange(event);
+            },
+            function(err) {
+                event.token_refresh_failures++;
+                log.log('Could not refresh access token', err);
+            }
+        );
+    } else {
+        log.debug("toking for eventID=%s  is still valid", event.eventID);
+    }
+    log.trace("refreshAccessToken end eventID=%s", event.eventID);
 }
 
 router.get('/getCurrentTrack', function(req, res) {
-    logger.debug("getCurrentTrack");
+    log.debug("getCurrentTrack");
 
     // TODO: Error handling if EventID is not present
     var eventID = req.query.event;
     var api = getSpotifyApiForEvent(eventID);
 
     api.getMyCurrentPlaybackState({}).then(function(data) {
-        logger.debug("Now Playing: ", data.body);
+        log.debug("Now Playing: ", data.body);
         res.send(data.body);
     }, function(err) {
         handleError(err, res);
@@ -306,14 +323,14 @@ router.get('/getCurrentTrack', function(req, res) {
 
 });
 router.get('/getAvailableDevices', function(req, res) {
-    logger.debug("getAvailableDevices");
+    log.debug("getAvailableDevices");
 
     // TODO: Error handling if EventID is not present
     var eventID = req.query.event;
     var api = getSpotifyApiForEvent(eventID);
 
     api.getMyDevices({}).then(function(data) {
-        logger.debug("Now Playing: ", data.body);
+        log.debug("Now Playing: ", data.body);
         res.send(data.body);
     }, function(err) {
         handleError(err, res);
@@ -321,15 +338,26 @@ router.get('/getAvailableDevices', function(req, res) {
 
 });
 
+// Problem: Init of 10 Pods concurrently and expiered tokens, - we need to avoid concurrent token refresh
+// (actually we need to test that - could be that with a new refresh tokens, the 2nd call fails).
+// Other approach: readiness check = false, wait a random interval 0-30 seconds, then check for expiered tokens. Assumption: one  pod checks first for expiered tokens and does the update, other pods get notified and when their interval experies, they see only current tokens.
+
+// TODO: Implement Health and Readiness check.
+
+// TODO: Implement token refresh during runtime - check every minute or so if tokens expy in the near future. Use a random interval for "near future" to avoid concurrent refreshs. If a refresh fails, we assume that another pod tried it already.
+// If refresh_failure counter is too high, we notify to EventOwner.
+
+// TODO: Implement Retries on Spotify API Calls.
+
 
 if (typeof spotifyClientID !== 'undefined' && spotifyClientID) {
-    logger.log("spotifyClientID is defined via env variable- using the real thing...");
+    log.log("spotifyClientID is defined via env variable- using the real thing...");
 
     app.use('/play', require('./lib/player.js')());
     app.use('/currentTrack', require('./lib/currentTrack.js')());
     app.use('/trackInfo', require('./lib/trackInfo.js')());
 } else {
-    logger.log("spotify token is NOT defined via env variable- using the mockup...");
+    log.log("spotify token is NOT defined via env variable- using the mockup...");
 
     var mockup = require('./lib/mockup.js');
     app.use('/play', mockup["play"]);
@@ -345,5 +373,9 @@ if (typeof spotifyClientID !== 'undefined' && spotifyClientID) {
 
 app.use("/backend-spotifyprovider", router);
 
+// Wait 5 seconds for all messages to be processed, then check once for expired tokens:
+setTimeout(refreshExpiredTokens, 5000);
+
+setInterval(refreshExpiredTokens, 60000);
 
 module.exports = app;

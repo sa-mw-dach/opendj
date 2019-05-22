@@ -1,6 +1,40 @@
 ---
 - hosts: localhost
   tasks:
+    - name: Deploy Kafka via Operator
+      k8s:
+        state: present
+        definition:
+          apiVersion: kafka.strimzi.io/v1alpha1
+          kind: Kafka
+          metadata:
+            name: opendj-kafka
+            namespace: "{{ namespace }}"
+          spec:
+            kafka:
+              version: 2.1.1
+              replicas: 1
+              listeners:
+                plain: {}
+                tls: {}
+              config:
+                offsets.topic.replication.factor: 1
+                transaction.state.log.replication.factor: 1
+                transaction.state.log.min.isr: 1
+                log.message.format.version: "2.1"
+              storage:
+                type: persistent-claim
+                size: 1Gi
+                deleteClaim: true
+            zookeeper:
+              replicas: 1
+              storage:
+                type: persistent-claim
+                size: 1Gi
+                deleteClaim: true
+            entityOperator:
+              topicOperator: {}
+              userOperator: {}
     - name: Create ImageStreamTag
       k8s:
         state: present
@@ -41,7 +75,7 @@
             resources: {}
             runPolicy: Serial
             source:
-              contextDir: services/spotify-provider-boundary
+              contextDir: components/spotify-provider-boundary
               git:
                 uri: https://github.com/sa-mw-dach/OpenDJ.git
               type: Git
@@ -106,6 +140,8 @@
                       - name: device
                       - name: MOCKUP_TRACKDURATION_MS
                         value: "20000"
+                      - name: kafkaURL
+                        value: "opendj-kafka-kafka-bootstrap:9092"
                     imagePullPolicy: IfNotPresent
                     name: spotify-provider-boundary
                     ports:

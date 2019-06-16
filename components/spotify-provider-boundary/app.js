@@ -95,10 +95,21 @@ kafkaConsumer.on('message', function(message) {
     try {
         var payload = JSON.parse(message.value);
         if (payload != null && payload.eventID != null) {
-            // TODO: Idempotency - check if our internal state is already newer
-            // then we should ignore this message.
-            log.info("Adding new state for event %s", payload.eventID);
-            mapOfEventStates.set(payload.eventID, payload);
+            // Idempotency - check if our internal state is already newer
+            // then we should ignore this message:
+            var currentState = mapOfEventStates.get(payload.eventID);
+            if (currentState && Date.parse(currentState.timestamp) > Date.parse(payload.timestamp)) {
+                log.info("Current state for event %s is newer than state from message - message is ignored", payload.eventID)
+            } else {
+                log.info("Adding new state for event %s", payload.eventID);
+                mapOfEventStates.set(payload.eventID, payload);
+            }
+
+            // Ensure we do not loose valuable refresh tokens:
+            if (currentState && currentState.refresh_token && !payload.refresh_token) {
+                log.info("New state has no refresh token, but old one has it - keeping it!");
+                payload.refresh_token = currentState.refresh_token;
+            }
         }
     } catch (e) {
         log.warn(" Exception %s while processing message - ignored", e);
@@ -133,6 +144,20 @@ var spotifyClientID = process.env.SPOTIFY_CLIENT_ID || "-unknown-";
 var spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET || "-unknown-";
 var spotifyRedirectUri = process.env.SPOTIFY_CALLBACK_URL || "-unknown-";
 var spotifyScopes = ['user-read-playback-state', 'user-modify-playback-state', 'user-read-currently-playing', 'playlist-modify-private'];
+
+// Interval we check for expieried tokens:
+var SPOTIFY_REFRESH_TOKEN_INTERVAL = process.env.SPOTIFY_REFRESH_TOKEN_INTERVAL || "60000";
+
+// Initial delay before we start checking for expiered token (allow for some time to have all messages processed)
+var SPOTIFY_REFRESH_INITIAL_DELAY = process.env.SPOTIFY_REFRESH_INITIAL_DELAY || "5000";
+
+// Offset we refresh a token BEFORE it expires - to be sure, we do this 5 minutes BEFORE
+// it expires:
+var SPOTIFY_REFRESH_TOKEN_OFFSET = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "300000";
+
+// To avoid that several pods refresh at the same time, we add some random
+// value to the offset:
+var SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "60000";
 
 
 // Map of Spotify API Objects:
@@ -220,8 +245,18 @@ function refreshExpiredTokens() {
 function updateEventTokensFromSpotifyBody(eventState, body) {
     var now = new Date();
     log.debug("updateEventTokensFromSpotifyBody body=%s", JSON.stringify(body));
-    eventState.access_token = body['access_token'];
-    eventState.refresh_token = body['refresh_token'];
+    if (body['access_token']) {
+        log.trace("received new access token");
+        eventState.access_token = body['access_token'];
+    } else {
+        log.error("THIS SHOULD NOT HAPPEN: received no new access token upon refresh, eventState=%s body=%s", JSON.stringify(eventState), JSON.stringify(body));
+    }
+
+    if (body['refresh_token']) {
+        log.info("received new refresh token");
+        eventState.refresh_token = body['refresh_token'];
+    }
+
     eventState.token_created = now.toISOString();
     eventState.token_expires = new Date(now.getTime() + 1000 * body['expires_in']).toISOString();
 }
@@ -288,10 +323,22 @@ router.get('/auth_callback', function(req, res) {
 function refreshAccessToken(event) {
     log.trace("refreshAccessToken begin eventID=%s", event.eventID);
 
-    // TODO: Refresh not only expired but also close to expiry, using a random interval
+    var expTs = Date.parse(event.token_expires);
+    var now = Date.now();
 
-    if (Date.parse(event.token_expires) < Date.now()) {
-        log.info("access token for eventID=%s is expired - initiating refresh... ", event.eventID);
+    // Access token is valid typically for 1hour (3600seconds)
+    // We refresh it a bit before it expieres, to ensure smooth transition:
+    expTs = expTs - SPOTIFY_REFRESH_TOKEN_OFFSET;
+
+    // To avoid that several pods refresh at the same time, we add some random
+    // value to the offset:
+    expTs = expTs - Math.floor(Math.random() * SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM);
+
+    log.debug("refreshAccessToken: expTs=%s", new Date(expTs).toISOString());
+    log.debug("refreshAccessToken: now  =%s", new Date(now).toISOString());
+
+    if (expTs < now) {
+        log.info("refreshAccessToken: access token for eventID=%s is about to expire in %s sec - initiating refresh... ", event.eventID, (now - expTs) / 1000);
 
         var api = getSpotifyApiForEvent(event.eventID);
         api.refreshAccessToken().then(
@@ -302,11 +349,11 @@ function refreshAccessToken(event) {
             },
             function(err) {
                 event.token_refresh_failures++;
-                log.log('Could not refresh access token', err);
+                log.error('Could not refresh access token', err);
             }
         );
     } else {
-        log.debug("toking for eventID=%s  is still valid", event.eventID);
+        log.debug("refreshAccessToken: toking for eventID=%s  is still valid", event.eventID);
     }
     log.trace("refreshAccessToken end eventID=%s", event.eventID);
 }
@@ -327,19 +374,20 @@ router.get('/getCurrentTrack', function(req, res) {
 
 });
 router.get('/getAvailableDevices', function(req, res) {
-    log.debug("getAvailableDevices");
+    log.trace("getAvailableDevices begin");
 
     // TODO: Error handling if EventID is not present
     var eventID = req.query.event;
     var api = getSpotifyApiForEvent(eventID);
 
-    api.getMyDevices({}).then(function(data) {
-        log.debug("Now Playing: ", data.body);
+    api.getMyDevices().then(function(data) {
+        log.debug("getAvailableDevices:", data.body);
         res.send(data.body);
     }, function(err) {
         handleError(err, res);
     });
 
+    log.trace("getAvailableDevices end");
 });
 
 // Problem: Init of 10 Pods concurrently and expiered tokens, - we need to avoid concurrent token refresh
@@ -361,7 +409,7 @@ if (typeof spotifyClientID !== 'undefined' && spotifyClientID) {
     app.use('/currentTrack', require('./lib/currentTrack.js')());
     app.use('/trackInfo', require('./lib/trackInfo.js')());
 } else {
-    log.log("spotify token is NOT defined via env variable- using the mockup...");
+    log.log("spotifyClientID is NOT defined via env variable- using the mockup...");
 
     var mockup = require('./lib/mockup.js');
     app.use('/play', mockup["play"]);
@@ -378,8 +426,8 @@ if (typeof spotifyClientID !== 'undefined' && spotifyClientID) {
 app.use("/backend-spotifyprovider", router);
 
 // Wait 5 seconds for all messages to be processed, then check once for expired tokens:
-setTimeout(refreshExpiredTokens, 5000);
+setTimeout(refreshExpiredTokens, SPOTIFY_REFRESH_INITIAL_DELAY);
 
-setInterval(refreshExpiredTokens, 60000);
+setInterval(refreshExpiredTokens, SPOTIFY_REFRESH_TOKEN_INTERVAL);
 
 module.exports = app;

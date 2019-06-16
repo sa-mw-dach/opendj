@@ -4,6 +4,7 @@
     - name: Deploy Kafka via Operator
       k8s:
         state: present
+        wait: true
         definition:
           apiVersion: kafka.strimzi.io/v1alpha1
           kind: Kafka
@@ -32,12 +33,29 @@
                 type: persistent-claim
                 size: 1Gi
                 deleteClaim: true
-            entityOperator:
-              topicOperator: {}
-              userOperator: {}
+
+# Create Secret Manually:
+#  oc create secret generic test  --from-literal=CLIENT_ID=<SECRET> --from-literal=CLIENT_SECRET=<SECRET>
+    - name: Create Spotify secret
+      k8s:
+        state: present
+        wait: true
+        definition:
+          apiVersion: v1
+          kind: Secret
+          data:
+            CLIENT_ID: <SECRET>
+            CLIENT_SECRET: <SECRET>
+          metadata:
+            name: spotify-api-credentials
+            namespace: "{{ namespace }}"
+          type: Opaque
+  
+      
     - name: Create ImageStreamTag
       k8s:
         state: present
+        wait: true
         definition:
           kind: ImageStream
           apiVersion: image.openshift.io/v1
@@ -54,6 +72,7 @@
     - name: Create BuildConfig
       k8s:
         state: present
+        wait: true
         definition:
           kind: BuildConfig
           apiVersion: build.openshift.io/v1
@@ -102,6 +121,7 @@
     - name: Create DeploymentConfig
       k8s:
         state: present
+        wait: true
         definition:
           kind: DeploymentConfig
           apiVersion: apps.openshift.io/v1
@@ -136,12 +156,18 @@
               spec:
                 containers:
                   - env:
-                      - name: token
-                      - name: device
+                      - name: MOCKUP_ENABLED
+                        value: "false"
                       - name: MOCKUP_TRACKDURATION_MS
                         value: "20000"
                       - name: kafkaURL
                         value: "opendj-kafka-kafka-bootstrap:9092"
+                      - name: SPOTIFY_CALLBACK_URL
+                        value: "http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/auth_callback"
+                    envFrom:
+                      - prefix: SPOTIFY_
+                        secretRef:
+                          name: spotify-api-credentials
                     imagePullPolicy: IfNotPresent
                     name: spotify-provider-boundary
                     ports:
@@ -172,6 +198,7 @@
     - name: Create Service
       k8s:
         state: present
+        wait: true
         definition:
           kind: Service
           apiVersion: v1
@@ -194,6 +221,7 @@
     - name: Create Route
       k8s:
         state: present
+        wait: true
         definition:
           kind: Route
           apiVersion: route.openshift.io/v1
@@ -209,3 +237,4 @@
               name: spotify-provider-boundary
               weight: 100
             wildcardPolicy: None
+            

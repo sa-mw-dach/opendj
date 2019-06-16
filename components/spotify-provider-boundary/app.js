@@ -156,8 +156,8 @@ var SPOTIFY_REFRESH_INITIAL_DELAY = process.env.SPOTIFY_REFRESH_INITIAL_DELAY ||
 var SPOTIFY_REFRESH_TOKEN_OFFSET = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "300000";
 
 // To avoid that several pods refresh at the same time, we add some random
-// value to the offset:
-var SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "60000";
+// value (up to 3 min) to the offset:
+var SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM || "180000";
 
 
 // Map of Spotify API Objects:
@@ -324,6 +324,7 @@ function refreshAccessToken(event) {
     log.trace("refreshAccessToken begin eventID=%s", event.eventID);
 
     var expTs = Date.parse(event.token_expires);
+    var expTsOrig = expTs;
     var now = Date.now();
 
     // Access token is valid typically for 1hour (3600seconds)
@@ -334,11 +335,14 @@ function refreshAccessToken(event) {
     // value to the offset:
     expTs = expTs - Math.floor(Math.random() * SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM);
 
-    log.debug("refreshAccessToken: expTs=%s", new Date(expTs).toISOString());
-    log.debug("refreshAccessToken: now  =%s", new Date(now).toISOString());
+    if (log.isDebugEnabled()) {
+        log.debug("refreshAccessToken: expTsOrig=%s", new Date(expTsOrig).toISOString());
+        log.debug("refreshAccessToken: expTs    =%s", new Date(expTs).toISOString());
+        log.debug("refreshAccessToken: now      =%s", new Date(now).toISOString());
+    }
 
     if (expTs < now) {
-        log.info("refreshAccessToken: access token for eventID=%s is about to expire in %s sec - initiating refresh... ", event.eventID, (now - expTs) / 1000);
+        log.info("refreshAccessToken: access token for eventID=%s is about to expire in %s sec - initiating refresh... ", event.eventID, (expTsOrig - now) / 1000);
 
         var api = getSpotifyApiForEvent(event.eventID);
         api.refreshAccessToken().then(

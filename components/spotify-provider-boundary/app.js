@@ -164,11 +164,12 @@ var mapOfEventStates = new Map();
 
 
 function getSpotifyApiForEvent(eventID) {
+    log.trace("getSpotifyApiForEvent begin eventID=%s", eventID);
     var spotifyApi = mapOfSpotifyApis[eventID];
 
     if (spotifyApi == null) {
         log.debug("Create SpotifyApi for eventID=%s...", eventID);
-        log.debug("clientId=%s, clientSecret=%s, redirectUri=%s", spotifyClientID, spotifyClientSecret, spotifyRedirectUri);
+        log.debug("clientId=>%s<, clientSecret=>%s<, redirectUri=>%s<", spotifyClientID, spotifyClientSecret, spotifyRedirectUri);
         spotifyApi = new SpotifyWebApi({
             clientId: spotifyClientID,
             clientSecret: spotifyClientSecret,
@@ -176,8 +177,10 @@ function getSpotifyApiForEvent(eventID) {
         });
         mapOfSpotifyApis[eventID] = spotifyApi;
         log.debug("Create SpotifyApi for eventID=%s...DONE", eventID);
-    }
+    } else {
+        log.trace("spotifyApiForEvent already present");
 
+    }
     // Make sure Api has latest Tokens:
     var eventState = getEventStateForEvent(eventID);
     if (eventState.access_token != null && spotifyApi.getAccessToken() != eventState.access_token) {
@@ -190,7 +193,7 @@ function getSpotifyApiForEvent(eventID) {
     }
 
     // TODO: Check if Access token did expire
-
+    log.trace("getSpotifyApiForEvent end eventID=%s", eventID);
     return spotifyApi;
 }
 
@@ -216,6 +219,7 @@ function refreshExpiredTokens() {
 
 function updateEventTokensFromSpotifyBody(eventState, body) {
     var now = new Date();
+    log.debug("updateEventTokensFromSpotifyBody body=%s", JSON.stringify(body));
     eventState.access_token = body['access_token'];
     eventState.refresh_token = body['refresh_token'];
     eventState.token_created = now.toISOString();

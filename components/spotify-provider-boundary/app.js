@@ -149,7 +149,7 @@ var spotifyScopes = ['user-read-playback-state', 'user-modify-playback-state', '
 var SPOTIFY_REFRESH_TOKEN_INTERVAL = process.env.SPOTIFY_REFRESH_TOKEN_INTERVAL || "60000";
 
 // Initial delay before we start checking for expiered token (allow for some time to have all messages processed)
-var SPOTIFY_REFRESH_INITIAL_DELAY = process.env.SPOTIFY_REFRESH_INITIAL_DELAY || "5000";
+var SPOTIFY_REFRESH_INITIAL_DELAY = process.env.SPOTIFY_REFRESH_INITIAL_DELAY || "1000";
 
 // Offset we refresh a token BEFORE it expires - to be sure, we do this 5 minutes BEFORE
 // it expires:
@@ -399,48 +399,100 @@ router.get('/getAvailableDevices', function(req, res) {
     log.trace("getAvailableDevices end");
 });
 
-function mapSpotifySearchResultToOpenDJSearchResult(spotifyResult) {
-    log.trace("mapSpotifySearchResultToOpenDJSearchResult begin");
-    var result = [];
-    for (let sptTrack of spotifyResult.tracks.items) {
-        var odjTrack = {};
-        odjTrack.id = sptTrack.uri;
-        odjTrack.name = sptTrack.name;
-        odjTrack.artist = sptTrack.artists[0].name;
-        if (sptTrack.artists.length > 1) {
-            odjTrack.artist += ", ";
-            odjTrack.artist += sptTrack.artists[1].name;
-        }
-        if (sptTrack.artists.length > 2) {
-            odjTrack.artist += ", et al";
-        }
+function mapSpotifyTrackToOpenDJTrack(sptTrack) {
+    var odjTrack = {};
+    odjTrack.id = sptTrack.uri;
+    odjTrack.name = sptTrack.name;
 
-        if (sptTrack.album.release_date) {
-            odjTrack.year = sptTrack.album.release_date.substring(0, 4);
-        } else {
-            odjTrack.year = "????";
-        }
-
-
-        // Use the album images. Spotify returns widest first, we want the smallest, thus
-        // we return the last:
-        if (sptTrack.album.images.length > 0) {
-            odjTrack.image_url = sptTrack.album.images[sptTrack.album.images.length - 1].url
-        } else {
-            // TODO: Return URL to opendj IMG
-            odjTrack.image_url = "";
-        }
-
-
-        odjTrack.duration_ms = sptTrack.duration_ms
-
-        // Optional:
-        odjTrack.preview = sptTrack.preview_url;
-
-        result.push(odjTrack);
+    odjTrack.artist = sptTrack.artists[0].name;
+    if (sptTrack.artists.length > 1) {
+        odjTrack.artist += ", ";
+        odjTrack.artist += sptTrack.artists[1].name;
+    }
+    if (sptTrack.artists.length > 2) {
+        odjTrack.artist += ", et al";
     }
 
-    log.trace("mapSpotifySearchResultToOpenDJSearchResult end");
+    if (sptTrack.album.release_date) {
+        odjTrack.year = sptTrack.album.release_date.substring(0, 4);
+    } else {
+        odjTrack.year = "????";
+    }
+
+
+    // Use the album images. Spotify returns widest first, we want the smallest, thus
+    // we return the last:
+    if (sptTrack.album.images.length > 0) {
+        odjTrack.image_url = sptTrack.album.images[sptTrack.album.images.length - 1].url
+    } else {
+        // TODO: Return URL to OpenDJ Logo
+        odjTrack.image_url = "";
+    }
+
+    odjTrack.duration_ms = sptTrack.duration_ms
+    odjTrack.preview = sptTrack.preview_url;
+    odjTrack.popularity = sptTrack.popularity;
+    odjTrack.provider = "spotify";
+
+    return odjTrack;
+}
+
+
+function mapSpotifySearchResultToOpenDJSearchResult(spotifyResult) {
+    var result = [];
+    for (let sptTrack of spotifyResult.tracks.items) {
+        result.push(mapSpotifyTrackToOpenDJTrack(sptTrack));
+    }
+
+    return result;
+}
+
+function collapseArrayIntoSingleString(currentString, arrayOfStrings, maxEntries) {
+    var result = currentString;
+    if (!currentString) {
+        currentString = "";
+    }
+
+    if (arrayOfStrings && arrayOfStrings.length > 0) {
+        for (var i = 0; i < maxEntries; i++) {
+            if (i >= arrayOfStrings.length) break;
+
+            if (currentString.length > 0) {
+                currentString += ", ";
+            }
+            currentString += arrayOfStrings[i];
+        }
+    }
+
+    return result;
+}
+
+function mapSpotifyTrackResultsToOpenDJTrack(trackResult, albumResult, artistResult, audioFeaturesResult) {
+    var result = {};
+    if (trackResult && trackResult.body) {
+        result = mapSpotifyTrackToOpenDJTrack(trackResult.body);
+    }
+
+    if (albumResult && albumResult.body) {
+        result.genre = collapseArrayIntoSingleString(result.genre, albumResult.body.genres, 2);
+    }
+
+    if (artistResult && artistResult.body) {
+        result.genre = collapseArrayIntoSingleString(result.genre, artistResult.body.genres, 2);
+    }
+
+    if (audioFeaturesResult && audioFeaturesResult.body) {
+        result.danceability = Math.round(audioFeaturesResult.body.danceability * 100);
+        result.energy = Math.round(audioFeaturesResult.body.energy * 100);
+        result.acousticness = Math.round(audioFeaturesResult.body.acousticness * 100);
+        result.instrumentalness = Math.round(audioFeaturesResult.body.instrumentalness * 100);
+        result.liveness = Math.round(audioFeaturesResult.body.liveness * 100);
+        result.happiness = Math.round(audioFeaturesResult.body.valence * 100);
+        result.bpm = Math.round(audioFeaturesResult.body.tempo);
+        result.x = Math.round(audioFeaturesResult.body.x * 100);
+        result.x = Math.round(audioFeaturesResult.body.x * 100);
+    }
+
     return result;
 }
 
@@ -461,6 +513,74 @@ router.get('/searchTrack', function(req, res) {
     });
 });
 
+
+router.get('/trackDetails', async function(req, res) {
+    log.trace("trackDetails begin");
+
+    // TODO: Error handling if EventID is not present
+    var eventID = req.query.event;
+    var trackID = req.query.track
+    var trackResult = null;
+    var audioFeaturesResult = null;
+    var albumResult = null;
+    var artistResult = null;
+
+    // TODO: CACHING, as this is quite Expensive!
+    // TODO: Error handling if API is not defined:
+    var api = getSpotifyApiForEvent(eventID);
+
+    log.debug("trackDetails eventID=%s, trackID=%s", eventID, trackID);
+
+    // If TrackID contains a "spotify:track:" prefix, we need to remove it:
+    var colonPos = trackID.lastIndexOf(":");
+    if (colonPos != -1) {
+        trackID = trackID.substring(colonPos + 1);
+    }
+
+    // We have to make four calls - we do that in parallel to speed things up
+    // The problem is the "Genre" Result - it's not stored with the track, but with
+    // either the album or the artist. So here we go:
+    // #1: Get basic Track Result:
+    trackResult = api.getTrack(trackID);
+
+    // #2: Get get Track Audio Features (danceability, energy and stuff):
+    audioFeaturesResult = api.getAudioFeaturesForTrack(trackID);
+
+    // When we have trackResult we get the album and artist ID , and with that, we can make call 
+    // #3 to get album details and ...
+    trackResult = await trackResult;
+    if (trackResult && trackResult.body && trackResult.body.album && trackResult.body.album.id) {
+        albumResult = api.getAlbum(trackResult.body.album.id);
+    }
+
+    // ... call #4 to get Artist Result:
+    if (trackResult && trackResult.body && trackResult.body.artists && trackResult.body.artists.length > 0) {
+        artistResult = api.getArtist(trackResult.body.artists[0].id);
+    }
+
+    // Wait for all results to return:
+    albumResult = await albumResult;
+    audioFeaturesResult = await audioFeaturesResult;
+    artistResult = await artistResult;
+
+    if (albumResult && albumResult.genres && albumResult.genres.length > 0) {
+        // TODO: Collapse genres array into single string, max 2 or three entries:
+    }
+
+    // TODO: Merge responses into OpenDJ TrackResult 
+    // For now (and debugging), we send the raw: spotify objects:
+    var result = mapSpotifyTrackResultsToOpenDJTrack(trackResult, albumResult, artistResult, audioFeaturesResult);
+
+    res.send({
+        track: trackResult,
+        album: albumResult,
+        artist: artistResult,
+        audioFeaturesResult: audioFeaturesResult,
+        result: result,
+    });
+    log.trace("trackDetails end");
+
+});
 
 
 

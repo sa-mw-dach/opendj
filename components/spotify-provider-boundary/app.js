@@ -65,14 +65,14 @@ var topicsToCreate = [{
     ]
 }, ];
 kafkaClient.createTopics(topicsToCreate, (error, result) => {
-    log.log("kafkaClient  createTopics error: %s", error);
-    log.log("kafkaClient  createTopics result: %s", JSON.stringify(result));
+    log.debug("kafkaClient  createTopics error: %s", error);
+    log.debug("kafkaClient  createTopics result: %s", JSON.stringify(result));
 });
 
 var kafkaProducer = new kafka.Producer(kafkaClient);
 
 kafkaProducer.on('ready', function() {
-    log.log("kafkaProducer is ready");
+    log.info("kafkaProducer is ready");
 });
 kafkaProducer.on('error', function(err) {
     log.error("kafkaProducer error: %s", err);
@@ -128,8 +128,8 @@ function fireEventStateChange(eventState) {
         key: eventState.eventID,
         messages: [JSON.stringify(eventState)]
     }], function(err, data) {
-        log.log("kafkaProducer.send err=%s", err);
-        log.log("kafkaProducer.send data=%s", JSON.stringify(data));
+        log.debug("kafkaProducer.send err=%s", err);
+        log.debug("kafkaProducer.send data=%s", JSON.stringify(data));
     });
     log.debug("fireEventStateChange for eventID=%s DONE", eventState.eventID);
 }
@@ -170,15 +170,15 @@ var mapOfSpotifyApis = {
 // Example Object for an Event State - this is clone for all events:
 var eventStatePrototype = {
     eventID: "-1", // ID of Music Event  
-    access_token: null,
-    refresh_token: null,
-    client_state: "-unknown-",
-    token_expires: "-unknown-",
-    token_created: "-unknown-",
-    token_refresh_failures: -1,
+    access_token: "",
+    refresh_token: "",
+    client_state: "",
+    token_expires: "",
+    token_created: "",
+    token_refresh_failures: 0,
     isPlaying: false,
-    currentTrack: "-unknown-",
-    currentDevice: "-unknown-",
+    currentTrack: "",
+    currentDevice: "",
     timestamp: new Date().toISOString(),
 };
 
@@ -234,14 +234,6 @@ function getEventStateForEvent(eventID) {
     return eventState;
 }
 
-function refreshExpiredTokens() {
-    log.trace("refreshExpiredTokens begin");
-
-    mapOfEventStates.forEach(refreshAccessToken);
-
-    log.trace("refreshExpiredTokens end");
-}
-
 function updateEventTokensFromSpotifyBody(eventState, body) {
     var now = new Date();
     log.debug("updateEventTokensFromSpotifyBody body=%s", JSON.stringify(body));
@@ -260,7 +252,6 @@ function updateEventTokensFromSpotifyBody(eventState, body) {
     eventState.token_created = now.toISOString();
     eventState.token_expires = new Date(now.getTime() + 1000 * body['expires_in']).toISOString();
 }
-
 
 // We are using "Authorization Code Flow" as we need full access on behalf of the user.
 // Read https://developer.spotify.com/documentation/general/guides/authorization-guide/ to 
@@ -283,7 +274,7 @@ router.get('/getSpotifyLoginURL', function(req, res) {
 // Redirected from Spotiy AccountsService after user Consent.
 // We receive a code and need to trade that token into tokens:
 router.get('/auth_callback', function(req, res) {
-    log.debug("auth_callback req=%s", JSON.stringify(req.query));
+    log.trace("auth_callback start req=%s", JSON.stringify(req.query));
     var code = req.query.code;
     var state = req.query.state;
     var eventID = state;
@@ -296,10 +287,7 @@ router.get('/auth_callback', function(req, res) {
     var spotifyApi = getSpotifyApiForEvent(eventID);
     spotifyApi.authorizationCodeGrant(code).then(
         function(data) {
-            log.debug("Access granted for eventID=%s!", eventID);
-            log.debug('The token expires in ' + data.body['expires_in']);
-            log.debug('The access token is ' + data.body['access_token']);
-            log.debug('The refresh token is ' + data.body['refresh_token']);
+            log.debug("authorization code granted for eventID=%s!", eventID);
 
             // Set tokens on the Event Object to use it in later spotify API calls:
             var eventState = getEventStateForEvent(eventID);
@@ -311,7 +299,7 @@ router.get('/auth_callback', function(req, res) {
             res.send('1');
         },
         function(err) {
-            log.debug('authorizationCodeGrant err=%s', err);
+            log.debug('authorization code granted  err=%s', err);
             handleError(err, res);
         }
     );
@@ -322,6 +310,11 @@ router.get('/auth_callback', function(req, res) {
 // Step 4 of the flow - refresh tokens!
 function refreshAccessToken(event) {
     log.trace("refreshAccessToken begin eventID=%s", event.eventID);
+
+    if (!event.token_expires) {
+        log.debug("refreshAccessToken: event has no token_expires, nothing to do here");
+        return;
+    }
 
     var expTs = Date.parse(event.token_expires);
     var expTsOrig = expTs;
@@ -353,6 +346,7 @@ function refreshAccessToken(event) {
             },
             function(err) {
                 event.token_refresh_failures++;
+                // TODO: Act if to many refresh_failures occur!
                 log.error('Could not refresh access token', err);
             }
         );
@@ -361,6 +355,17 @@ function refreshAccessToken(event) {
     }
     log.trace("refreshAccessToken end eventID=%s", event.eventID);
 }
+
+function refreshExpiredTokens() {
+    log.trace("refreshExpiredTokens begin");
+
+    mapOfEventStates.forEach(refreshAccessToken);
+
+    log.trace("refreshExpiredTokens end");
+}
+
+
+
 
 router.get('/getCurrentTrack', function(req, res) {
     log.debug("getCurrentTrack");
@@ -393,6 +398,72 @@ router.get('/getAvailableDevices', function(req, res) {
 
     log.trace("getAvailableDevices end");
 });
+
+function mapSpotifySearchResultToOpenDJSearchResult(spotifyResult) {
+    log.trace("mapSpotifySearchResultToOpenDJSearchResult begin");
+    var result = [];
+    for (let sptTrack of spotifyResult.tracks.items) {
+        var odjTrack = {};
+        odjTrack.id = sptTrack.uri;
+        odjTrack.name = sptTrack.name;
+        odjTrack.artist = sptTrack.artists[0].name;
+        if (sptTrack.artists.length > 1) {
+            odjTrack.artist += ", ";
+            odjTrack.artist += sptTrack.artists[1].name;
+        }
+        if (sptTrack.artists.length > 2) {
+            odjTrack.artist += ", et al";
+        }
+
+        if (sptTrack.album.release_date) {
+            odjTrack.year = sptTrack.album.release_date.substring(0, 4);
+        } else {
+            odjTrack.year = "????";
+        }
+
+
+        // Use the album images. Spotify returns widest first, we want the smallest, thus
+        // we return the last:
+        if (sptTrack.album.images.length > 0) {
+            odjTrack.image_url = sptTrack.album.images[sptTrack.album.images.length - 1].url
+        } else {
+            // TODO: Return URL to opendj IMG
+            odjTrack.image_url = "";
+        }
+
+
+        odjTrack.duration_ms = sptTrack.duration_ms
+
+        // Optional:
+        odjTrack.preview = sptTrack.preview_url;
+
+        result.push(odjTrack);
+    }
+
+    log.trace("mapSpotifySearchResultToOpenDJSearchResult end");
+    return result;
+}
+
+router.get('/searchTrack', function(req, res) {
+    log.trace("searchTrack begin");
+
+    // TODO: Error handling if EventID is not present
+    var eventID = req.query.event;
+    var query = req.query.q
+    var api = getSpotifyApiForEvent(eventID);
+
+    api.searchTracks(query, { limit: 20 }).then(function(data) {
+        res.send(mapSpotifySearchResultToOpenDJSearchResult(data.body));
+        //        res.send(data.body);
+        log.trace("searchTrack end");
+    }, function(err) {
+        handleError(err, res);
+    });
+});
+
+
+
+
 
 // Problem: Init of 10 Pods concurrently and expiered tokens, - we need to avoid concurrent token refresh
 // (actually we need to test that - could be that with a new refresh tokens, the 2nd call fails).

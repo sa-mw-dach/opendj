@@ -5,12 +5,7 @@
 
 ## Problem Description
 Situation: Track is playing
-
-
-
 We have multiple pods running the spotify provider for a single event for HA reasons.
-
-
 
 ## Option A: All pods poll spotify
 ### Description
@@ -76,7 +71,11 @@ TOPIC -> PART 4 -> CG 1
 
 
 
-## Option X: Title
+
+# Problem Statement
+Problem desription here
+
+## Option #1: Title
 ### Description
 text
 
@@ -86,3 +85,17 @@ text
 ### Cons
 1. 
 1. 
+
+## Option #2: Title
+### Description
+text
+
+### Pros
+1. 
+1.
+### Cons
+1. 
+1. 
+
+## Decision
+Who decided for which option for what reasons on which date?

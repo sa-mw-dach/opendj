@@ -145,8 +145,11 @@ brew install kafka
 # Make sure jdk 1.8 is selected:
 jenv local openjdk64-1.8.0.212
 
+# Get Logs from latest deployment:
+oc logs -f dc/spotify-provider-boundary
+
 # Run:
-zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties 
+zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties &
 kafka-server-start /usr/local/etc/kafka/server.properties
 
 # Delete topic:
@@ -156,6 +159,8 @@ kafka-topics --bootstrap-server localhost:9092 --delete --topic opendj-spotifypr
 # GIT
 ## Reference issues in other repo:
 sa-mw-dach/OpenDJ#53
+sa-mw-dach/OpenDJ#64
+
 
 # Spotify API
 Registered Callbacks in Spotify Developer Dashboard for OpenDJ App:
@@ -167,6 +172,8 @@ http://localhost:8081/backend-spotifyprovider/auth_callback
 
 # first: get login url:
 http://localhost:8080/backend-spotifyprovider/getSpotifyLoginURL?event=4711
+http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/getSpotifyLoginURL?event=4711
+
 
 # second: (copy paste that URL to antoher tab and see how spotify consent screen), then call back
 
@@ -174,6 +181,9 @@ http://localhost:8080/backend-spotifyprovider/getSpotifyLoginURL?event=4711
 http://localhost:8080/backend-spotifyprovider/getCurrentTrack?event=4711
 http://localhost:8080/backend-spotifyprovider/getAvailableDevices?event=4711
 
+
+http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/getCurrentTrack?event=4711
+http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/getAvailableDevices?event=4711
 
 
 

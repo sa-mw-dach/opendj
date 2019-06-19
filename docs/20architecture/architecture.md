@@ -114,14 +114,56 @@ Daniel decided 2019-06-19 for a combination of Option#5 (Kafka) and  Option#3 (d
 1. We  use Kafka Events as persistence layer as long as possible, because we need async events anyway and works fine for simple key/value persistence as proven by the [experiment](https://github.com/sa-mw-dach/OpenDJ/issues/53)
 1. If Kafka is not suited  we use a MongoDB. The deployment is shared by all services, but each service has it's on schema. This simplifies deployment and operation. MongoDB instead of PSQL, because it horizontally scales and does exhibit a single point of failure.
 
+
+# How to describe event bus interfaces?
+For HTTP interfaces, we can use a Swagger/OpenAPI definition, which can be rendered into a Test UI and used for
+scaffolding of implementations and client code.   
+Can we use something equivalent for event bus based interfaces? 
+
+Discussion took place with [ticket#24](https://github.com/sa-mw-dach/OpenDJ/issues/24)  
+
+
+## Option #1: Use Async.API
+AsyncAPI is an extension/variation of OpenAPI by adding async/event handling capabilities.
+[Details here](https://www.asyncapi.com). The [Getting Started doc](https://www.asyncapi.com/docs/getting-started)  is a quick read while providing good overview.
+
+### Pros
+1. open to different protocols (websockets, kafka, amqp, mqtt)
+1. very close to OpenAPI, that we will probably use for sync interfaces. We could e.g. re-use schemas for objects that appear on both sync and async apis.
+1. potential future support in RH tooling (currently under evaluation). The slides for [this summit talk](https://summit.redhat.com/conference/sessions?p1=eyJzcGVha2VyIjpbXSwidGltZXNsb3QiOltdLCJkYXkiOltdLCJyb29tIjpbXSwibG9jYXRpb24iOltdLCJzdGFydCI6IiIsImZpbmlzaCI6IiIsInBhZ2VudW1iZXIiOjEsImNhdGVnb3JpZXMiOnt9LCJrZXl3b3JkIjoiYXN5bmNocm9ub3VzIGFwaXMifQ%3D%3D) might give additional insights (did not manage to attend it).
+1. also makes suggestions how to structure topics for events, which could be used independent of the API description format/tools
+### Cons
+1. It is currently Version 2.0.0-rc1,  so this is the bleeding edge of technology.
+1. Small Community - [github project](https://github.com/asyncapi) has only 9 members
+1. limited tooling support, VSCode extension "openapi-lint" provides limited validation capabilities, but only for V1.2.0.
+
+## Option #2: Use PlantUML
+PlantUML can be used to describe async events.
+High level in e.g. a component diag could look like this:  
+![highlevel](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/00project/eventBusDescription/eventsAsComponentDiag.puml)
+
+On a more fine grained level, it could look like this:
+![highlevel](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/00project/eventBusDescription/eventsAsClassDiag.puml)
+
+
+### Pros
+1. no new tool, we use plantuml already
+### Cons
+1. nothing can be generated out of this.
+1. current design does not include topic space, only event/message format. 
+
+## Decision
+Daniel decided 2019-06-19 for a combination: we go with AsyncAPI where possible and if the interface is still to vague, we go with PlantUML or simply textual description. Rational: pragmatism.
+
+
 <!--- Template for new Architectural Decision to copy:
 # Problem Statement
 Problem desription here
+Discussion took place with [ticket#46](https://github.com/sa-mw-dach/OpenDJ/issues/46)  
+
 
 ## Option #1: Title
-### Description
-text
-
+Description text
 ### Pros
 1. 
 1.
@@ -131,7 +173,6 @@ text
 
 ## Option #2: Title
 Description text
-
 ### Pros
 1. 
 1.

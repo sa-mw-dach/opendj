@@ -416,9 +416,9 @@ function mapSpotifyTrackToOpenDJTrack(sptTrack) {
     }
 
     if (sptTrack.album.release_date) {
-        odjTrack.year = sptTrack.album.release_date.substring(0, 4);
+        odjTrack.year = parseInt(sptTrack.album.release_date.substring(0, 4));
     } else {
-        odjTrack.year = "????";
+        odjTrack.year = 4242;
     }
 
 
@@ -567,10 +567,6 @@ router.get('/trackDetails', async function(req, res) {
     albumResult = await albumResult;
     audioFeaturesResult = await audioFeaturesResult;
     artistResult = await artistResult;
-
-    if (albumResult && albumResult.genres && albumResult.genres.length > 0) {
-        // TODO: Collapse genres array into single string, max 2 or three entries:
-    }
 
     // TODO: Merge responses into OpenDJ TrackResult 
     // For now (and debugging), we send the raw: spotify objects:

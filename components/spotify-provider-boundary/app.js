@@ -9,9 +9,9 @@ var log4js = require('log4js')
 var log = log4js.getLogger();
 log.level = process.env.LOG_LEVEL || "trace";
 
-var COMPRESS_RESULT = new Boolean(process.env.COMPRESS_RESULT || "true");
+var COMPRESS_RESULT = process.env.COMPRESS_RESULT || "true";
 
-if (COMPRESS_RESULT) {
+if (COMPRESS_RESULT == 'true') {
     log.info("compression enabled");
     app.use(compression())
 } else {
@@ -40,7 +40,7 @@ function handleError(err, response) {
 // ------------------------------------------------------------------------
 const TOPIC_INTERNAL = "opendj-spotifyprovider-internal";
 
-var kafkaURL = process.env.kafkaURL || "localhost:9092"
+var kafkaURL = process.env.KAFKA_HOST || "localhost:9092"
 var kafka = require('kafka-node')
 var kafkaClient = new kafka.KafkaClient({
     kafkaHost: kafkaURL,
@@ -110,7 +110,7 @@ kafkaConsumer.on('message', function(message) {
             if (currentState && Date.parse(currentState.timestamp) > Date.parse(payload.timestamp)) {
                 log.info("Current state for event %s is newer than state from message - message is ignored", payload.eventID)
             } else {
-                log.info("Adding new state for event %s", payload.eventID);
+                log.info("Using new state for event %s", payload.eventID);
                 mapOfEventStates.set(payload.eventID, payload);
             }
 
@@ -168,7 +168,10 @@ var SPOTIFY_REFRESH_TOKEN_OFFSET = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "
 // value (up to 3 min) to the offset:
 var SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM || "180000";
 
+// Number of genres to return for track details:
 var SPOTIFY_TRACK_DETAIL_NUM_GENRES = process.env.SPOTIFY_TRACK_DETAIL_NUM_GENRES || "3";
+
+var SPOTIFY_SEARCH_LIMIT = process.env.SPOTIFY_SEARCH_LIMIT || "20";
 
 
 // Map of Spotify API Objects:
@@ -518,7 +521,7 @@ router.get('/searchTrack', function(req, res) {
     var query = req.query.q
     var api = getSpotifyApiForEvent(eventID);
 
-    api.searchTracks(query, { limit: 20 }).then(function(data) {
+    api.searchTracks(query, { limit: SPOTIFY_SEARCH_LIMIT }).then(function(data) {
         res.send(mapSpotifySearchResultToOpenDJSearchResult(data.body));
         //        res.send(data.body);
         log.trace("searchTrack end");
@@ -581,13 +584,17 @@ router.get('/trackDetails', async function(req, res) {
     // For now (and debugging), we send the raw: spotify objects:
     var result = mapSpotifyTrackResultsToOpenDJTrack(trackResult, albumResult, artistResult, audioFeaturesResult);
 
-    res.send({
-        track: trackResult,
-        album: albumResult,
-        artist: artistResult,
-        audioFeaturesResult: audioFeaturesResult,
-        result: result,
-    });
+    res.send(result);
+
+    /*
+        res.send({
+            track: trackResult,
+            album: albumResult,
+            artist: artistResult,
+            audioFeaturesResult: audioFeaturesResult,
+            result: result,
+        });
+     */
     log.trace("trackDetails end");
 
 });

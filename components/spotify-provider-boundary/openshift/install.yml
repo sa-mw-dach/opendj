@@ -36,19 +36,19 @@
 
 # Create Secret Manually:
 #  oc create secret generic test  --from-literal=CLIENT_ID=<SECRET> --from-literal=CLIENT_SECRET=<SECRET>
-    - name: Create Spotify secret
-      k8s:
-        state: present
-        wait: true
-        definition:
-          apiVersion: v1
-          kind: Secret
-          data:
-            CLIENT_ID: <SECRET>
-            CLIENT_SECRET: <SECRET>
-          metadata:
-            name: spotify-api-credentials
-            namespace: "{{ namespace }}"
+    # - name: Create Spotify secret
+    #   k8s:
+    #     state: present
+    #     wait: true
+    #     definition:
+    #       apiVersion: v1
+    #       kind: Secret
+    #       data:
+    #         CLIENT_ID: <SECRET>
+    #         CLIENT_SECRET: <SECRET>
+    #       metadata:
+    #         name: spotify-api-credentials
+    #         namespace: "{{ namespace }}"
           type: Opaque
   
       
@@ -156,14 +156,31 @@
               spec:
                 containers:
                   - env:
+                      - name: LOG_LEVEL
+                        value: "info"
+                      - name: COMPRESS_RESULT
+                        value: "true"
                       - name: MOCKUP_ENABLED
                         value: "false"
                       - name: MOCKUP_TRACKDURATION_MS
                         value: "20000"
-                      - name: kafkaURL
+                      - name: KAFKA_HOST
                         value: "opendj-kafka-kafka-bootstrap:9092"
                       - name: SPOTIFY_CALLBACK_URL
                         value: "http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/auth_callback"
+                      - name: SPOTIFY_REFRESH_TOKEN_INTERVAL
+                        value: "60000"
+                      - name: SPOTIFY_REFRESH_INITIAL_DELAY
+                        value: "1000"
+                      - name: SPOTIFY_REFRESH_TOKEN_OFFSET
+                        value: "300000"
+                      - name: SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM
+                        value: "180000"
+                      - name: SPOTIFY_TRACK_DETAIL_NUM_GENRES
+                        value: "3"     
+                      - name: SPOTIFY_SEARCH_LIMIT
+                        value: "20"     
+
                     envFrom:
                       - prefix: SPOTIFY_
                         secretRef:

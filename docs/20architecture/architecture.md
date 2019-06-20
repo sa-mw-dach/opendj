@@ -17,7 +17,7 @@ The solution is decomposed into the following layers:
 
 1. **service** All Components that run on a server and serve APIs/content for frontend components. Components on the service layer try to follow the domain driven design principle. For each domain, there should be a service responsible for this domain and nothing more.
 1. **provider** Special service components that provide music search / playback services.
-1. **backend** Components that provide backing services for the actual services
+1. **backend** Components that provide technical backing services for the actual services, e.g. databases, message brokers and stuff like that.
 
 ![aod](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/architectureOverview.puml)
 
@@ -32,6 +32,56 @@ The solution is decomposed into the following layers:
 1. Communication between services and services with backends should be async/event driven as much as possible, otherwise REST@HTTP. We expect all service and backend-components to be deployed co-located, i.e. low latency.
 
 1. communication between backends and external services should be compressed and encrypted. No rules regarding protocol, as highly dependent on the service/API being used.
+
+# Components and their responsibilities
+## frontend-web
+Contains the html5/angular web client that runs on the users browser. Really only the stuff that runs on the client, according to the layering concept.
+Talks primarily to the service-bffweb (see below) via REST@HTTP and websockets.
+Might call directly to other services for performance or simplification reasons.
+Responsibilities:
+1. Taking care of all the user interactions
+1. Providing the different views for the different users
+
+## service-bffweb
+The backend for frontend for the frontent-web component. The entry point to the system for the web client. For async updates (e.g. of the playlist), websockets are used. These allow the bffweb to push updates to the web client.  
+
+Responsibilities:
+1. Aggregate internal services so that they can be easily consumed. 
+1. Maps from kafka events that happen on the server side to websockets for client communications (kafka protocol can not easily be routed to clients)
+
+## service-playlist
+Maintains the playlists for all active events.  
+
+Responsibilities:
+1. create a playlist for an event
+1. add a track to a playlist
+1. move a track to a different position in the playlist
+1. start/stop playing the playlist.
+1. notify clients of updates of a playlist
+1. hide the different available music provider
+1. when the playing of the current track is finished, pop that track off the list, start playing the next track.
+
+## provider-spotify
+Provides the interface/boundary to spotify for actual music.
+
+Responsibilities:
+1. Handle authentication flow against spotify.
+1. selection of a playback device
+1. searching of tracks
+1. provide track details (bpm etc.)
+1. playback of tracks
+1. notify when a track playback is finished (or stopped using direct spotify controls)
+
+## backend-eventstore
+Provide pub/sub and persistence storage of events, e.g. with [Apache Kafka](https://kafka.apache.org)
+
+## backend-eventstore
+Provide pub/sub and persistence storage of events, e.g. with [Apache Kafka](https://kafka.apache.org)
+
+## backend-db
+Provide persistence for state in a database.
+By theory, each Microservice should have it's own database.
+We think this will lead to a deployment overkill. Thus, we start with a single database shared by all microservice. To allow for later seperation, each microservice **MUST** use it's own schema in the datbas, ane relations between different schema are **FORBIDDEN**.
 
 
 

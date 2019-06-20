@@ -268,3 +268,10 @@ No GDPR relevant data should be stored by the system.
 
 Users should be allowed to be remain completely anonymous.
 <a name="NFR-10-630">\(NFR-10-630\)</a>
+
+## Operational Requirements
+The whole system should be reachable via  / deployable to a single DNS entry, e.g. *opendj.io* All static content, web pages, API calls etc. must be based of the singe name.
+<a name="NFR-10-700">\(NFR-10-700\)</a>
+
+The whole system should be deployable to a OpenShift Online Employee account.
+<a name="NFR-10-700">\(NFR-10-710\)</a>

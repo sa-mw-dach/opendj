@@ -38,11 +38,12 @@ curator -down-> frontendweb
 eventowner -down-> frontendweb
 
 frontendweb -down-> servicebffweb
+frontendweb .down.> backendspotify
 
 servicebffweb -down-> serviceuser
 servicebffweb -down-> serviceevent
 servicebffweb -down-> serviceplaylist
-servicebffweb -down-> backendeventstore
+'servicebffweb -down-> backendeventstore
 
 
 serviceplaylist -down-> backendspotify
@@ -51,10 +52,10 @@ serviceplaylist -down-> backendeventstore
 serviceuser -down-> backenddb
 
 backendspotify -down-> backendeventstore
-backendsoundcloud -down-> backendeventstore
+'backendsoundcloud -down-> backendeventstore
 
 backendspotify -down--> spotifyapi 
 
-note bottom of serviceevent: Components marked with * are not part of MVP
+'  note bottom of serviceevent: Components marked with * are not part of MVP
 
 @enduml

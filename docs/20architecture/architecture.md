@@ -12,11 +12,27 @@
 # Architecture Overview 
 ## Layers
 The solution is decomposed into the following layers:
-1. **frontend**  All the components that run on a client/frontend device, e.h. HTML pages, native apps etc.
-2. **service** All Components that run on a server and serve APIs/content for frontend components. Components on the service layer try to follow the domain driven design principle. For each domain, there should be a service responsible for this domain and nothing more.
-3. **backend** Components that provide backing services for the actual services, or serve as boundary to system external components/services.
+1. **frontend**  All the components that run on a client/frontend device, e.h. HTML pages, native apps etc. Hint: as these components must be somehow delivered to the client, they probably will also have a deployment to a server, which of course is fine. 
+
+
+1. **service** All Components that run on a server and serve APIs/content for frontend components. Components on the service layer try to follow the domain driven design principle. For each domain, there should be a service responsible for this domain and nothing more.
+1. **provider** Special service components that provide music search / playback services.
+1. **backend** Components that provide backing services for the actual services
 
 ![aod](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/architectureOverview.puml)
+
+**Remarks:**
+1. Components flagged with "*" are not part of MVP
+1. It is expected that all service components will used the backend-eventstore. Not all relationships are show for sake of simplicity.
+1. The frontend-web should primarly talk to the service-bffweb component, to implement the [**B**ackend **F**or **F**rontend Pattern](https://samnewman.io/patterns/architectural/bff/). The dotted relationship to the provider-spotify is an exception to this rule for the search track functionallity, for performance reasons in the MVP. For later releases, esp. with multi-provider support, this must be routed back to the bff.
+
+## Communication Principles
+1. Communication between frontend and services via REST@HTTP or HTTP. Communication should be compressed to save on sparse bandwith and high latency.
+
+1. Communication between services and services with backends should be async/event driven as much as possible, otherwise REST@HTTP. We expect all service and backend-components to be deployed co-located, i.e. low latency.
+
+1. communication between backends and external services should be compressed and encrypted. No rules regarding protocol, as highly dependent on the service/API being used.
+
 
 
 # Architectural Decisions

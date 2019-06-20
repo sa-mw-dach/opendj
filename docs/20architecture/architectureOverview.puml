@@ -9,26 +9,23 @@ together {
       actor EventOwner as eventowner
 }
 
-together {
-      component [frontend-web-user] as frontendwebuser  
-      component [frontend-web-curator] as frontendwebcurator
-      component [frontend-web-event] as frontendwebevent
-}
+component [frontend-web] as frontendweb 
 
+component [service-bffweb] as servicebffweb 
 
 together {
-      together {
-      component [service-playlist-api] as serviceplaylistapi  
-      component [service-playlist-db] as serviceplaylistdb
-
-      }
-      component [service-user] as serviceuserapi
-      component [service-event] as serviceeventapi  
-      component [service-playback-ctrl] as serviceplaybackctrl
+      component [service-playlist] as serviceplaylist 
+      component [service-user*] as serviceuser
+      component [service-event*] as serviceevent
 }
 
 together {
-      component [boundary-spotify] as boundaryspotify  
+      component [provider-spotify] as backendspotify  
+      component [provider-soundcloud*] as backendsoundcloud  
+}
+together {
+      component [backend-eventstore] as backendeventstore
+      component [backend-db*] as backenddb
 }
 
 cloud  {
@@ -36,17 +33,28 @@ cloud  {
 }
 
 
-user -down-> frontendwebuser
-curator -down-> frontendwebcurator
-eventowner -down-> frontendwebevent
+user -down-> frontendweb
+curator -down-> frontendweb
+eventowner -down-> frontendweb
 
-frontendwebuser -down-> serviceuserapi
-frontendwebuser -down-> serviceeventapi
-frontendwebuser -down-> serviceplaylistapi
-serviceplaylistapi -down-> serviceplaylistdb
+frontendweb -down-> servicebffweb
 
-serviceplaybackctrl -right-> serviceplaylistapi
-serviceplaybackctrl --> boundaryspotify
+servicebffweb -down-> serviceuser
+servicebffweb -down-> serviceevent
+servicebffweb -down-> serviceplaylist
+servicebffweb -down-> backendeventstore
 
-boundaryspotify --> spotifyapi 
+
+serviceplaylist -down-> backendspotify
+serviceplaylist -down-> backendsoundcloud
+serviceplaylist -down-> backendeventstore
+serviceuser -down-> backenddb
+
+backendspotify -down-> backendeventstore
+backendsoundcloud -down-> backendeventstore
+
+backendspotify -down--> spotifyapi 
+
+note bottom of serviceevent: Components marked with * are not part of MVP
+
 @enduml

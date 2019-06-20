@@ -9,7 +9,13 @@
 1. Use Red Hat Enterprise Products as much as possible - avoid community upstream projects.
 
 
-# Architecture Overview Diagram
+# Architecture Overview 
+## Layers
+The solution is decomposed into the following layers:
+1. **frontend**  All the components that run on a client/frontend device, e.h. HTML pages, native apps etc.
+2. **service** All Components that run on a server and serve APIs/content for frontend components. Components on the service layer try to follow the domain driven design principle. For each domain, there should be a service responsible for this domain and nothing more.
+3. **backend** Components that provide backing services for the actual services, or serve as boundary to system external components/services.
+
 ![aod](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/sa-mw-dach/OpenDJ/master/docs/20architecture/architectureOverview.puml)
 
 

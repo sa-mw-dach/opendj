@@ -197,6 +197,8 @@ As EventOwner, I would like to see a list of all users and the number of tracks 
 As EventOwner I would like to see a list of all tracks with their like/dislike/skipRequests/ActualySkipped counts so I can promote the most liked/disliked/hated track of the evening.
 <a name="STRY-30-420">\(STRY-30-420\)</a>
 
+As EventOwner, I would like to see a statics of my the fun factor of my event over the time, based on feedback of the users during the event.
+<a name="STRY-30-430">\(STRY-30-430\)</a>
 
 
 # NonFunctionalRequirements

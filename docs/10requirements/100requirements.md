@@ -178,11 +178,14 @@ As EventOwner I can select which Playlist is being played by using manual playli
 As EventOwner I can allow/disallow the same track to be played more then once during my event.
 <a name="STRY-30-320">\(STRY-30-320\)</a>
 
-AS EventOwner I want the current track to be skipped when the majority of the UserS request SKIP.
+As EventOwner I want the current track to be skipped when the majority of the UserS request SKIP.
 <a name="STRY-30-330">\(STRY-30-330\)</a>
 
-As a EventOwner,  I want to export the actual playlist after the event so that I am compliant with [GEMA](https://www.gema.de/portal/app/tarifrechner/tariffinder)
+As EventOwner,  I want to export the actual playlist after the event so that I am compliant with [GEMA](https://www.gema.de/portal/app/tarifrechner/tariffinder)
 <a name="STRY-30-340">\(STRY-30-340\)</a>
+
+As EventOwner, I would like to be able to ensure that at every time, music is  played. The system should provide an emergency playlist in case the current playlist runs empty.
+<a name="STRY-30-350">\(STRY-30-350\)</a>
 
 ### Statistics
 As EventOwner, I would like to see a list of all curators and the number of tracks they have played so I can promote the star curator.

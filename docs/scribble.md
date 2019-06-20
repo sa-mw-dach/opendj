@@ -180,10 +180,16 @@ http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.mu
 # third:
 http://localhost:8080/backend-spotifyprovider/getCurrentTrack?event=4711
 http://localhost:8080/backend-spotifyprovider/getAvailableDevices?event=4711
+http://localhost:8080/backend-spotifyprovider/searchTrack?event=4711&q=Michael+Jackson
 
 
 http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/getCurrentTrack?event=4711
 http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/getAvailableDevices?event=4711
+http://spotify-provider-boundary-dfroehli-opendj-dev.apps.ocp1.stormshift.coe.muc.redhat.com/backend-spotifyprovider/searchTrack?event=4711&q=Michael+Jackson
+
+
+
+
 
 
 

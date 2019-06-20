@@ -159,6 +159,8 @@ var SPOTIFY_REFRESH_TOKEN_OFFSET = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET || "
 // value (up to 3 min) to the offset:
 var SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM = process.env.SPOTIFY_REFRESH_TOKEN_OFFSET_RANDOM || "180000";
 
+var SPOTIFY_TRACK_DETAIL_NUM_GENRES = process.env.SPOTIFY_TRACK_DETAIL_NUM_GENRES || "3";
+
 
 // Map of Spotify API Objects:
 // Key: EventID
@@ -401,7 +403,7 @@ router.get('/getAvailableDevices', function(req, res) {
 
 function mapSpotifyTrackToOpenDJTrack(sptTrack) {
     var odjTrack = {};
-    odjTrack.id = sptTrack.uri;
+    odjTrack.id = sptTrack.id;
     odjTrack.name = sptTrack.name;
 
     odjTrack.artist = sptTrack.artists[0].name;
@@ -447,23 +449,27 @@ function mapSpotifySearchResultToOpenDJSearchResult(spotifyResult) {
     return result;
 }
 
+function timesCharExistInString(str, chr) {
+    var total = 0,
+        last_location = 0,
+        single_char = (chr + '')[0];
+    while (last_location = str.indexOf(single_char, last_location) + 1) {
+        total = total + 1;
+    }
+    return total;
+};
+
 function collapseArrayIntoSingleString(currentString, arrayOfStrings, maxEntries) {
     var result = currentString;
-    if (!currentString) {
-        currentString = "";
-    }
 
     if (arrayOfStrings && arrayOfStrings.length > 0) {
-        for (var i = 0; i < maxEntries; i++) {
-            if (i >= arrayOfStrings.length) break;
-
-            if (currentString.length > 0) {
-                currentString += ", ";
-            }
-            currentString += arrayOfStrings[i];
+        var i;
+        for (i = 0; i < maxEntries; i++) {
+            if (i >= arrayOfStrings.length || timesCharExistInString(result, ',') + 1 >= maxEntries) break;
+            if (result.length > 0) result += ", ";
+            result += arrayOfStrings[i];
         }
     }
-
     return result;
 }
 
@@ -473,12 +479,13 @@ function mapSpotifyTrackResultsToOpenDJTrack(trackResult, albumResult, artistRes
         result = mapSpotifyTrackToOpenDJTrack(trackResult.body);
     }
 
+    result.genre = "";
     if (albumResult && albumResult.body) {
-        result.genre = collapseArrayIntoSingleString(result.genre, albumResult.body.genres, 2);
+        result.genre = collapseArrayIntoSingleString(result.genre, albumResult.body.genres, SPOTIFY_TRACK_DETAIL_NUM_GENRES);
     }
 
     if (artistResult && artistResult.body) {
-        result.genre = collapseArrayIntoSingleString(result.genre, artistResult.body.genres, 2);
+        result.genre = collapseArrayIntoSingleString(result.genre, artistResult.body.genres, SPOTIFY_TRACK_DETAIL_NUM_GENRES);
     }
 
     if (audioFeaturesResult && audioFeaturesResult.body) {
@@ -489,8 +496,6 @@ function mapSpotifyTrackResultsToOpenDJTrack(trackResult, albumResult, artistRes
         result.liveness = Math.round(audioFeaturesResult.body.liveness * 100);
         result.happiness = Math.round(audioFeaturesResult.body.valence * 100);
         result.bpm = Math.round(audioFeaturesResult.body.tempo);
-        result.x = Math.round(audioFeaturesResult.body.x * 100);
-        result.x = Math.round(audioFeaturesResult.body.x * 100);
     }
 
     return result;

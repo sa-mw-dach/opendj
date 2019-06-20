@@ -155,6 +155,16 @@ On a more fine grained level, it could look like this:
 ## Decision
 Daniel decided 2019-06-19 for a combination: we go with AsyncAPI where possible and if the interface is still to vague, we go with PlantUML or simply textual description. Rational: pragmatism.
 
+#  RESTfulness in HTTP APIs / HATEOS
+How [RESTful](https://restfulapi.net/) / [HATEOS](https://restfulapi.net/hateoas/) do we want to design the OpenDJ internal and external APIs?
+Discussion took place with [ticket#46](https://github.com/sa-mw-dach/OpenDJ/issues/25)  
+
+## Option #1: Go full HATEOS
+## Option #2: Common Sense Aproach
+## Decision
+Daniel decided 2019-06-20 that we use the [guiding principles]((https://restfulapi.net/) ) of RESTfulness as much as sensible. HATEOS is overkill and probably causing only more complexity and problems then it brings benefits.
+
+
 
 <!--- Template for new Architectural Decision to copy:
 # Problem Statement

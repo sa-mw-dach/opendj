@@ -1,14 +1,23 @@
 'use strict';
 
+const compression = require('compression');
 const express = require('express');
 const app = express();
 var cors = require('cors');
 var router = new express.Router();
 var log4js = require('log4js')
 var log = log4js.getLogger();
-log.level = "trace";
+log.level = process.env.LOG_LEVEL || "trace";
 
+var COMPRESS_RESULT = new Boolean(process.env.COMPRESS_RESULT || "true");
 
+if (COMPRESS_RESULT) {
+    log.info("compression enabled");
+    app.use(compression())
+} else {
+    log.info("compression disabled");
+
+}
 app.use(cors());
 
 
@@ -145,7 +154,7 @@ var spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET || "-unknown-";
 var spotifyRedirectUri = process.env.SPOTIFY_CALLBACK_URL || "-unknown-";
 var spotifyScopes = ['user-read-playback-state', 'user-modify-playback-state', 'user-read-currently-playing', 'playlist-modify-private'];
 
-// Interval we check for expieried tokens:
+// Interval we check for expired tokens:
 var SPOTIFY_REFRESH_TOKEN_INTERVAL = process.env.SPOTIFY_REFRESH_TOKEN_INTERVAL || "60000";
 
 // Initial delay before we start checking for expiered token (allow for some time to have all messages processed)

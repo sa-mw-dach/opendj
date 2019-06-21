@@ -1,0 +1,7 @@
+{
+  "name": "opendj-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

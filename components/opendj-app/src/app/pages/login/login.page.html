@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="opendj">
+
+  <div class="login-logo">
+    <img src="assets/img/logo.png" alt="OpenDJ logo">
+  </div>
+  <div style="text-align: center; max-width: 350px; margin: 0 auto;">
+
+    <form #loginForm="ngForm" novalidate>
+      <ion-list style="background: transparent !important;">
+        <ion-item>
+          <ion-label position="fixed" color="light">Username</ion-label>
+          <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false"
+            autocapitalize="off" clearInput required>
+          </ion-input>
+        </ion-item>
+
+        <ion-text color="danger">
+          <p [hidden]="username.valid || submitted == false" class="ion-padding-start">
+            Username is required
+          </p>
+        </ion-text>
+
+        <ion-item>
+          <ion-label position="fixed" color="light">Curator Key</ion-label>
+          <ion-input [(ngModel)]="login.curatorPassword" name="password" type="password" clearInput #password="ngModel" required>
+          </ion-input>
+        </ion-item>
+
+      </ion-list>
+
+      <ion-button (click)="onLogin(loginForm)" type="submit" color="light" shape="round" fill="outline">Login
+      </ion-button>
+
+    </form>
+  </div>
+
+</ion-content>

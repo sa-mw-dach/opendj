@@ -1,0 +1,79 @@
+{
+    "events": [
+        {
+            "id": "1",
+            "ownerId": "123",
+            "title": "Celebrate your wife",
+            "motto": "Big Partner Party",
+            "description": "Have you ever been at an event and disliked the music being played? The vision of OpenDJ is to solve this problem by applying open source principles to the music playlist of an event.",
+            "imgUrl": "https://www.verti-music-hall.de/assets/img/iStock-627183716_medium-5bb5fa97ca.jpg",
+            "street": "Teststrasse 34",
+            "city": "Hamburg",
+            "startDate": "2019-09-12",
+            "startTime": "21:00 CET",
+            "isPublic": true,
+            "isDuplicateTracksAllowed": true,
+            "isMultipleCuratorAllowed": true,
+            "musicProvider": "spotify",
+            "musicProviderToken": "strinaskhd6sadhjksfa8967sfg",
+            "maxParticipants": 100,
+            "registrationCode": "8324bsjdfb730HFJ",
+            "costs": 14.99,
+            "currency": "EUR"
+        },
+        {
+            "id": "2",
+            "ownerId": "12234",
+            "title": "Cocktails and Music",
+            "motto": "All Green",
+            "description": "Have you ever been at an event and disliked the music being played? The vision of OpenDJ is to solve this problem by applying open source principles to the music playlist of an event.",
+            "imgUrl": "https://www.alpenpark-neuss.de/fileadmin/_processed_/4/e/csm_Gruppe_Party_2_5e67330e54.jpg",
+            "street": "Teststrasse 34",
+            "city": "Frankfurt",
+            "startDate": "2019-08-26",
+            "startTime": "20:15 CET",
+            "isPublic": false,
+            "isDuplicateTracksAllowed": true,
+            "isMultipleCuratorAllowed": true,
+            "musicProvider": "spotify",
+            "musicProviderToken": "strinaskhd6sadhjksfa8967sfg",
+            "maxParticipants": 100,
+            "registrationCode": "8324bsjdfb730HFJ",
+            "costs": 14.99,
+            "currency": "EUR"
+        },
+        {
+            "id": "3",
+            "ownerId": "234234",
+            "title": "Ahoi Party Köln",
+            "motto": "Abfahrt",
+            "description": "Have you ever been at an event and disliked the music being played? The vision of OpenDJ is to solve this problem by applying open source principles to the music playlist of an event.",
+            "imgUrl": "https://www.ahoi-party.de/assets/galerie/2018-06-09-summer-feeling-2018/2018_06_09_002.JPG",
+            "street": "Teststrasse 34",
+            "city": "Köln",
+            "startDate": "2019-10-12",
+            "startTime": "19:30 CET",
+            "isPublic": true,
+            "isDuplicateTracksAllowed": true,
+            "isMultipleCuratorAllowed": true,
+            "musicProvider": "spotify",
+            "musicProviderToken": "strinaskhd6sadhjksfa8967sfg",
+            "maxParticipants": 100,
+            "registrationCode": "8324bsjdfb730HFJ",
+            "costs": 14.99,
+            "currency": "EUR"
+        }
+    ],
+    "tracks": [
+        {
+            "id":"spotify:track:5ChkMS8OtdzJeqyybCc9R5",
+            "name":"Billie Jean",
+            "artist":"Michael Jackson",
+            "year":"1982",
+            "image_url":"https://i.scdn.co/image/eb2b6bb819fd2b1795acd65efc8e1a975c487afc",
+            "duration_ms":293826,
+            "preview":"https://p.scdn.co/mp3-preview/f504e6b8e037771318656394f532dede4f9bcaea?cid=ae5f9971dec243f98cf746c496181712"
+        },
+        {
+            "id":"spotify:track:6G8kHiVZ1jW7vHMPVRNZU0","name":"Don’t Matter To Me (with Michael Jackson)","artist":"Drake, Michael Jackson","year":"2018","image_url":"https://i.scdn.co/image/f12257240bbec6ddfa780253ac939e646eba2a36","duration_ms":245786,"preview":null},{"id":"spotify:track:1OOtq8tRnDM8kG2gqUPjAj","name":"Beat It - Single Version","artist":"Michael Jackson","year":"1982","image_url":"https://i.scdn.co/image/eb2b6bb819fd2b1795acd65efc8e1a975c487afc","duration_ms":258040,"preview":"https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:2bCQHF9gdG5BNDVuEIEnNk","name":"Smooth Criminal - 2012 Remaster","artist":"Michael Jackson","year":"1987","image_url":"https://i.scdn.co/image/a4315d50a7a26f3e4d2faf370d2d06bb4c38292d","duration_ms":257760,"preview":"https://p.scdn.co/mp3-preview/8dcbe2702477ac98c7c711cbafcac43e10063949?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:2Cy7QY8HPLk925AyNAt6OG","name":"Black or White - Single Version","artist":"Michael Jackson","year":"2005","image_url":"https://i.scdn.co/image/008dbfe055e000a897b11ae7736a38e560ffd124","duration_ms":202853,"preview":"https://p.scdn.co/mp3-preview/2b6e89f6ad480deed492b01d5a63aabeaa6af1ff?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:3wuCCNCnBhJlwkIJTBZFiv","name":"They Don't Care About Us","artist":"Michael Jackson","year":"1995","image_url":"https://i.scdn.co/image/8dfb24ff3fac5c8701fdfc50e2895339bc6d1a49","duration_ms":284160,"preview":"https://p.scdn.co/mp3-preview/b8ce84078aa19478da4283c37741e15d8858639c?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:46eu3SBuFCXWsPT39Yg3tJ","name":"Don't Stop 'Til You Get Enough - Single Version","artist":"Michael Jackson","year":"1979","image_url":"https://i.scdn.co/image/188146eb8c69b0c0bd6684a5178471b7932f1baa","duration_ms":365466,"preview":"https://p.scdn.co/mp3-preview/bcbf2c53e033e4df303f4a9c90c4eada0a70216f?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:7oOOI85fVQvVnK5ynNMdW7","name":"Rock with You - Single Version","artist":"Michael Jackson","year":"1979","image_url":"https://i.scdn.co/image/188146eb8c69b0c0bd6684a5178471b7932f1baa","duration_ms":220626,"preview":"https://p.scdn.co/mp3-preview/6d950aa4c01473bee46de9c601f7c9c06d7576b3?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:7woW97CfcWaKtuC6W5BP2K","name":"Heal the World","artist":"Michael Jackson","year":"1991","image_url":"https://i.scdn.co/image/89cfbfdc2e7053c1a5ca693f8105799f1dad3704","duration_ms":384306,"preview":"https://p.scdn.co/mp3-preview/12261e2c16b7eb17508fb25a411691380893151d?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:7azo4rpSUh8nXgtonC6Pkq","name":"Thriller","artist":"Michael Jackson","year":"2017","image_url":"https://i.scdn.co/image/b188d610efd0432755907dc336355b7df0827d87","duration_ms":358053,"preview":"https://p.scdn.co/mp3-preview/9f288fba4d3380b1ae25e7f88a2054d7fac0bf2d?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:7EsjkelQuoUlJXEw7SeVV4","name":"Black or White","artist":"Michael Jackson","year":"1991","image_url":"https://i.scdn.co/image/89cfbfdc2e7053c1a5ca693f8105799f1dad3704","duration_ms":254933,"preview":"https://p.scdn.co/mp3-preview/7685001a08ad8903a2c14f1fbb0834c6904a65a3?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:48td6xvpokdYwvbl3JIiXP","name":"Love Never Felt so Good","artist":"Michael Jackson, Justin Timberlake","year":"2014","image_url":"https://i.scdn.co/image/4caac4eb87871d0725bb77f931b931fa46cb47c8","duration_ms":246026,"preview":"https://p.scdn.co/mp3-preview/01ca80f1b2042f7e4a6d45b5f11bf03060a41c2d?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:4GCGH6TJ69neckwITeBFXK","name":"Earth Song","artist":"Michael Jackson","year":"1995","image_url":"https://i.scdn.co/image/8dfb24ff3fac5c8701fdfc50e2895339bc6d1a49","duration_ms":406040,"preview":"https://p.scdn.co/mp3-preview/ffe3ced66631a6b7cb309387e032620bdfbe81fc?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:4jnFqNWeJCeCRHc4HCdxfd","name":"Remember the Time","artist":"Michael Jackson","year":"1991","image_url":"https://i.scdn.co/image/89cfbfdc2e7053c1a5ca693f8105799f1dad3704","duration_ms":239226,"preview":"https://p.scdn.co/mp3-preview/900f644f1c0fac46930083cb771013ef9cf50144?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:0sKlV58cODrjxGFOyf9IXY","name":"The Way You Make Me Feel - 2012 Remaster","artist":"Michael Jackson","year":"1987","image_url":"https://i.scdn.co/image/a4315d50a7a26f3e4d2faf370d2d06bb4c38292d","duration_ms":298120,"preview":"https://p.scdn.co/mp3-preview/93f122101d44b96287fa0dea98f1b0f133a413b8?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:5lWFrW5T3JtxVCLDb7etPu","name":"Bad - 2012 Remaster","artist":"Michael Jackson","year":"1987","image_url":"https://i.scdn.co/image/a4315d50a7a26f3e4d2faf370d2d06bb4c38292d","duration_ms":247360,"preview":"https://p.scdn.co/mp3-preview/5d08b76c5f2b944725394019c38b3ff08f867306?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:1kiNatIrwDusOZfR29W0LJ","name":"Man in the Mirror - 2012 Remaster","artist":"Michael Jackson","year":"1987","image_url":"https://i.scdn.co/image/a4315d50a7a26f3e4d2faf370d2d06bb4c38292d","duration_ms":318680,"preview":"https://p.scdn.co/mp3-preview/9b6d9730b531defe7f54062497657293e67690fe?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:1D9KEXIrlmPUkMTdYzqgX4","name":"Thriller","artist":"Michael Jackson","year":"2009","image_url":"https://i.scdn.co/image/6120a09e0762b57d2fa8f73cdcb916e20f4110e5","duration_ms":357493,"preview":"https://p.scdn.co/mp3-preview/0b62db54da539b34856448e509c30ce4601931f5?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:2u2udGmop1z67EPpr91km7","name":"Man in the Mirror","artist":"Michael Jackson","year":"1995","image_url":"https://i.scdn.co/image/8dfb24ff3fac5c8701fdfc50e2895339bc6d1a49","duration_ms":319306,"preview":"https://p.scdn.co/mp3-preview/956569fa481d2e3807f1e6a1f78b4e5c9ea99530?cid=ae5f9971dec243f98cf746c496181712"},{"id":"spotify:track:4FC7GMnGwYeAjuvC83Srbs","name":"Dirty Diana - 2012 Remaster","artist":"Michael Jackson","year":"2017","image_url":"https://i.scdn.co/image/b188d610efd0432755907dc336355b7df0827d87","duration_ms":280946,"preview":"https://p.scdn.co/mp3-preview/532affb8368ee2a5d6134ef00466c8ded88d0d4d?cid=ae5f9971dec243f98cf746c496181712"}]
+}

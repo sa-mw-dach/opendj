@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Red Hat - Playlist
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-grid>
+    <ion-row>
+
+      <ion-col>
+        <ion-card class="welcome-card" color="medium">
+          <ion-img src="https://www.verti-music-hall.de/assets/img/iStock-627183716_medium-5bb5fa97ca.jpg">
+          </ion-img>
+          <ion-card-header style="text-align: center;">
+            <ion-card-subtitle>Flying Lotus</ion-card-subtitle>
+            <ion-card-title>Flamagra</ion-card-title>
+            <br />
+            <ion-button color="light" shape="round" fill="outline">
+              <ion-icon name="square"></ion-icon>
+            </ion-button>
+            <ion-button color="success" shape="round">
+              <ion-icon name="pause"></ion-icon>
+            </ion-button>
+            <ion-button color="light" shape="round" fill="outline">
+              <ion-icon name="skip-forward"></ion-icon>
+            </ion-button>
+          </ion-card-header>
+          <ion-card-content>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+      <ion-col>
+        <ion-list color="light">
+          <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
+
+            <ion-item-sliding *ngFor="let item of playlist;  trackBy: trackElement">
+
+              <ion-item color="light" (click)="presentActionSheet(item.title)">
+                <ion-thumbnail slot="start">
+                  <img src="{{item.image_url}}">
+                </ion-thumbnail>
+                <ion-label text-wrap>{{item.name}}<br />
+                  <span style="font-size: 14px; color: #666;">{{item.artist}}, {{item.year}}</span><br />
+                  <ion-badge color="medium" style="margin-top: 10px;">oschneid</ion-badge> &nbsp;
+                  <ion-badge color="success">22 Likes</ion-badge>
+                </ion-label>
+                <ion-reorder slot="end">
+                  <ion-icon name="menu"></ion-icon>
+                </ion-reorder>
+              </ion-item>
+
+            </ion-item-sliding>
+          </ion-reorder-group>
+        </ion-list>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <!--
+    <div *ngIf="selectedItem" padding>
+      You navigated here from <b>{{selectedItem.title }}</b>
+    </div>
+  -->
+</ion-content>

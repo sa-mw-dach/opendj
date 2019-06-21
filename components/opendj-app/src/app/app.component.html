@@ -1,0 +1,41 @@
+<ion-app>
+  <ion-split-pane>
+    <ion-menu>
+      <ion-header>
+        <ion-toolbar color="dark">
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content color="light">
+        <ion-list style="background: transparent !important;">
+          <ion-menu-toggle autoHide="false" *ngIf="loggedIn">
+            <ion-item color="medium">
+              <ion-icon slot="start" name="contact"></ion-icon>
+              <ion-label>
+                {{userDetails.username}}
+              </ion-label>
+              <ion-icon slot="end" name="star" *ngIf="userDetails.isCurator" color="warning"></ion-icon>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]" color="light">
+              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+              <ion-label>
+                {{p.title}}
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle autoHide="false" *ngIf="loggedIn">
+            <ion-item button (click)="logout()" color="light">
+              <ion-icon slot="start" name="log-out"></ion-icon>
+              <ion-label>
+                Logout
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet main></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

@@ -1,0 +1,17 @@
+.login-logo {
+    padding: 20px 0;
+    min-height: 200px;
+    text-align: center;
+  }
+  
+  .login-logo img {
+    max-width: 300px;
+    margin-bottom: -50px;
+  }
+  
+  .list {
+    margin-bottom: 0;
+  }
+  .item, .list, .item-content, .item-complex {
+    --ion-background-color: transparent !important;
+  }
